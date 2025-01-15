@@ -3,12 +3,12 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:torreyana_mob/my/screens/assignments.dart';
-import 'package:torreyana_mob/my/screens/parent_home.dart';
-import 'package:torreyana_mob/my/screens/schedule.dart';
-import 'package:torreyana_mob/my/screens/student_home.dart';
 import 'package:tourbillauth/auth.dart';
 
+import '../my/screens/assignments.dart';
+import '../my/screens/parent_home.dart';
+import '../my/screens/schedule.dart';
+import '../my/screens/student_home.dart';
 import '../screens/flow.dart';
 import '../screens/home.dart';
 import '../screens/login.dart';
@@ -65,7 +65,7 @@ extension NavigationHandler on BuildContext {
 
 @riverpod
 void Function(BuildContext, String) navigationHandler(
-    NavigationHandlerRef ref, String route) {
+    Ref ref, String route) {
   ref.read(analyticsProvider).logScreenView(screenName: route);
   // Pass through to go_router.
   return (context, route) {
@@ -79,7 +79,7 @@ void Function(BuildContext, String) navigationHandler(
 /// redirect. Don't set a login redirect on the root path ('/') since the login
 /// route is under that path root.
 @riverpod
-GoRouter router(RouterRef ref) => GoRouter(
+GoRouter router(Ref ref) => GoRouter(
       debugLogDiagnostics: kDebugMode,
       initialLocation: defaultPath,
       routes: [
@@ -120,7 +120,7 @@ GoRouter router(RouterRef ref) => GoRouter(
       ],
     );
 
-GoRoute defaultHomeRoute(RouterRef ref, {required List<GoRoute> childRoutes}) {
+GoRoute defaultHomeRoute(Ref ref, {required List<GoRoute> childRoutes}) {
   return GoRoute(
     path: defaultPath,
     builder: (context, state) => navigation
@@ -134,7 +134,7 @@ GoRoute defaultHomeRoute(RouterRef ref, {required List<GoRoute> childRoutes}) {
   );
 }
 
-List<GoRoute> homeRedirectRoutes(RouterRef ref) {
+List<GoRoute> homeRedirectRoutes(Ref ref) {
   return [
     GoRoute(
       path: navigation.homeScreen.name,
@@ -145,11 +145,10 @@ List<GoRoute> homeRedirectRoutes(RouterRef ref) {
               path: screen.name,
               redirect: (context, state) => defaultPath,
             ))
-        .toList()
   ];
 }
 
-List<GoRoute> screenRoutes(RouterRef ref) {
+List<GoRoute> screenRoutes(Ref ref) {
   return navigation.screens
       .map((screen) => GoRoute(
             path: screen.name,
@@ -163,7 +162,7 @@ List<GoRoute> screenRoutes(RouterRef ref) {
 }
 
 String? _loginRedirect(
-        BuildContext context, GoRouterState state, RouterRef ref) =>
+        BuildContext context, GoRouterState state, Ref ref) =>
     ref.read(firebaseAuthProvider).currentUser == null
         ? _redirectUri(state)
         : null;

@@ -6,7 +6,7 @@ part of 'flows.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$flowHash() => r'02ca93c02768928c27f5906b476ca0d760352fb6';
+String _$flowHash() => r'c1aa07612482b5b3192aede509ce3fbe162651f2';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -139,6 +139,8 @@ class FlowProvider extends AutoDisposeProvider<Flow> {
   }
 }
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 mixin FlowRef on AutoDisposeProviderRef<Flow> {
   /// The parameter `flowName` of this provider.
   String get flowName;
@@ -152,7 +154,7 @@ class _FlowProviderElement extends AutoDisposeProviderElement<Flow>
   String get flowName => (origin as FlowProvider).flowName;
 }
 
-String _$stepBuilderHash() => r'9ba702383f7b74fc74e3d9e4010832bf0348319b';
+String _$stepBuilderHash() => r'774f0a13dc696e5b65e7d8adf3e35610b0e37ecc';
 
 /// See also [stepBuilder].
 @ProviderFor(stepBuilder)
@@ -272,6 +274,8 @@ class StepBuilderProvider extends AutoDisposeProvider<
   }
 }
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 mixin StepBuilderRef on AutoDisposeProviderRef<
     Widget Function(BuildContext, WidgetRef, Widget?)> {
   /// The parameter `flow` of this provider.
@@ -417,6 +421,8 @@ class CurrentUserFlowStateProvider extends AutoDisposeNotifierProviderImpl<
   }
 }
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 mixin CurrentUserFlowStateRef on AutoDisposeNotifierProviderRef<UserFlowState> {
   /// The parameter `flowName` of this provider.
   String get flowName;
@@ -450,4 +456,4 @@ final memorySessionDataRepositoryProvider = AutoDisposeNotifierProvider<
 typedef _$MemorySessionDataRepository
     = AutoDisposeNotifier<Map<String, dynamic>>;
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

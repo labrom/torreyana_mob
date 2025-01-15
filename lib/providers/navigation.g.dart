@@ -6,7 +6,7 @@ part of 'navigation.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$navigationHandlerHash() => r'2efd98888aef05c3026192f8c1407d9e0300c54f';
+String _$navigationHandlerHash() => r'cfd602e2a2a1700de06ff4f626bdf0403bab9cb8';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -146,6 +146,8 @@ class NavigationHandlerProvider
   }
 }
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 mixin NavigationHandlerRef
     on AutoDisposeProviderRef<void Function(BuildContext, String)> {
   /// The parameter `route` of this provider.
@@ -161,7 +163,7 @@ class _NavigationHandlerProviderElement
   String get route => (origin as NavigationHandlerProvider).route;
 }
 
-String _$routerHash() => r'dbc5aa1049aee8d2eddedea6db5a5ae53ef02115';
+String _$routerHash() => r'a805b517f8f93aec2ba02262c86b302634af413e';
 
 /// go_router provider with all the registered routes.
 ///
@@ -180,6 +182,8 @@ final routerProvider = AutoDisposeProvider<GoRouter>.internal(
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef RouterRef = AutoDisposeProviderRef<GoRouter>;
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

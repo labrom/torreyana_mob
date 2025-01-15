@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:torreyana_mob/providers/settings.dart';
 import 'package:tourbillon/log.dart';
 
+import '../providers/settings.dart';
 import '../widgets/settings.dart';
 
-part 'flows.g.dart';
 part '../my_flows.dart';
+part 'flows.g.dart';
 
 /// A flow description.
 ///
@@ -146,7 +146,7 @@ class UserFlowState {
 }
 
 @riverpod
-Flow flow(FlowRef ref, {required String flowName}) => flows[flowName]!;
+Flow flow(Ref ref, {required String flowName}) => flows[flowName]!;
 
 @riverpod
 class CurrentUserFlowState extends _$CurrentUserFlowState {
@@ -212,7 +212,7 @@ class MemorySessionDataRepository extends _$MemorySessionDataRepository {
 
 @riverpod
 Widget Function(BuildContext, WidgetRef, Widget?) stepBuilder(
-  StepBuilderRef ref, {
+  Ref ref, {
   required String flow,
 }) {
   final currentUserFlowState =

@@ -2,8 +2,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:torreyana_mob/providers/theme.dart';
 
+import '../providers/theme.dart';
 import 'settings.dart';
 import 'theme_buttons.dart';
 

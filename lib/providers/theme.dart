@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../my_theme.dart';
@@ -26,7 +27,7 @@ class PrimaryColor extends _$PrimaryColor {
 }
 
 @riverpod
-ThemeData appThemeData(AppThemeDataRef ref) {
+ThemeData appThemeData(Ref ref) {
   return ThemeData.from(
       colorScheme: ColorScheme.fromSeed(
           seedColor: ref.watch(primaryColorProvider),

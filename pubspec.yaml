@@ -31,6 +31,7 @@ dependencies:
   flutter_riverpod:
   go_router:
   google_fonts:
+  riverpod:
   riverpod_annotation:
   tourbillauth:
     git:

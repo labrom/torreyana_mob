@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:torreyana_mob/layouts/hero.dart';
 
+import '../layouts/hero.dart';
 import '../localization.dart';
 import '../providers/navigation.dart';
 

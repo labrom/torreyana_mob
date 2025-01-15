@@ -297,25 +297,25 @@
     },
     {
       "name": "firebase_ui_auth",
-      "rootUri": "file:///home/labrom/.pub-cache/hosted/pub.dev/firebase_ui_auth-1.16.0",
+      "rootUri": "file:///home/labrom/.pub-cache/hosted/pub.dev/firebase_ui_auth-1.16.1",
       "packageUri": "lib/",
       "languageVersion": "2.18"
     },
     {
       "name": "firebase_ui_localizations",
-      "rootUri": "file:///home/labrom/.pub-cache/hosted/pub.dev/firebase_ui_localizations-1.13.0",
+      "rootUri": "file:///home/labrom/.pub-cache/hosted/pub.dev/firebase_ui_localizations-1.13.1",
       "packageUri": "lib/",
       "languageVersion": "2.18"
     },
     {
       "name": "firebase_ui_oauth",
-      "rootUri": "file:///home/labrom/.pub-cache/hosted/pub.dev/firebase_ui_oauth-1.6.0",
+      "rootUri": "file:///home/labrom/.pub-cache/hosted/pub.dev/firebase_ui_oauth-1.6.1",
       "packageUri": "lib/",
       "languageVersion": "2.18"
     },
     {
       "name": "firebase_ui_oauth_google",
-      "rootUri": "file:///home/labrom/.pub-cache/hosted/pub.dev/firebase_ui_oauth_google-1.4.0",
+      "rootUri": "file:///home/labrom/.pub-cache/hosted/pub.dev/firebase_ui_oauth_google-1.4.1",
       "packageUri": "lib/",
       "languageVersion": "2.18"
     },
@@ -884,7 +884,7 @@
       "languageVersion": "3.1"
     }
   ],
-  "generated": "2025-01-10T20:01:30.734648Z",
+  "generated": "2025-01-15T03:53:48.120033Z",
   "generator": "pub",
   "generatorVersion": "3.5.4",
   "flutterRoot": "file:///home/labrom/flutter",
