@@ -205,8 +205,6 @@ class _TextAlignmentButtonState extends State<TextAlignmentButton> {
         case TextAlign.start:
           _align = TextAlign.center;
           break;
-        default:
-          break;
       }
     });
     widget.onAlign(_align);
