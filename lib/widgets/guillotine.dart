@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class Guillotine extends StatelessWidget {
+  const Guillotine({super.key});
+
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -9,6 +11,8 @@ class Guillotine extends StatelessWidget {
 }
 
 class Matrix4dPlayground extends StatefulWidget {
+  const Matrix4dPlayground({super.key});
+
   @override
   _Matrix4dPlaygroundState createState() => _Matrix4dPlaygroundState();
 }
