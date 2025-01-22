@@ -3,13 +3,13 @@
   "packages": [
     {
       "name": "_fe_analyzer_shared",
-      "rootUri": "file:///home/labrom/.pub-cache/hosted/pub.dev/_fe_analyzer_shared-72.0.0",
+      "rootUri": "file:///home/labrom/.pub-cache/hosted/pub.dev/_fe_analyzer_shared-78.0.0",
       "packageUri": "lib/",
       "languageVersion": "3.3"
     },
     {
       "name": "_flutterfire_internals",
-      "rootUri": "file:///home/labrom/.pub-cache/hosted/pub.dev/_flutterfire_internals-1.3.49",
+      "rootUri": "file:///home/labrom/.pub-cache/hosted/pub.dev/_flutterfire_internals-1.3.50",
       "packageUri": "lib/",
       "languageVersion": "3.2"
     },
@@ -21,13 +21,13 @@
     },
     {
       "name": "analyzer",
-      "rootUri": "file:///home/labrom/.pub-cache/hosted/pub.dev/analyzer-6.7.0",
+      "rootUri": "file:///home/labrom/.pub-cache/hosted/pub.dev/analyzer-7.1.0",
       "packageUri": "lib/",
       "languageVersion": "3.3"
     },
     {
       "name": "analyzer_plugin",
-      "rootUri": "file:///home/labrom/.pub-cache/hosted/pub.dev/analyzer_plugin-0.11.3",
+      "rootUri": "file:///home/labrom/.pub-cache/hosted/pub.dev/analyzer_plugin-0.12.0",
       "packageUri": "lib/",
       "languageVersion": "3.0"
     },
@@ -51,39 +51,39 @@
     },
     {
       "name": "build",
-      "rootUri": "file:///home/labrom/.pub-cache/hosted/pub.dev/build-2.4.1",
+      "rootUri": "file:///home/labrom/.pub-cache/hosted/pub.dev/build-2.4.2",
       "packageUri": "lib/",
-      "languageVersion": "2.19"
+      "languageVersion": "3.6"
     },
     {
       "name": "build_config",
-      "rootUri": "file:///home/labrom/.pub-cache/hosted/pub.dev/build_config-1.1.1",
+      "rootUri": "file:///home/labrom/.pub-cache/hosted/pub.dev/build_config-1.1.2",
       "packageUri": "lib/",
-      "languageVersion": "2.14"
+      "languageVersion": "3.6"
     },
     {
       "name": "build_daemon",
-      "rootUri": "file:///home/labrom/.pub-cache/hosted/pub.dev/build_daemon-4.0.2",
+      "rootUri": "file:///home/labrom/.pub-cache/hosted/pub.dev/build_daemon-4.0.3",
       "packageUri": "lib/",
-      "languageVersion": "3.4"
+      "languageVersion": "3.6"
     },
     {
       "name": "build_resolvers",
-      "rootUri": "file:///home/labrom/.pub-cache/hosted/pub.dev/build_resolvers-2.4.2",
+      "rootUri": "file:///home/labrom/.pub-cache/hosted/pub.dev/build_resolvers-2.4.3",
       "packageUri": "lib/",
-      "languageVersion": "3.0"
+      "languageVersion": "3.6"
     },
     {
       "name": "build_runner",
-      "rootUri": "file:///home/labrom/.pub-cache/hosted/pub.dev/build_runner-2.4.13",
+      "rootUri": "file:///home/labrom/.pub-cache/hosted/pub.dev/build_runner-2.4.14",
       "packageUri": "lib/",
-      "languageVersion": "3.5"
+      "languageVersion": "3.6"
     },
     {
       "name": "build_runner_core",
-      "rootUri": "file:///home/labrom/.pub-cache/hosted/pub.dev/build_runner_core-7.3.2",
+      "rootUri": "file:///home/labrom/.pub-cache/hosted/pub.dev/build_runner_core-8.0.0",
       "packageUri": "lib/",
-      "languageVersion": "3.5"
+      "languageVersion": "3.6"
     },
     {
       "name": "built_collection",
@@ -129,19 +129,19 @@
     },
     {
       "name": "cloud_firestore",
-      "rootUri": "file:///home/labrom/.pub-cache/hosted/pub.dev/cloud_firestore-5.6.1",
+      "rootUri": "file:///home/labrom/.pub-cache/hosted/pub.dev/cloud_firestore-5.6.2",
       "packageUri": "lib/",
       "languageVersion": "3.2"
     },
     {
       "name": "cloud_firestore_platform_interface",
-      "rootUri": "file:///home/labrom/.pub-cache/hosted/pub.dev/cloud_firestore_platform_interface-6.6.1",
+      "rootUri": "file:///home/labrom/.pub-cache/hosted/pub.dev/cloud_firestore_platform_interface-6.6.2",
       "packageUri": "lib/",
       "languageVersion": "3.2"
     },
     {
       "name": "cloud_firestore_web",
-      "rootUri": "file:///home/labrom/.pub-cache/hosted/pub.dev/cloud_firestore_web-4.4.1",
+      "rootUri": "file:///home/labrom/.pub-cache/hosted/pub.dev/cloud_firestore_web-4.4.2",
       "packageUri": "lib/",
       "languageVersion": "3.4"
     },
@@ -153,9 +153,9 @@
     },
     {
       "name": "collection",
-      "rootUri": "file:///home/labrom/.pub-cache/hosted/pub.dev/collection-1.18.0",
+      "rootUri": "file:///home/labrom/.pub-cache/hosted/pub.dev/collection-1.19.0",
       "packageUri": "lib/",
-      "languageVersion": "2.18"
+      "languageVersion": "3.4"
     },
     {
       "name": "convert",
@@ -171,33 +171,33 @@
     },
     {
       "name": "custom_lint",
-      "rootUri": "file:///home/labrom/.pub-cache/hosted/pub.dev/custom_lint-0.7.0",
+      "rootUri": "file:///home/labrom/.pub-cache/hosted/pub.dev/custom_lint-0.7.1",
       "packageUri": "lib/",
       "languageVersion": "3.0"
     },
     {
       "name": "custom_lint_builder",
-      "rootUri": "file:///home/labrom/.pub-cache/hosted/pub.dev/custom_lint_builder-0.7.0",
+      "rootUri": "file:///home/labrom/.pub-cache/hosted/pub.dev/custom_lint_builder-0.7.1",
       "packageUri": "lib/",
       "languageVersion": "3.0"
     },
     {
       "name": "custom_lint_core",
-      "rootUri": "file:///home/labrom/.pub-cache/hosted/pub.dev/custom_lint_core-0.7.0",
+      "rootUri": "file:///home/labrom/.pub-cache/hosted/pub.dev/custom_lint_core-0.7.1",
       "packageUri": "lib/",
       "languageVersion": "3.0"
     },
     {
       "name": "custom_lint_visitor",
-      "rootUri": "file:///home/labrom/.pub-cache/hosted/pub.dev/custom_lint_visitor-1.0.0+6.7.0",
+      "rootUri": "file:///home/labrom/.pub-cache/hosted/pub.dev/custom_lint_visitor-1.0.0+7.1.0",
       "packageUri": "lib/",
       "languageVersion": "3.0"
     },
     {
       "name": "dart_style",
-      "rootUri": "file:///home/labrom/.pub-cache/hosted/pub.dev/dart_style-2.3.7",
+      "rootUri": "file:///home/labrom/.pub-cache/hosted/pub.dev/dart_style-3.0.1",
       "packageUri": "lib/",
-      "languageVersion": "3.0"
+      "languageVersion": "3.4"
     },
     {
       "name": "desktop_webview_auth",
@@ -231,43 +231,43 @@
     },
     {
       "name": "firebase_analytics",
-      "rootUri": "file:///home/labrom/.pub-cache/hosted/pub.dev/firebase_analytics-11.4.0",
+      "rootUri": "file:///home/labrom/.pub-cache/hosted/pub.dev/firebase_analytics-11.4.1",
       "packageUri": "lib/",
       "languageVersion": "3.2"
     },
     {
       "name": "firebase_analytics_platform_interface",
-      "rootUri": "file:///home/labrom/.pub-cache/hosted/pub.dev/firebase_analytics_platform_interface-4.3.0",
+      "rootUri": "file:///home/labrom/.pub-cache/hosted/pub.dev/firebase_analytics_platform_interface-4.3.1",
       "packageUri": "lib/",
       "languageVersion": "3.2"
     },
     {
       "name": "firebase_analytics_web",
-      "rootUri": "file:///home/labrom/.pub-cache/hosted/pub.dev/firebase_analytics_web-0.5.10+6",
+      "rootUri": "file:///home/labrom/.pub-cache/hosted/pub.dev/firebase_analytics_web-0.5.10+7",
       "packageUri": "lib/",
       "languageVersion": "3.4"
     },
     {
       "name": "firebase_auth",
-      "rootUri": "file:///home/labrom/.pub-cache/hosted/pub.dev/firebase_auth-5.4.0",
+      "rootUri": "file:///home/labrom/.pub-cache/hosted/pub.dev/firebase_auth-5.4.1",
       "packageUri": "lib/",
       "languageVersion": "3.2"
     },
     {
       "name": "firebase_auth_platform_interface",
-      "rootUri": "file:///home/labrom/.pub-cache/hosted/pub.dev/firebase_auth_platform_interface-7.5.0",
+      "rootUri": "file:///home/labrom/.pub-cache/hosted/pub.dev/firebase_auth_platform_interface-7.5.1",
       "packageUri": "lib/",
       "languageVersion": "3.2"
     },
     {
       "name": "firebase_auth_web",
-      "rootUri": "file:///home/labrom/.pub-cache/hosted/pub.dev/firebase_auth_web-5.13.6",
+      "rootUri": "file:///home/labrom/.pub-cache/hosted/pub.dev/firebase_auth_web-5.13.7",
       "packageUri": "lib/",
       "languageVersion": "3.4"
     },
     {
       "name": "firebase_core",
-      "rootUri": "file:///home/labrom/.pub-cache/hosted/pub.dev/firebase_core-3.10.0",
+      "rootUri": "file:///home/labrom/.pub-cache/hosted/pub.dev/firebase_core-3.10.1",
       "packageUri": "lib/",
       "languageVersion": "3.2"
     },
@@ -285,13 +285,13 @@
     },
     {
       "name": "firebase_dynamic_links",
-      "rootUri": "file:///home/labrom/.pub-cache/hosted/pub.dev/firebase_dynamic_links-6.1.0",
+      "rootUri": "file:///home/labrom/.pub-cache/hosted/pub.dev/firebase_dynamic_links-6.1.1",
       "packageUri": "lib/",
       "languageVersion": "3.2"
     },
     {
       "name": "firebase_dynamic_links_platform_interface",
-      "rootUri": "file:///home/labrom/.pub-cache/hosted/pub.dev/firebase_dynamic_links_platform_interface-0.2.7",
+      "rootUri": "file:///home/labrom/.pub-cache/hosted/pub.dev/firebase_dynamic_links_platform_interface-0.2.7+1",
       "packageUri": "lib/",
       "languageVersion": "3.2"
     },
@@ -447,15 +447,15 @@
     },
     {
       "name": "hotreloader",
-      "rootUri": "file:///home/labrom/.pub-cache/hosted/pub.dev/hotreloader-4.2.0",
+      "rootUri": "file:///home/labrom/.pub-cache/hosted/pub.dev/hotreloader-4.3.0",
       "packageUri": "lib/",
       "languageVersion": "3.0"
     },
     {
       "name": "http",
-      "rootUri": "file:///home/labrom/.pub-cache/hosted/pub.dev/http-1.2.2",
+      "rootUri": "file:///home/labrom/.pub-cache/hosted/pub.dev/http-1.3.0",
       "packageUri": "lib/",
-      "languageVersion": "3.3"
+      "languageVersion": "3.4"
     },
     {
       "name": "http_multi_server",
@@ -465,9 +465,9 @@
     },
     {
       "name": "http_parser",
-      "rootUri": "file:///home/labrom/.pub-cache/hosted/pub.dev/http_parser-4.0.2",
+      "rootUri": "file:///home/labrom/.pub-cache/hosted/pub.dev/http_parser-4.1.2",
       "packageUri": "lib/",
-      "languageVersion": "2.12"
+      "languageVersion": "3.4"
     },
     {
       "name": "intl",
@@ -495,13 +495,13 @@
     },
     {
       "name": "leak_tracker",
-      "rootUri": "file:///home/labrom/.pub-cache/hosted/pub.dev/leak_tracker-10.0.5",
+      "rootUri": "file:///home/labrom/.pub-cache/hosted/pub.dev/leak_tracker-10.0.7",
       "packageUri": "lib/",
       "languageVersion": "3.2"
     },
     {
       "name": "leak_tracker_flutter_testing",
-      "rootUri": "file:///home/labrom/.pub-cache/hosted/pub.dev/leak_tracker_flutter_testing-3.0.5",
+      "rootUri": "file:///home/labrom/.pub-cache/hosted/pub.dev/leak_tracker_flutter_testing-3.0.8",
       "packageUri": "lib/",
       "languageVersion": "3.2"
     },
@@ -513,9 +513,9 @@
     },
     {
       "name": "lints",
-      "rootUri": "file:///home/labrom/.pub-cache/hosted/pub.dev/lints-5.0.0",
+      "rootUri": "file:///home/labrom/.pub-cache/hosted/pub.dev/lints-5.1.1",
       "packageUri": "lib/",
-      "languageVersion": "3.5"
+      "languageVersion": "3.6"
     },
     {
       "name": "logger",
@@ -531,7 +531,7 @@
     },
     {
       "name": "macros",
-      "rootUri": "file:///home/labrom/.pub-cache/hosted/pub.dev/macros-0.1.2-main.4",
+      "rootUri": "file:///home/labrom/.pub-cache/hosted/pub.dev/macros-0.1.3-main.0",
       "packageUri": "lib/",
       "languageVersion": "3.4"
     },
@@ -657,9 +657,9 @@
     },
     {
       "name": "pubspec_parse",
-      "rootUri": "file:///home/labrom/.pub-cache/hosted/pub.dev/pubspec_parse-1.4.0",
+      "rootUri": "file:///home/labrom/.pub-cache/hosted/pub.dev/pubspec_parse-1.5.0",
       "packageUri": "lib/",
-      "languageVersion": "3.2"
+      "languageVersion": "3.6"
     },
     {
       "name": "riverpod",
@@ -669,7 +669,7 @@
     },
     {
       "name": "riverpod_analyzer_utils",
-      "rootUri": "file:///home/labrom/.pub-cache/hosted/pub.dev/riverpod_analyzer_utils-0.5.8",
+      "rootUri": "file:///home/labrom/.pub-cache/hosted/pub.dev/riverpod_analyzer_utils-0.5.9",
       "packageUri": "lib/",
       "languageVersion": "3.0"
     },
@@ -681,13 +681,13 @@
     },
     {
       "name": "riverpod_generator",
-      "rootUri": "file:///home/labrom/.pub-cache/hosted/pub.dev/riverpod_generator-2.6.3",
+      "rootUri": "file:///home/labrom/.pub-cache/hosted/pub.dev/riverpod_generator-2.6.4",
       "packageUri": "lib/",
       "languageVersion": "2.17"
     },
     {
       "name": "riverpod_lint",
-      "rootUri": "file:///home/labrom/.pub-cache/hosted/pub.dev/riverpod_lint-2.6.3",
+      "rootUri": "file:///home/labrom/.pub-cache/hosted/pub.dev/riverpod_lint-2.6.4",
       "packageUri": "lib/",
       "languageVersion": "2.17"
     },
@@ -699,9 +699,9 @@
     },
     {
       "name": "shelf",
-      "rootUri": "file:///home/labrom/.pub-cache/hosted/pub.dev/shelf-1.4.1",
+      "rootUri": "file:///home/labrom/.pub-cache/hosted/pub.dev/shelf-1.4.2",
       "packageUri": "lib/",
-      "languageVersion": "2.17"
+      "languageVersion": "3.4"
     },
     {
       "name": "shelf_web_socket",
@@ -717,9 +717,9 @@
     },
     {
       "name": "source_gen",
-      "rootUri": "file:///home/labrom/.pub-cache/hosted/pub.dev/source_gen-1.5.0",
+      "rootUri": "file:///home/labrom/.pub-cache/hosted/pub.dev/source_gen-2.0.0",
       "packageUri": "lib/",
-      "languageVersion": "3.0"
+      "languageVersion": "3.6"
     },
     {
       "name": "source_span",
@@ -735,9 +735,9 @@
     },
     {
       "name": "stack_trace",
-      "rootUri": "file:///home/labrom/.pub-cache/hosted/pub.dev/stack_trace-1.11.1",
+      "rootUri": "file:///home/labrom/.pub-cache/hosted/pub.dev/stack_trace-1.12.0",
       "packageUri": "lib/",
-      "languageVersion": "2.18"
+      "languageVersion": "3.4"
     },
     {
       "name": "state_notifier",
@@ -759,9 +759,9 @@
     },
     {
       "name": "string_scanner",
-      "rootUri": "file:///home/labrom/.pub-cache/hosted/pub.dev/string_scanner-1.2.0",
+      "rootUri": "file:///home/labrom/.pub-cache/hosted/pub.dev/string_scanner-1.3.0",
       "packageUri": "lib/",
-      "languageVersion": "2.18"
+      "languageVersion": "3.1"
     },
     {
       "name": "term_glyph",
@@ -771,9 +771,9 @@
     },
     {
       "name": "test_api",
-      "rootUri": "file:///home/labrom/.pub-cache/hosted/pub.dev/test_api-0.7.2",
+      "rootUri": "file:///home/labrom/.pub-cache/hosted/pub.dev/test_api-0.7.3",
       "packageUri": "lib/",
-      "languageVersion": "3.2"
+      "languageVersion": "3.4"
     },
     {
       "name": "timing",
@@ -831,7 +831,7 @@
     },
     {
       "name": "vm_service",
-      "rootUri": "file:///home/labrom/.pub-cache/hosted/pub.dev/vm_service-14.2.5",
+      "rootUri": "file:///home/labrom/.pub-cache/hosted/pub.dev/vm_service-14.3.0",
       "packageUri": "lib/",
       "languageVersion": "3.3"
     },
@@ -855,7 +855,7 @@
     },
     {
       "name": "web_socket_channel",
-      "rootUri": "file:///home/labrom/.pub-cache/hosted/pub.dev/web_socket_channel-3.0.1",
+      "rootUri": "file:///home/labrom/.pub-cache/hosted/pub.dev/web_socket_channel-3.0.2",
       "packageUri": "lib/",
       "languageVersion": "3.3"
     },
@@ -884,10 +884,10 @@
       "languageVersion": "3.1"
     }
   ],
-  "generated": "2025-01-15T03:53:48.120033Z",
+  "generated": "2025-01-22T19:15:09.323581Z",
   "generator": "pub",
-  "generatorVersion": "3.5.4",
+  "generatorVersion": "3.6.1",
   "flutterRoot": "file:///home/labrom/flutter",
-  "flutterVersion": "3.24.5",
+  "flutterVersion": "3.27.3",
   "pubCache": "file:///home/labrom/.pub-cache"
 }
