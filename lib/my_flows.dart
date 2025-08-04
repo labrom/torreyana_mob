@@ -5,7 +5,12 @@ final flows = {
   'intro': Intro(),
 };
 
-Widget buildFlowStep(BuildContext context, String stepName) {
+Widget buildFlowStep(
+  BuildContext context,
+  WidgetRef ref,
+  String stepName,
+  Map<String, dynamic> sessionData,
+) {
   if (stepName.startsWith('intro')) {
     return Center(child: Text(stepName));
   }

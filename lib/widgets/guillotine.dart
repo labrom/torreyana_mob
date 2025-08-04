@@ -14,6 +14,7 @@ class Matrix4dPlayground extends StatefulWidget {
   const Matrix4dPlayground({super.key});
 
   @override
+  // ignore: library_private_types_in_public_api
   _Matrix4dPlaygroundState createState() => _Matrix4dPlaygroundState();
 }
 
@@ -57,8 +58,8 @@ class _Matrix4dPlaygroundState extends State<Matrix4dPlayground> {
           },
           child: Container(
             color: Colors.red,
-            height: 200.0,
-            width: 200.0,
+            height: 200,
+            width: 200,
           ),
         ),
       ),

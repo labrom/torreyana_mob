@@ -1,21 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
+import 'package:torreyana_mob/providers/flows.dart';
+import 'package:torreyana_mob/providers/navigation.dart';
+import 'package:torreyana_mob/providers/settings.dart';
 
-import '../providers/flows.dart';
-import '../providers/settings.dart';
+class SettingsPageLink extends ConsumerWidget {
 
-class SettingsPageLink extends StatelessWidget {
+  const SettingsPageLink({required this.title, required this.route, super.key, this.push = false});
   final String title;
   final String route;
-
-  const SettingsPageLink({super.key, required this.title, required this.route});
+  final bool push;
   @override
-  Widget build(BuildContext context) => SimpleWidgetSetting(
+  Widget build(BuildContext context, WidgetRef ref) => SimpleWidgetSetting(
         title: title,
         actionChild: IconButton(
           onPressed: () {
-            context.go(route);
+            context.navigate(ref, route, push: push);
           },
           icon: const Icon(Icons.chevron_right),
         ),
@@ -23,25 +23,22 @@ class SettingsPageLink extends StatelessWidget {
 }
 
 class SettingsSection extends StatelessWidget {
+
+  const SettingsSection({
+    required this.title, required this.children, super.key,
+  });
   final String title;
   final List<Widget> children;
 
-  const SettingsSection({
-    super.key,
-    required this.title,
-    required this.children,
-  });
-
   @override
   Widget build(BuildContext context) => Column(
-        mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
-            padding: const EdgeInsets.only(top: 24.0, bottom: 8.0),
+            padding: const EdgeInsets.only(top: 24, bottom: 8),
             child: Text(
               title,
-              style: Theme.of(context).textTheme.titleLarge,
+              style: context.textTheme.titleLarge,
             ),
           ),
           ...children,
@@ -49,24 +46,24 @@ class SettingsSection extends StatelessWidget {
       );
 }
 
+extension on BuildContext {
+  get textTheme => null;
+}
+
 class SimpleWidgetSetting extends StatelessWidget {
+
+  const SimpleWidgetSetting({
+    required this.title, required this.actionChild, super.key,
+    this.subtitle,
+  });
   final String title;
   final String? subtitle;
   final Widget actionChild;
 
-  const SimpleWidgetSetting({
-    super.key,
-    required this.title,
-    required this.actionChild,
-    this.subtitle,
-  });
-
   @override
   Widget build(BuildContext context) => Padding(
-        padding: const EdgeInsets.symmetric(vertical: 16.0),
+        padding: const EdgeInsets.symmetric(vertical: 16),
         child: Row(
-          mainAxisSize: MainAxisSize.max,
-          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Expanded(
               child: subtitle != null
@@ -75,20 +72,20 @@ class SimpleWidgetSetting extends StatelessWidget {
                       children: [
                         Text(
                           title,
-                          style: Theme.of(context).textTheme.titleMedium,
+                          style: context.textTheme.titleMedium,
                         ),
                         Padding(
-                          padding: const EdgeInsets.only(top: 8.0),
+                          padding: const EdgeInsets.only(top: 8),
                           child: Text(
                             subtitle!,
-                            style: Theme.of(context).textTheme.titleSmall,
+                            style: context.textTheme.titleSmall,
                           ),
                         ),
                       ],
                     )
                   : Text(
                       title,
-                      style: Theme.of(context).textTheme.titleMedium,
+                      style: context.textTheme.titleMedium,
                     ),
             ),
             actionChild,
@@ -98,18 +95,17 @@ class SimpleWidgetSetting extends StatelessWidget {
 }
 
 class ToggleSetting extends StatelessWidget {
-  final String title;
-  final String? subtitle;
-  final bool value;
-  final void Function(bool)? onChanged;
 
   const ToggleSetting({
-    super.key,
-    required this.value,
-    required this.title,
+    required this.value, required this.title, super.key,
     this.onChanged,
     this.subtitle,
   });
+  final String title;
+  final String? subtitle;
+  final bool value;
+  // ignore: avoid_positional_boolean_parameters
+  final void Function(bool)? onChanged;
 
   @override
   Widget build(BuildContext context) => SimpleWidgetSetting(
@@ -123,16 +119,14 @@ class ToggleSetting extends StatelessWidget {
 }
 
 class ConnectedToggleSetting extends ConsumerWidget {
+
+  const ConnectedToggleSetting({
+    required this.settingKey, required this.title, super.key,
+    this.subtitle,
+  });
   final String settingKey;
   final String title;
   final String? subtitle;
-
-  const ConnectedToggleSetting({
-    super.key,
-    required this.settingKey,
-    required this.title,
-    this.subtitle,
-  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) => ToggleSetting(
@@ -154,16 +148,14 @@ class ConnectedToggleSetting extends ConsumerWidget {
 }
 
 class CachedToggleSetting extends ConsumerWidget {
+
+  const CachedToggleSetting({
+    required this.settingKey, required this.title, super.key,
+    this.subtitle,
+  });
   final String settingKey;
   final String title;
   final String? subtitle;
-
-  const CachedToggleSetting({
-    super.key,
-    required this.settingKey,
-    required this.title,
-    this.subtitle,
-  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) => ToggleSetting(

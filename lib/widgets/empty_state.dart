@@ -1,9 +1,9 @@
 import 'package:flutter/widgets.dart';
 
 class EmptyState extends StatelessWidget {
-  final String message;
 
-  const EmptyState({super.key, required this.message});
+  const EmptyState({required this.message, super.key});
+  final String message;
 
   @override
   Widget build(BuildContext context) => Center(

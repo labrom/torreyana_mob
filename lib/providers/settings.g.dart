@@ -7,7 +7,7 @@ part of 'settings.dart';
 // **************************************************************************
 
 String _$firestoreUserSettingsRepositoryHash() =>
-    r'77030aa1a318c03a45cded2a7e81dc7575ba8cad';
+    r'48d558996a06c39b4f5ad8b2b86ff3be276a3938';
 
 /// See also [FirestoreUserSettingsRepository].
 @ProviderFor(FirestoreUserSettingsRepository)

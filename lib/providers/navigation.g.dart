@@ -6,7 +6,7 @@ part of 'navigation.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$navigationHandlerHash() => r'cfd602e2a2a1700de06ff4f626bdf0403bab9cb8';
+String _$navigationHandlerHash() => r'32040337907bd4371d5c713c0e60a2e25f4f8a18';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -35,7 +35,7 @@ const navigationHandlerProvider = NavigationHandlerFamily();
 
 /// See also [navigationHandler].
 class NavigationHandlerFamily
-    extends Family<void Function(BuildContext, String)> {
+    extends Family<void Function(BuildContext, String, bool)> {
   /// See also [navigationHandler].
   const NavigationHandlerFamily();
 
@@ -74,7 +74,7 @@ class NavigationHandlerFamily
 
 /// See also [navigationHandler].
 class NavigationHandlerProvider
-    extends AutoDisposeProvider<void Function(BuildContext, String)> {
+    extends AutoDisposeProvider<void Function(BuildContext, String, bool)> {
   /// See also [navigationHandler].
   NavigationHandlerProvider(
     String route,
@@ -109,7 +109,8 @@ class NavigationHandlerProvider
 
   @override
   Override overrideWith(
-    void Function(BuildContext, String) Function(NavigationHandlerRef provider)
+    void Function(BuildContext, String, bool) Function(
+            NavigationHandlerRef provider)
         create,
   ) {
     return ProviderOverride(
@@ -127,7 +128,7 @@ class NavigationHandlerProvider
   }
 
   @override
-  AutoDisposeProviderElement<void Function(BuildContext, String)>
+  AutoDisposeProviderElement<void Function(BuildContext, String, bool)>
       createElement() {
     return _NavigationHandlerProviderElement(this);
   }
@@ -149,21 +150,20 @@ class NavigationHandlerProvider
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 mixin NavigationHandlerRef
-    on AutoDisposeProviderRef<void Function(BuildContext, String)> {
+    on AutoDisposeProviderRef<void Function(BuildContext, String, bool)> {
   /// The parameter `route` of this provider.
   String get route;
 }
 
-class _NavigationHandlerProviderElement
-    extends AutoDisposeProviderElement<void Function(BuildContext, String)>
-    with NavigationHandlerRef {
+class _NavigationHandlerProviderElement extends AutoDisposeProviderElement<
+    void Function(BuildContext, String, bool)> with NavigationHandlerRef {
   _NavigationHandlerProviderElement(super.provider);
 
   @override
   String get route => (origin as NavigationHandlerProvider).route;
 }
 
-String _$routerHash() => r'a805b517f8f93aec2ba02262c86b302634af413e';
+String _$routerHash() => r'7fe94ed8365c535ecd4c2b32744b4725ed7837d1';
 
 /// go_router provider with all the registered routes.
 ///

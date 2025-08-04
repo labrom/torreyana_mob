@@ -1,11 +1,9 @@
-// ignore_for_file: must_be_immutable
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import '../providers/theme.dart';
-import 'settings.dart';
-import 'theme_buttons.dart';
+import 'package:torreyana_mob/providers/theme.dart';
+import 'package:torreyana_mob/widgets/settings.dart';
+import 'package:torreyana_mob/widgets/theme_buttons.dart';
+import 'package:tourbillon/build_context.dart';
 
 /// A widget that allows to view and set the app's theme.
 ///
@@ -32,11 +30,11 @@ class ThemeBuilder extends ConsumerWidget {
               initialColor: ref.watch(primaryColorProvider),
               pickerAlignment: PickerAlignment.rightBelow,
               onColor: (color) {
-                ref.read(primaryColorProvider.notifier).setColor(color);
+                ref.read(primaryColorProvider.notifier).color = color;
               },
             ),
           ),
-          ThemeColorsView(),
+          const ThemeColorsView(),
         ],
       );
 }
@@ -45,15 +43,15 @@ class ThemeBuilder extends ConsumerWidget {
 ///
 /// This widget uses [appThemeDataProvider].
 class ThemeColorsView extends ConsumerWidget {
-  final _padding = const EdgeInsets.all(6.0);
 
   const ThemeColorsView({super.key});
 
+  EdgeInsets get _padding => const EdgeInsets.all(6);
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final scheme = Theme.of(context).colorScheme;
+    final scheme = context.colorScheme;
     return Column(
-      mainAxisSize: MainAxisSize.max,
       children: [
         Row(
           children: [
@@ -131,7 +129,7 @@ class ThemeColorsView extends ConsumerWidget {
             children: [
               Text(
                 text,
-                style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                style: context.textTheme.titleLarge!.copyWith(
                       color: color,
                     ),
               ),

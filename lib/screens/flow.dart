@@ -1,30 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-
-import '../providers/flows.dart';
+import 'package:torreyana_mob/providers/flows.dart';
 
 /// A screen that displays a flow.
 ///
 /// This screen uses the [currentUserFlowStateProvider] and
 /// [stepBuilderProvider] providers.
 class FlowScreen extends ConsumerWidget {
-  final String flowName;
 
-  const FlowScreen({super.key, required this.flowName});
+  const FlowScreen({required this.flowName, super.key});
+  final String flowName;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final flow = ref.read(flowProvider(flowName: flowName));
+    final flow = ref.watch(flowProvider(flowName: flowName));
     return Scaffold(
       body: Column(
-        mainAxisSize: MainAxisSize.max,
-        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Expanded(
-            child: Consumer(
-              builder: ref.watch(stepBuilderProvider(flow: flowName)),
-            ),
+            child: ref.watch(stepBuilderProvider(flow: flowName)).call(context, ref, null),
           ),
           if (flow.totalSteps > 0) _progressBar(context, ref),
           _navBar(context, ref),
@@ -36,11 +31,10 @@ class FlowScreen extends ConsumerWidget {
   Widget _navBar(BuildContext context, WidgetRef ref) {
     final currentUserFlowState =
         ref.watch(currentUserFlowStateProvider(flowName: flowName));
-    final flow = ref.read(flowProvider(flowName: flowName));
+    final flow = ref.watch(flowProvider(flowName: flowName));
 
     if (flow.forwardNavigationOnly || currentUserFlowState.firstStep) {
       return Row(
-        mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           _nextbutton(context, ref),
@@ -48,7 +42,6 @@ class FlowScreen extends ConsumerWidget {
       );
     } else {
       return Row(
-        mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           _previousButton(context, ref),
@@ -60,11 +53,9 @@ class FlowScreen extends ConsumerWidget {
 
   Widget _previousButton(BuildContext context, WidgetRef ref) {
     final currentUserFlowStateNotifier =
-        ref.read(currentUserFlowStateProvider(flowName: flowName).notifier);
+        ref.watch(currentUserFlowStateProvider(flowName: flowName).notifier);
     return TextButton(
-      onPressed: () {
-        currentUserFlowStateNotifier.previousStep();
-      },
+      onPressed: currentUserFlowStateNotifier.previousStep,
       child: const Text('Previous'),
     );
   }
@@ -73,8 +64,8 @@ class FlowScreen extends ConsumerWidget {
     final currentUserFlowState =
         ref.watch(currentUserFlowStateProvider(flowName: flowName));
     final currentUserFlowStateNotifier =
-        ref.read(currentUserFlowStateProvider(flowName: flowName).notifier);
-    final flow = ref.read(flowProvider(flowName: flowName));
+        ref.watch(currentUserFlowStateProvider(flowName: flowName).notifier);
+    final flow = ref.watch(flowProvider(flowName: flowName));
     final sessionData = ref.watch(memorySessionDataRepositoryProvider);
     final nextStepAllowed =
         flow.canGoNext(currentUserFlowState.currentStep, sessionData);
@@ -93,9 +84,7 @@ class FlowScreen extends ConsumerWidget {
           )
         : TextButton(
             onPressed: nextStepAllowed
-                ? () {
-                    currentUserFlowStateNotifier.nextStep();
-                  }
+                ? currentUserFlowStateNotifier.nextStep
                 : null,
             child: const Text('Next'),
           );

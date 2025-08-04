@@ -15,11 +15,9 @@ class FirestoreUserSettingsRepository
       .snapshots()
       .map((snapshot) => snapshot.data() ?? {});
 
-  Future<void> write(String field, dynamic value) async {
-    FirebaseFirestore.instance
+  Future<void> write(String field, dynamic value) => FirebaseFirestore.instance
         .collection('user-settings')
         // TODO Replace 'anon' with anonymous Firebase sign-in
         .doc(ref.read(firebaseAuthProvider).currentUser?.uid ?? 'anon')
         .set({field: value}, SetOptions(merge: true));
-  }
 }

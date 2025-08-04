@@ -1,31 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import '../providers/navigation.dart';
+import 'package:torreyana_mob/providers/navigation.dart';
+import 'package:tourbillon/build_context.dart';
 
 class HeroLayout1 extends StatelessWidget {
-  final Text titleText;
-  final Text? subtitleText;
-  final Widget primaryCta;
-  final Widget? secondaryCta;
-  final Widget heroImage;
+
+  const HeroLayout1({
+    required this.titleText, required this.primaryCta, required this.heroImage, super.key,
+    this.subtitleText,
+    this.secondaryCta,
+  });
 
   HeroLayout1.fromTheme(
     BuildContext context, {
-    Key? key,
-    required String title,
+    required String title, required String primaryCta, required String primaryRoutePath, required Image heroImage, Key? key,
     String? subtitle,
     bool centeredText = false,
-    required String primaryCta,
-    required String primaryRoutePath,
     String? secondaryCta,
     String? secondaryRoutePath,
-    required Image heroImage,
   }) : this(
           key: key,
-          titleText: _titleText(title, Theme.of(context), centeredText),
+          titleText: _titleText(title, context.textTheme, centeredText),
           subtitleText: subtitle != null
-              ? _subtitleText(subtitle, Theme.of(context), centeredText)
+              ? _subtitleText(subtitle, context.textTheme, centeredText)
               : null,
           primaryCta: _primaryCta(context, primaryRoutePath, primaryCta),
           secondaryCta: secondaryCta != null && secondaryRoutePath != null
@@ -33,40 +30,35 @@ class HeroLayout1 extends StatelessWidget {
               : null,
           heroImage: heroImage,
         );
-
-  const HeroLayout1({
-    super.key,
-    required this.titleText,
-    this.subtitleText,
-    required this.primaryCta,
-    this.secondaryCta,
-    required this.heroImage,
-  });
+  final Text titleText;
+  final Text? subtitleText;
+  final Widget primaryCta;
+  final Widget? secondaryCta;
+  final Widget heroImage;
 
   @override
   Widget build(BuildContext context) => Column(
-        mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Padding(
-            padding: const EdgeInsets.all(32.0),
+            padding: const EdgeInsets.all(32),
             child: titleText,
           ),
           if (subtitleText != null)
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 32.0),
-              child: subtitleText!,
+              padding: const EdgeInsets.symmetric(horizontal: 32),
+              child: subtitleText,
             ),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 32.0),
+            padding: const EdgeInsets.symmetric(horizontal: 32),
             child: primaryCta,
           ),
           if (secondaryCta != null) secondaryCta!,
           ClipRRect(
             borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(24.0),
-              topRight: Radius.circular(24.0),
+              topLeft: Radius.circular(24),
+              topRight: Radius.circular(24),
             ),
             child: heroImage,
           ),
@@ -75,28 +67,25 @@ class HeroLayout1 extends StatelessWidget {
 }
 
 class HeroLayout2 extends StatelessWidget {
-  final Text titleText;
-  final Text? subtitleText;
-  final Widget primaryCta;
-  final Widget? secondaryCta;
-  final Widget heroImage;
+
+  const HeroLayout2({
+    required this.titleText, required this.primaryCta, required this.heroImage, super.key,
+    this.subtitleText,
+    this.secondaryCta,
+  });
 
   HeroLayout2.fromTheme(
     BuildContext context, {
-    Key? key,
-    required String title,
+    required String title, required String primaryCta, required String primaryRoutePath, required Image heroImage, Key? key,
     String? subtitle,
     bool centeredText = false,
-    required String primaryCta,
-    required String primaryRoutePath,
     String? secondaryCta,
     String? secondaryRoutePath,
-    required Image heroImage,
   }) : this(
           key: key,
-          titleText: _titleText(title, Theme.of(context), centeredText),
+          titleText: _titleText(title, context.textTheme, centeredText),
           subtitleText: subtitle != null
-              ? _subtitleText(subtitle, Theme.of(context), centeredText)
+              ? _subtitleText(subtitle, context.textTheme, centeredText)
               : null,
           primaryCta: _primaryCta(context, primaryRoutePath, primaryCta),
           secondaryCta: secondaryCta != null && secondaryRoutePath != null
@@ -104,32 +93,27 @@ class HeroLayout2 extends StatelessWidget {
               : null,
           heroImage: heroImage,
         );
-
-  const HeroLayout2({
-    super.key,
-    required this.titleText,
-    this.subtitleText,
-    required this.primaryCta,
-    this.secondaryCta,
-    required this.heroImage,
-  });
+  final Text titleText;
+  final Text? subtitleText;
+  final Widget primaryCta;
+  final Widget? secondaryCta;
+  final Widget heroImage;
 
   @override
   Widget build(BuildContext context) => Column(
-        mainAxisSize: MainAxisSize.max,
         children: [
           Stack(
             alignment: Alignment.bottomCenter,
             children: [
               heroImage,
               SizedBox(
-                height: 24.0,
+                height: 24,
                 child: Container(
                   decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.surface,
+                    color: context.colorScheme.surface,
                     borderRadius: const BorderRadius.only(
-                      topLeft: Radius.circular(24.0),
-                      topRight: Radius.circular(24.0),
+                      topLeft: Radius.circular(24),
+                      topRight: Radius.circular(24),
                     ),
                   ),
                 ),
@@ -139,30 +123,29 @@ class HeroLayout2 extends StatelessWidget {
           Expanded(
             child: Container(
               decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.surface,
+                color: context.colorScheme.surface,
                 borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(24.0),
-                  topRight: Radius.circular(24.0),
+                  topLeft: Radius.circular(24),
+                  topRight: Radius.circular(24),
                 ),
               ),
               child: Padding(
-                padding: const EdgeInsets.all(16.0),
+                padding: const EdgeInsets.all(16),
                 child: Column(
-                  mainAxisSize: MainAxisSize.max,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     Padding(
-                      padding: const EdgeInsets.all(16.0),
+                      padding: const EdgeInsets.all(16),
                       child: titleText,
                     ),
                     if (subtitleText != null)
                       Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                        child: subtitleText!,
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child: subtitleText,
                       ),
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
                       child: primaryCta,
                     ),
                     if (secondaryCta != null) secondaryCta!,
@@ -175,16 +158,16 @@ class HeroLayout2 extends StatelessWidget {
       );
 }
 
-Text _titleText(String title, ThemeData themeData, bool centeredText) => Text(
+Text _titleText(String title, TextTheme textTheme, bool centeredText) => Text(
       title,
-      style: themeData.textTheme.displayLarge,
+      style: textTheme.displayLarge,
       textAlign: centeredText ? TextAlign.center : TextAlign.start,
     );
 
-Text _subtitleText(String subtitle, ThemeData themeData, bool centeredText) =>
+Text _subtitleText(String subtitle, TextTheme textTheme, bool centeredText) =>
     Text(
       subtitle,
-      style: themeData.textTheme.headlineSmall,
+      style: textTheme.headlineSmall,
       textAlign: centeredText ? TextAlign.center : TextAlign.start,
     );
 

@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import '../layouts/hero.dart';
-import '../localization.dart';
-import '../providers/navigation.dart';
+import 'package:torreyana_mob/layouts/hero.dart';
+import 'package:torreyana_mob/localization.dart';
+import 'package:torreyana_mob/providers/navigation.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});

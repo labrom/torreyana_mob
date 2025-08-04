@@ -21,18 +21,24 @@ class PrimaryColor extends _$PrimaryColor {
   @override
   Color build() => seedColor;
 
-  void setColor(Color color) {
+  // ignore: avoid_setters_without_getters
+  set color(Color color) {
     state = color;
   }
 }
 
 @riverpod
 ThemeData appThemeData(Ref ref) {
+  final darkTheme = ref.watch(darkThemeProvider);
+  final baseTextTheme = darkTheme ? ThemeData.dark().textTheme : ThemeData.light().textTheme;
   return ThemeData.from(
-      colorScheme: ColorScheme.fromSeed(
-          seedColor: ref.watch(primaryColorProvider),
-          brightness: ref.watch(darkThemeProvider)
-              ? Brightness.dark
-              : Brightness.light),
-      useMaterial3: true);
+    colorScheme: ColorScheme.fromSeed(
+      seedColor: ref.watch(primaryColorProvider),
+      brightness: darkTheme
+          ? Brightness.dark
+          : Brightness.light,
+    ),
+    textTheme: textThemeFunction(baseTextTheme),
+    useMaterial3: true,
+  );
 }

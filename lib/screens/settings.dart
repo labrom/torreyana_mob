@@ -1,34 +1,56 @@
 import 'package:flutter/material.dart';
-
-import '../providers/navigation.dart';
-import '../widgets/settings.dart';
+import 'package:torreyana_mob/providers/navigation.dart';
+import 'package:torreyana_mob/widgets/settings.dart';
 
 class SettingsScreen extends StatelessWidget {
-  const SettingsScreen({super.key});
+  const SettingsScreen({super.key, this.showProfileLink = false, this.pushSubPages = true});
+
+  final bool showProfileLink;
+  final bool pushSubPages;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Settings'),
+        title: const Text('Settings'),
       ),
-      body: const SingleChildScrollView(
+      body: SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(16),
           child: Column(
             children: [
+              // TODO Extract to a 'my' file
+              SettingsSection(
+                title: 'Connections',
+                children: [
+                  SettingsPageLink(
+                    title: 'Update Schwab',
+                    route: '/$flowPathSegment/schwab',
+                    push: pushSubPages,
+                  ),
+                ],
+              ),
               SettingsSection(
                 title: 'Profile',
                 children: [
-                  ConnectedToggleSetting(
-                      settingKey: 'visible',
-                      title: 'Public profile',
-                      subtitle:
-                          'Profile information can be seen by everybody.'),
+                  if (showProfileLink)
+                    SettingsPageLink(
+                      title: 'Manage your profile',
+                      route: '/$profilePathSegment',
+                      push: pushSubPages,
+                    ),
+                  const ConnectedToggleSetting(
+                    settingKey: 'visible',
+                    title: 'Public profile',
+                    subtitle: 'Profile information can be seen by everybody.',
+                  ),
                 ],
               ),
               SettingsPageLink(
-                  title: 'Theme', route: '/$settingsPathSegment/theme'),
+                title: 'Theme',
+                route: '/$settingsPathSegment/theme',
+                push: pushSubPages,
+              ),
             ],
           ),
         ),

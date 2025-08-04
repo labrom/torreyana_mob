@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-import '../widgets/theme.dart';
+import 'package:torreyana_mob/widgets/theme.dart';
 
 class ThemeSettingsScreen extends StatelessWidget {
   const ThemeSettingsScreen({super.key});
@@ -13,7 +12,7 @@ class ThemeSettingsScreen extends StatelessWidget {
       ),
       body: const SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.all(16.0),
+          padding: EdgeInsets.all(16),
           child: Column(
             children: [
               ThemeBuilder(),

@@ -6,7 +6,7 @@ part of 'theme.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$appThemeDataHash() => r'ae069898f37c8b3fc61ba0d8c39198d1f8ed3d30';
+String _$appThemeDataHash() => r'62cd0ea588a69067382ee9829a881eceb99ac35f';
 
 /// See also [appThemeData].
 @ProviderFor(appThemeData)
@@ -36,7 +36,7 @@ final darkThemeProvider = AutoDisposeNotifierProvider<DarkTheme, bool>.internal(
 );
 
 typedef _$DarkTheme = AutoDisposeNotifier<bool>;
-String _$primaryColorHash() => r'9f3dfcb29208c845480c85f07bee4288c683b63e';
+String _$primaryColorHash() => r'5a7b33b3573daecbd1868a1ab5db6556a125ca42';
 
 /// See also [PrimaryColor].
 @ProviderFor(PrimaryColor)

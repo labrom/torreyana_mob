@@ -24,14 +24,13 @@ const textElementFonts = [
 ];
 
 class TextFontButton extends StatefulWidget {
-  final void Function(String) onFontSelected;
-  final String? font;
 
   const TextFontButton({
-    super.key,
-    required this.onFontSelected,
+    required this.onFontSelected, super.key,
     this.font,
   });
+  final void Function(String) onFontSelected;
+  final String? font;
 
   @override
   State<StatefulWidget> createState() => _TextFontButtonState();
@@ -82,14 +81,13 @@ class _TextFontButtonState extends State<TextFontButton>
 }
 
 class TextSizeButton extends StatefulWidget {
-  final void Function(int) onSizeSelected;
-  final TextStyle? textStyle;
 
   const TextSizeButton({
-    super.key,
-    required this.onSizeSelected,
+    required this.onSizeSelected, super.key,
     this.textStyle,
   });
+  final void Function(int) onSizeSelected;
+  final TextStyle? textStyle;
 
   @override
   State<StatefulWidget> createState() => _TextSizeButtonState();
@@ -113,10 +111,9 @@ class _TextSizeButtonState extends State<TextSizeButton>
             borderRadius: BorderRadius.circular(roundedCornerRadius - 1),
           ),
           child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [11, 14, 18, 24, 32, 42, 54, 68]
-                .map((size) => _sizeSelector(size))
+                .map(_sizeSelector)
                 .toList(),
           ),
         ),
@@ -145,14 +142,13 @@ class _TextSizeButtonState extends State<TextSizeButton>
 }
 
 class TextAlignmentButton extends StatefulWidget {
-  final TextAlign _align;
-  final void Function(TextAlign align) onAlign;
 
   const TextAlignmentButton(
     this._align, {
-    super.key,
-    required this.onAlign,
+    required this.onAlign, super.key,
   });
+  final TextAlign _align;
+  final void Function(TextAlign align) onAlign;
 
   @override
   State<StatefulWidget> createState() => _TextAlignmentButtonState();
@@ -183,7 +179,8 @@ class _TextAlignmentButtonState extends State<TextAlignmentButton> {
         return Icons.format_align_center;
       case TextAlign.justify:
         return Icons.format_align_justify;
-      default:
+      case TextAlign.left:
+      case TextAlign.start:
         return Icons.format_align_left;
     }
   }
@@ -194,17 +191,13 @@ class _TextAlignmentButtonState extends State<TextAlignmentButton> {
         case TextAlign.right:
         case TextAlign.end:
           _align = TextAlign.justify;
-          break;
         case TextAlign.center:
           _align = TextAlign.right;
-          break;
         case TextAlign.justify:
           _align = TextAlign.left;
-          break;
         case TextAlign.left:
         case TextAlign.start:
           _align = TextAlign.center;
-          break;
       }
     });
     widget.onAlign(_align);
@@ -212,16 +205,15 @@ class _TextAlignmentButtonState extends State<TextAlignmentButton> {
 }
 
 class ThemePrimaryColorButton extends StatefulWidget {
+
+  const ThemePrimaryColorButton({
+    required this.onColor, super.key,
+    this.initialColor = Colors.black,
+    this.pickerAlignment = PickerAlignment.leftBelow,
+  });
   final Color initialColor;
   final void Function(Color color) onColor;
   final PickerAlignment pickerAlignment;
-
-  const ThemePrimaryColorButton({
-    super.key,
-    this.initialColor = Colors.black,
-    this.pickerAlignment = PickerAlignment.leftBelow,
-    required this.onColor,
-  });
 
   @override
   State<StatefulWidget> createState() => _ThemePrimaryColorButtonState();
@@ -264,14 +256,9 @@ class _ThemePrimaryColorButtonState extends State<ThemePrimaryColorButton>
 }
 
 class _ColorPicker extends StatelessWidget {
-  final Color? selectedColor;
-  final double minValue, maxValue;
-  final double minSaturation, maxSaturation;
-  final void Function(Color) onColorPicked;
 
   const _ColorPicker({
-    this.selectedColor,
-    required this.onColorPicked,
+    required this.onColorPicked, this.selectedColor,
     this.minValue = 0,
     this.maxValue = 1,
     this.minSaturation = 0,
@@ -282,11 +269,17 @@ class _ColorPicker extends StatelessWidget {
         assert(minSaturation >= 0),
         assert(minSaturation <= maxSaturation),
         assert(maxSaturation <= 1);
+  final Color? selectedColor;
+  final double minValue;
+  final double maxValue;
+  final double minSaturation;
+  final double maxSaturation;
+  final void Function(Color) onColorPicked;
 
   @override
   Widget build(BuildContext context) {
-    var columns = 12;
-    var rows = 8;
+    const columns = 12;
+    const rows = 8;
     return Table(
       defaultColumnWidth: const IntrinsicColumnWidth(flex: 1),
       children: List.generate(
@@ -342,9 +335,9 @@ class _ColorPicker extends StatelessWidget {
 }
 
 class _TransparentColorBoxDecoration extends Decoration {
-  final Color color;
 
   const _TransparentColorBoxDecoration({this.color = Colors.black});
+  final Color color;
 
   @override
   bool get isComplex => false;
@@ -355,37 +348,32 @@ class _TransparentColorBoxDecoration extends Decoration {
 }
 
 class _TransparentColorBoxPainter extends BoxPainter {
-  final Color color;
 
   _TransparentColorBoxPainter(this.color);
+  final Color color;
 
   @override
   void paint(Canvas canvas, Offset offset, ImageConfiguration configuration) {
-    var rect = (offset & configuration.size!);
-    var paint = Paint()
+    final rect = offset & configuration.size!;
+    final paint = Paint()
       ..color = color
       ..style = PaintingStyle.stroke
       ..strokeWidth = 1;
-    var clipRadius = (rect.width - 2) / 2;
-    var rectCenter =
+    final clipRadius = (rect.width - 2) / 2;
+    final rectCenter =
         Offset(rect.left + rect.width / 2, rect.top + rect.height / 2);
-    var clip = Path()
+    final clip = Path()
       ..addOval(Rect.fromCircle(center: rectCenter, radius: clipRadius));
-    canvas.save();
-    canvas.clipPath(clip);
-    canvas.drawLine(rect.topLeft, rect.bottomRight, paint);
-    canvas.drawLine(rect.topRight, rect.bottomLeft, paint);
-    canvas.restore();
-    canvas.drawCircle(rectCenter, clipRadius, paint);
+    canvas..save()
+    ..clipPath(clip)
+    ..drawLine(rect.topLeft, rect.bottomRight, paint)
+    ..drawLine(rect.topRight, rect.bottomLeft, paint)
+    ..restore()
+    ..drawCircle(rectCenter, clipRadius, paint);
   }
 }
 
 class ToggleIconButton extends StatefulWidget {
-  final IconData icon;
-  final IconData? uncheckedIcon;
-  final String? tooltip;
-  final void Function(bool value)? onToggle;
-  final bool initiallyChecked;
 
   const ToggleIconButton(
       {super.key,
@@ -394,6 +382,11 @@ class ToggleIconButton extends StatefulWidget {
       this.onToggle,
       this.initiallyChecked = false,
       this.tooltip});
+  final IconData icon;
+  final IconData? uncheckedIcon;
+  final String? tooltip;
+  final void Function(bool value)? onToggle;
+  final bool initiallyChecked;
 
   @override
   State<StatefulWidget> createState() => _ToggleIconButtonState();
@@ -458,7 +451,7 @@ mixin _Picker<T extends StatefulWidget> on State<T> {
       return;
     }
 
-    final renderBox = context.findRenderObject() as RenderBox;
+    final renderBox = context.findRenderObject()! as RenderBox;
     final offset = renderBox.localToGlobal(Offset.zero);
     final screenSize = MediaQuery.of(context).size;
 
@@ -525,7 +518,6 @@ mixin _Picker<T extends StatefulWidget> on State<T> {
           borderRadius: BorderRadius.circular(4),
           border: Border.all(
             color: Theme.of(context).dividerColor,
-            width: 1,
           ),
         ),
         child: Column(
@@ -533,8 +525,8 @@ mixin _Picker<T extends StatefulWidget> on State<T> {
           children: [
             menuContent(context),
             TextButton(
+              onPressed: _removeOverlay,
               child: Text(MaterialLocalizations.of(context).cancelButtonLabel),
-              onPressed: () => _removeOverlay(),
             )
           ],
         ),

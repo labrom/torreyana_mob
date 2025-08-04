@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:torreyana_mob/providers/settings.dart';
+import 'package:torreyana_mob/widgets/settings.dart';
 import 'package:tourbillon/log.dart';
-
-import '../providers/settings.dart';
-import '../widgets/settings.dart';
 
 part '../my_flows.dart';
 part 'flows.g.dart';
@@ -21,6 +20,17 @@ part 'flows.g.dart';
 /// variations. If these variations are implemented in separate [Flow] sub-classes,
 /// they could still share most of their steps.
 abstract class Flow {
+  /// Creates a flow.
+  ///
+  /// Child classes need to invoke this constructor.
+  const Flow(
+    this.name, {
+    required this.dataStorage,
+    required this.firstStep,
+    this.forwardNavigationOnly = false,
+    this.totalSteps = 0,
+  });
+
   /// The flow name.
   ///
   /// This name isn't displayed in the UI.
@@ -50,17 +60,6 @@ abstract class Flow {
   /// determine when the end of the flow has been reached, and no progress
   /// indicator is shown.
   final int totalSteps;
-
-  /// Creates a flow.
-  ///
-  /// Child classes need to invoke this constructor.
-  const Flow(
-    this.name, {
-    required this.dataStorage,
-    required this.firstStep,
-    this.forwardNavigationOnly = false,
-    this.totalSteps = 0,
-  });
 
   /// Determines the next step, given the current step and the flow data.
   ///
@@ -119,24 +118,19 @@ enum FlowDataStorage {
   mergedUserSettings,
 
   /// Flow data is stored in a group (Firestore document) inside user settings.
-  flowNameUserSettingsGroup
+  flowNameUserSettingsGroup,
 }
 
 class UserFlowState {
+  UserFlowState({required this.flow, required this.steps, this.last = false})
+    : assert(flow.isNotEmpty && steps.isNotEmpty),
+      started = true;
+
+  UserFlowState.initial() : flow = '', steps = [], last = false, started = false;
   final bool started;
   final bool last;
   final String flow;
   final List<String> steps;
-
-  UserFlowState({required this.flow, required this.steps, this.last = false})
-      : assert(flow.isNotEmpty && steps.isNotEmpty),
-        started = true;
-
-  UserFlowState.initial()
-      : flow = '',
-        steps = [],
-        last = false,
-        started = false;
 
   bool get firstStep => steps.length == 1;
 
@@ -152,33 +146,39 @@ Flow flow(Ref ref, {required String flowName}) => flows[flowName]!;
 class CurrentUserFlowState extends _$CurrentUserFlowState {
   @override
   UserFlowState build({required String flowName}) => UserFlowState(
-      flow: flowName,
-      steps: [ref.read(flowProvider(flowName: flowName)).firstStep]);
+    flow: flowName,
+    steps: [ref.watch(flowProvider(flowName: flowName)).firstStep],
+  );
 
   void nextStep() {
     if (state.started && !state.last) {
-      final flow = ref.read(flowProvider(flowName: state.flow));
+      final flow = ref.watch(flowProvider(flowName: state.flow));
       final nextStep = flow.nextStep(
-          state.steps.last, ref.read(memorySessionDataRepositoryProvider));
-      log.d('Moving flow \'$state.flow\' to next step: \'$nextStep\'');
+        state.steps.last,
+        ref.watch(memorySessionDataRepositoryProvider),
+      );
+      log.d("Moving flow '$state.flow' to next step: '$nextStep'");
       state = UserFlowState(
-          flow: state.flow,
-          steps: [...state.steps, nextStep],
-          last: flow.isLast(nextStep));
+        flow: state.flow,
+        steps: [...state.steps, nextStep],
+        last: flow.isLast(nextStep),
+      );
     } else {
-      log.e(state.last
-          ? 'Flow \'${state.flow}\' has already reached its last step.'
-          : 'No flow is currently started.');
+      log.e(
+        state.last
+            ? "Flow '${state.flow}' has already reached its last step."
+            : 'No flow is currently started.',
+      );
     }
   }
 
   void previousStep() {
     if (!state.firstStep) {
-      var steps = state.steps.sublist(0, state.steps.length - 1);
-      log.d('Moving flow \'$state.flow\' to previous step: \'${steps.last}\'');
+      final steps = state.steps.sublist(0, state.steps.length - 1);
+      log.d("Moving flow '$state.flow' to previous step: '${steps.last}'");
       state = UserFlowState(flow: state.flow, steps: steps);
     } else {
-      log.e('Flow \'${state.flow}\' has already returned to its first step.');
+      log.e("Flow '${state.flow}' has already returned to its first step.");
     }
   }
 }
@@ -196,8 +196,7 @@ class MemorySessionDataRepository extends _$MemorySessionDataRepository {
 
   Future<void> writeToUserSettings({required String flowName}) async {
     final dataStorage = ref.read(flowProvider(flowName: flowName)).dataStorage;
-    final firestore =
-        ref.read(firestoreUserSettingsRepositoryProvider.notifier);
+    final firestore = ref.read(firestoreUserSettingsRepositoryProvider.notifier);
     switch (dataStorage) {
       case FlowDataStorage.mergedUserSettings:
         for (final entry in state.entries) {
@@ -205,7 +204,8 @@ class MemorySessionDataRepository extends _$MemorySessionDataRepository {
         }
       // TODO
       case FlowDataStorage.flowNameUserSettingsGroup:
-      default:
+      case FlowDataStorage.memoryOnly:
+      case FlowDataStorage.none:
     }
   }
 }
@@ -215,8 +215,11 @@ Widget Function(BuildContext, WidgetRef, Widget?) stepBuilder(
   Ref ref, {
   required String flow,
 }) {
-  final currentUserFlowState =
-      ref.watch(currentUserFlowStateProvider(flowName: flow));
-  return (context, ref, _) =>
-      buildFlowStep(context, currentUserFlowState.steps.last);
+  final currentUserFlowState = ref.watch(currentUserFlowStateProvider(flowName: flow));
+  return (context, ref, _) => buildFlowStep(
+    context,
+    ref,
+    currentUserFlowState.steps.last,
+    ref.read(memorySessionDataRepositoryProvider),
+  );
 }

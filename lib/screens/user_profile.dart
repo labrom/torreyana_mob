@@ -2,10 +2,9 @@ import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:torreyana_mob/providers/navigation.dart';
 import 'package:tourbillauth/auth.dart';
 import 'package:tourbillauth/config.dart';
-
-import '../providers/navigation.dart';
 
 class UserProfileScreen extends ConsumerWidget {
   const UserProfileScreen({super.key});
@@ -21,6 +20,7 @@ class UserProfileScreen extends ConsumerWidget {
                     actions: [
                       SignedOutAction((context) => context.go(loginPath)),
                     ],
+                    showDeleteConfirmationDialog: true,
                   )
                 : null,
             loading: () => null,
