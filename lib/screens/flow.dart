@@ -9,17 +9,18 @@ import 'package:torreyana_mob/providers/flows.dart';
 /// [stepBuilderProvider] providers.
 class FlowScreen extends ConsumerWidget {
 
-  const FlowScreen({required this.flowName, super.key});
+  const FlowScreen({required this.flowName, required this.config, super.key});
   final String flowName;
+  final FlowConfig config;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final flow = ref.watch(flowProvider(flowName: flowName));
+    final flow = config.flows[flowName]!;
     return Scaffold(
       body: Column(
         children: [
           Expanded(
-            child: ref.watch(stepBuilderProvider(flow: flowName)).call(context, ref, null),
+            child: ref.watch(stepBuilderProvider(config: config, flow: flowName)).call(context, ref),
           ),
           if (flow.totalSteps > 0) _progressBar(context, ref),
           _navBar(context, ref),
@@ -30,8 +31,8 @@ class FlowScreen extends ConsumerWidget {
 
   Widget _navBar(BuildContext context, WidgetRef ref) {
     final currentUserFlowState =
-        ref.watch(currentUserFlowStateProvider(flowName: flowName));
-    final flow = ref.watch(flowProvider(flowName: flowName));
+        ref.watch(currentUserFlowStateProvider(config: config, flowName: flowName));
+    final flow = config.flows[flowName]!;
 
     if (flow.forwardNavigationOnly || currentUserFlowState.firstStep) {
       return Row(
@@ -53,7 +54,7 @@ class FlowScreen extends ConsumerWidget {
 
   Widget _previousButton(BuildContext context, WidgetRef ref) {
     final currentUserFlowStateNotifier =
-        ref.watch(currentUserFlowStateProvider(flowName: flowName).notifier);
+        ref.watch(currentUserFlowStateProvider(config: config, flowName: flowName).notifier);
     return TextButton(
       onPressed: currentUserFlowStateNotifier.previousStep,
       child: const Text('Previous'),
@@ -62,10 +63,10 @@ class FlowScreen extends ConsumerWidget {
 
   Widget _nextbutton(BuildContext context, WidgetRef ref) {
     final currentUserFlowState =
-        ref.watch(currentUserFlowStateProvider(flowName: flowName));
+        ref.watch(currentUserFlowStateProvider(config: config, flowName: flowName));
     final currentUserFlowStateNotifier =
-        ref.watch(currentUserFlowStateProvider(flowName: flowName).notifier);
-    final flow = ref.watch(flowProvider(flowName: flowName));
+        ref.watch(currentUserFlowStateProvider(config: config, flowName: flowName).notifier);
+    final flow = config.flows[flowName]!;
     final sessionData = ref.watch(memorySessionDataRepositoryProvider);
     final nextStepAllowed =
         flow.canGoNext(currentUserFlowState.currentStep, sessionData);
@@ -75,7 +76,7 @@ class FlowScreen extends ConsumerWidget {
                 ? () {
                     ref
                         .read(memorySessionDataRepositoryProvider.notifier)
-                        .writeToUserSettings(flowName: flowName);
+                        .writeToUserSettings(config: config, flowName: flowName);
                     // TODO Should we wait til it's done?
                     context.pop();
                   }

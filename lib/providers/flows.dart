@@ -2,11 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:torreyana_mob/providers/settings.dart';
-import 'package:torreyana_mob/widgets/settings.dart';
 import 'package:tourbillon/log.dart';
 
-part '../my_flows.dart';
 part 'flows.g.dart';
+
+class FlowConfig {
+  FlowConfig({required this.flows, required this.stepBuilder});
+
+  final Map<String, Flow> flows;
+  final Widget Function(BuildContext, WidgetRef, String stepName, Map<String, dynamic> sessionData)
+  stepBuilder;
+}
 
 /// A flow description.
 ///
@@ -14,7 +20,7 @@ part 'flows.g.dart';
 /// A flow class is responsible for defining the sequence of steps needed to
 /// complete the flow.
 /// However, it is not responsible for building the steps UI. This should be
-/// done in the [buildFlowStep] function. This allows different flows to share
+/// done in the [FlowConfig.stepBuilder] function. This allows different flows to share
 /// steps. For example, an onboarding flow could have different versions
 /// tailored to different user groups, with roughly the same steps but a few
 /// variations. If these variations are implemented in separate [Flow] sub-classes,
@@ -140,19 +146,19 @@ class UserFlowState {
 }
 
 @riverpod
-Flow flow(Ref ref, {required String flowName}) => flows[flowName]!;
-
-@riverpod
 class CurrentUserFlowState extends _$CurrentUserFlowState {
   @override
-  UserFlowState build({required String flowName}) => UserFlowState(
-    flow: flowName,
-    steps: [ref.watch(flowProvider(flowName: flowName)).firstStep],
-  );
+  UserFlowState build({required FlowConfig config, required String flowName}) {
+    this.config = config;
+    return UserFlowState(
+      flow: flowName,
+      steps: [config.flows[flowName]!.firstStep],
+    );
+  }
 
   void nextStep() {
     if (state.started && !state.last) {
-      final flow = ref.watch(flowProvider(flowName: state.flow));
+      final flow = config.flows[state.flow]!;
       final nextStep = flow.nextStep(
         state.steps.last,
         ref.watch(memorySessionDataRepositoryProvider),
@@ -194,8 +200,8 @@ class MemorySessionDataRepository extends _$MemorySessionDataRepository {
     state = newState;
   }
 
-  Future<void> writeToUserSettings({required String flowName}) async {
-    final dataStorage = ref.read(flowProvider(flowName: flowName)).dataStorage;
+  Future<void> writeToUserSettings({required FlowConfig config, required String flowName}) async {
+    final dataStorage = config.flows[flowName]!.dataStorage;
     final firestore = ref.read(firestoreUserSettingsRepositoryProvider.notifier);
     switch (dataStorage) {
       case FlowDataStorage.mergedUserSettings:
@@ -211,12 +217,15 @@ class MemorySessionDataRepository extends _$MemorySessionDataRepository {
 }
 
 @riverpod
-Widget Function(BuildContext, WidgetRef, Widget?) stepBuilder(
+Widget Function(BuildContext, WidgetRef) stepBuilder(
   Ref ref, {
+  required FlowConfig config,
   required String flow,
 }) {
-  final currentUserFlowState = ref.watch(currentUserFlowStateProvider(flowName: flow));
-  return (context, ref, _) => buildFlowStep(
+  final currentUserFlowState = ref.watch(
+    currentUserFlowStateProvider(config: config, flowName: flow),
+  );
+  return (context, ref) => config.stepBuilder(
     context,
     ref,
     currentUserFlowState.steps.last,

@@ -6,7 +6,7 @@ part of 'flows.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$flowHash() => r'c1aa07612482b5b3192aede509ce3fbe162651f2';
+String _$stepBuilderHash() => r'07be8f867067f10c7d5a0744115ddd4a015cc1f8';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -29,148 +29,23 @@ class _SystemHash {
   }
 }
 
-/// See also [flow].
-@ProviderFor(flow)
-const flowProvider = FlowFamily();
-
-/// See also [flow].
-class FlowFamily extends Family<Flow> {
-  /// See also [flow].
-  const FlowFamily();
-
-  /// See also [flow].
-  FlowProvider call({
-    required String flowName,
-  }) {
-    return FlowProvider(
-      flowName: flowName,
-    );
-  }
-
-  @override
-  FlowProvider getProviderOverride(
-    covariant FlowProvider provider,
-  ) {
-    return call(
-      flowName: provider.flowName,
-    );
-  }
-
-  static const Iterable<ProviderOrFamily>? _dependencies = null;
-
-  @override
-  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
-
-  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
-
-  @override
-  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
-      _allTransitiveDependencies;
-
-  @override
-  String? get name => r'flowProvider';
-}
-
-/// See also [flow].
-class FlowProvider extends AutoDisposeProvider<Flow> {
-  /// See also [flow].
-  FlowProvider({
-    required String flowName,
-  }) : this._internal(
-          (ref) => flow(
-            ref as FlowRef,
-            flowName: flowName,
-          ),
-          from: flowProvider,
-          name: r'flowProvider',
-          debugGetCreateSourceHash:
-              const bool.fromEnvironment('dart.vm.product') ? null : _$flowHash,
-          dependencies: FlowFamily._dependencies,
-          allTransitiveDependencies: FlowFamily._allTransitiveDependencies,
-          flowName: flowName,
-        );
-
-  FlowProvider._internal(
-    super._createNotifier, {
-    required super.name,
-    required super.dependencies,
-    required super.allTransitiveDependencies,
-    required super.debugGetCreateSourceHash,
-    required super.from,
-    required this.flowName,
-  }) : super.internal();
-
-  final String flowName;
-
-  @override
-  Override overrideWith(
-    Flow Function(FlowRef provider) create,
-  ) {
-    return ProviderOverride(
-      origin: this,
-      override: FlowProvider._internal(
-        (ref) => create(ref as FlowRef),
-        from: from,
-        name: null,
-        dependencies: null,
-        allTransitiveDependencies: null,
-        debugGetCreateSourceHash: null,
-        flowName: flowName,
-      ),
-    );
-  }
-
-  @override
-  AutoDisposeProviderElement<Flow> createElement() {
-    return _FlowProviderElement(this);
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return other is FlowProvider && other.flowName == flowName;
-  }
-
-  @override
-  int get hashCode {
-    var hash = _SystemHash.combine(0, runtimeType.hashCode);
-    hash = _SystemHash.combine(hash, flowName.hashCode);
-
-    return _SystemHash.finish(hash);
-  }
-}
-
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-mixin FlowRef on AutoDisposeProviderRef<Flow> {
-  /// The parameter `flowName` of this provider.
-  String get flowName;
-}
-
-class _FlowProviderElement extends AutoDisposeProviderElement<Flow>
-    with FlowRef {
-  _FlowProviderElement(super.provider);
-
-  @override
-  String get flowName => (origin as FlowProvider).flowName;
-}
-
-String _$stepBuilderHash() => r'747a9216a8ddc28cab558835b995ac06ed7da937';
-
 /// See also [stepBuilder].
 @ProviderFor(stepBuilder)
 const stepBuilderProvider = StepBuilderFamily();
 
 /// See also [stepBuilder].
 class StepBuilderFamily
-    extends Family<Widget Function(BuildContext, WidgetRef, Widget?)> {
+    extends Family<Widget Function(BuildContext, WidgetRef)> {
   /// See also [stepBuilder].
   const StepBuilderFamily();
 
   /// See also [stepBuilder].
   StepBuilderProvider call({
+    required FlowConfig config,
     required String flow,
   }) {
     return StepBuilderProvider(
+      config: config,
       flow: flow,
     );
   }
@@ -180,6 +55,7 @@ class StepBuilderFamily
     covariant StepBuilderProvider provider,
   ) {
     return call(
+      config: provider.config,
       flow: provider.flow,
     );
   }
@@ -200,14 +76,16 @@ class StepBuilderFamily
 }
 
 /// See also [stepBuilder].
-class StepBuilderProvider extends AutoDisposeProvider<
-    Widget Function(BuildContext, WidgetRef, Widget?)> {
+class StepBuilderProvider
+    extends AutoDisposeProvider<Widget Function(BuildContext, WidgetRef)> {
   /// See also [stepBuilder].
   StepBuilderProvider({
+    required FlowConfig config,
     required String flow,
   }) : this._internal(
           (ref) => stepBuilder(
             ref as StepBuilderRef,
+            config: config,
             flow: flow,
           ),
           from: stepBuilderProvider,
@@ -219,6 +97,7 @@ class StepBuilderProvider extends AutoDisposeProvider<
           dependencies: StepBuilderFamily._dependencies,
           allTransitiveDependencies:
               StepBuilderFamily._allTransitiveDependencies,
+          config: config,
           flow: flow,
         );
 
@@ -229,15 +108,16 @@ class StepBuilderProvider extends AutoDisposeProvider<
     required super.allTransitiveDependencies,
     required super.debugGetCreateSourceHash,
     required super.from,
+    required this.config,
     required this.flow,
   }) : super.internal();
 
+  final FlowConfig config;
   final String flow;
 
   @override
   Override overrideWith(
-    Widget Function(BuildContext, WidgetRef, Widget?) Function(
-            StepBuilderRef provider)
+    Widget Function(BuildContext, WidgetRef) Function(StepBuilderRef provider)
         create,
   ) {
     return ProviderOverride(
@@ -249,25 +129,29 @@ class StepBuilderProvider extends AutoDisposeProvider<
         dependencies: null,
         allTransitiveDependencies: null,
         debugGetCreateSourceHash: null,
+        config: config,
         flow: flow,
       ),
     );
   }
 
   @override
-  AutoDisposeProviderElement<Widget Function(BuildContext, WidgetRef, Widget?)>
+  AutoDisposeProviderElement<Widget Function(BuildContext, WidgetRef)>
       createElement() {
     return _StepBuilderProviderElement(this);
   }
 
   @override
   bool operator ==(Object other) {
-    return other is StepBuilderProvider && other.flow == flow;
+    return other is StepBuilderProvider &&
+        other.config == config &&
+        other.flow == flow;
   }
 
   @override
   int get hashCode {
     var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, config.hashCode);
     hash = _SystemHash.combine(hash, flow.hashCode);
 
     return _SystemHash.finish(hash);
@@ -276,28 +160,36 @@ class StepBuilderProvider extends AutoDisposeProvider<
 
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
-mixin StepBuilderRef on AutoDisposeProviderRef<
-    Widget Function(BuildContext, WidgetRef, Widget?)> {
+mixin StepBuilderRef
+    on AutoDisposeProviderRef<Widget Function(BuildContext, WidgetRef)> {
+  /// The parameter `config` of this provider.
+  FlowConfig get config;
+
   /// The parameter `flow` of this provider.
   String get flow;
 }
 
-class _StepBuilderProviderElement extends AutoDisposeProviderElement<
-    Widget Function(BuildContext, WidgetRef, Widget?)> with StepBuilderRef {
+class _StepBuilderProviderElement
+    extends AutoDisposeProviderElement<Widget Function(BuildContext, WidgetRef)>
+    with StepBuilderRef {
   _StepBuilderProviderElement(super.provider);
 
+  @override
+  FlowConfig get config => (origin as StepBuilderProvider).config;
   @override
   String get flow => (origin as StepBuilderProvider).flow;
 }
 
 String _$currentUserFlowStateHash() =>
-    r'1637d5ed81927f381852843a251b153304079814';
+    r'314e03a10eda96a932fb08389559b6ef7e007b71';
 
 abstract class _$CurrentUserFlowState
     extends BuildlessAutoDisposeNotifier<UserFlowState> {
+  late final FlowConfig config;
   late final String flowName;
 
   UserFlowState build({
+    required FlowConfig config,
     required String flowName,
   });
 }
@@ -313,9 +205,11 @@ class CurrentUserFlowStateFamily extends Family<UserFlowState> {
 
   /// See also [CurrentUserFlowState].
   CurrentUserFlowStateProvider call({
+    required FlowConfig config,
     required String flowName,
   }) {
     return CurrentUserFlowStateProvider(
+      config: config,
       flowName: flowName,
     );
   }
@@ -325,6 +219,7 @@ class CurrentUserFlowStateFamily extends Family<UserFlowState> {
     covariant CurrentUserFlowStateProvider provider,
   ) {
     return call(
+      config: provider.config,
       flowName: provider.flowName,
     );
   }
@@ -349,9 +244,12 @@ class CurrentUserFlowStateProvider extends AutoDisposeNotifierProviderImpl<
     CurrentUserFlowState, UserFlowState> {
   /// See also [CurrentUserFlowState].
   CurrentUserFlowStateProvider({
+    required FlowConfig config,
     required String flowName,
   }) : this._internal(
-          () => CurrentUserFlowState()..flowName = flowName,
+          () => CurrentUserFlowState()
+            ..config = config
+            ..flowName = flowName,
           from: currentUserFlowStateProvider,
           name: r'currentUserFlowStateProvider',
           debugGetCreateSourceHash:
@@ -361,6 +259,7 @@ class CurrentUserFlowStateProvider extends AutoDisposeNotifierProviderImpl<
           dependencies: CurrentUserFlowStateFamily._dependencies,
           allTransitiveDependencies:
               CurrentUserFlowStateFamily._allTransitiveDependencies,
+          config: config,
           flowName: flowName,
         );
 
@@ -371,9 +270,11 @@ class CurrentUserFlowStateProvider extends AutoDisposeNotifierProviderImpl<
     required super.allTransitiveDependencies,
     required super.debugGetCreateSourceHash,
     required super.from,
+    required this.config,
     required this.flowName,
   }) : super.internal();
 
+  final FlowConfig config;
   final String flowName;
 
   @override
@@ -381,6 +282,7 @@ class CurrentUserFlowStateProvider extends AutoDisposeNotifierProviderImpl<
     covariant CurrentUserFlowState notifier,
   ) {
     return notifier.build(
+      config: config,
       flowName: flowName,
     );
   }
@@ -390,12 +292,15 @@ class CurrentUserFlowStateProvider extends AutoDisposeNotifierProviderImpl<
     return ProviderOverride(
       origin: this,
       override: CurrentUserFlowStateProvider._internal(
-        () => create()..flowName = flowName,
+        () => create()
+          ..config = config
+          ..flowName = flowName,
         from: from,
         name: null,
         dependencies: null,
         allTransitiveDependencies: null,
         debugGetCreateSourceHash: null,
+        config: config,
         flowName: flowName,
       ),
     );
@@ -409,12 +314,15 @@ class CurrentUserFlowStateProvider extends AutoDisposeNotifierProviderImpl<
 
   @override
   bool operator ==(Object other) {
-    return other is CurrentUserFlowStateProvider && other.flowName == flowName;
+    return other is CurrentUserFlowStateProvider &&
+        other.config == config &&
+        other.flowName == flowName;
   }
 
   @override
   int get hashCode {
     var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, config.hashCode);
     hash = _SystemHash.combine(hash, flowName.hashCode);
 
     return _SystemHash.finish(hash);
@@ -424,6 +332,9 @@ class CurrentUserFlowStateProvider extends AutoDisposeNotifierProviderImpl<
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 mixin CurrentUserFlowStateRef on AutoDisposeNotifierProviderRef<UserFlowState> {
+  /// The parameter `config` of this provider.
+  FlowConfig get config;
+
   /// The parameter `flowName` of this provider.
   String get flowName;
 }
@@ -434,11 +345,13 @@ class _CurrentUserFlowStateProviderElement
   _CurrentUserFlowStateProviderElement(super.provider);
 
   @override
+  FlowConfig get config => (origin as CurrentUserFlowStateProvider).config;
+  @override
   String get flowName => (origin as CurrentUserFlowStateProvider).flowName;
 }
 
 String _$memorySessionDataRepositoryHash() =>
-    r'93bb6530590e32963e9bb16025d71f176a9c0401';
+    r'b2588e3a431260f30d295f7940aaa3f6d442705b';
 
 /// See also [MemorySessionDataRepository].
 @ProviderFor(MemorySessionDataRepository)

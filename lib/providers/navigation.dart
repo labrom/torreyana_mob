@@ -3,19 +3,14 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:torreyana_mob/my/screens/assignments.dart';
-import 'package:torreyana_mob/my/screens/parent_home.dart';
-import 'package:torreyana_mob/my/screens/schedule.dart';
-import 'package:torreyana_mob/my/screens/student_home.dart';
+import 'package:torreyana_mob/providers/flows.dart';
 import 'package:torreyana_mob/screens/flow.dart';
-import 'package:torreyana_mob/screens/home.dart';
 import 'package:torreyana_mob/screens/login.dart';
 import 'package:torreyana_mob/screens/settings.dart';
 import 'package:torreyana_mob/screens/theme_settings.dart';
 import 'package:torreyana_mob/screens/user_profile.dart';
 import 'package:tourbillauth/auth.dart';
 
-part '../my_navigation.dart';
 part 'navigation.g.dart';
 
 const defaultPath = '/';
@@ -41,12 +36,12 @@ class Screen {
   final bool isShell;
   final List<Screen> children;
 
-  RouteBase toRoute(Ref ref) {
+  RouteBase toRoute(Ref ref, Navigation nav) {
     if (isShell) {
       return ShellRoute(
         builder: (context, state, child) =>
             builder(context, state.pathParameters..addAll(state.uri.queryParameters), child),
-        routes: children.map((screen) => screen.toRoute(ref)).toList(),
+        routes: children.map((screen) => screen.toRoute(ref, nav)).toList(),
       );
     }
     return GoRoute(
@@ -54,11 +49,11 @@ class Screen {
       builder: (context, state) =>
           builder(context, state.pathParameters..addAll(state.uri.queryParameters), null),
       redirect:
-          (requiresLogin && !navigation.homeRequiresLogin) ||
-              (name == defaultPath && navigation.homeRequiresLogin)
+          (requiresLogin && !nav.homeRequiresLogin) ||
+              (name == defaultPath && nav.homeRequiresLogin)
           ? (context, state) => _loginRedirect(context, state, ref)
           : null,
-      routes: children.map((screen) => screen.toRoute(ref)).toList(),
+      routes: children.map((screen) => screen.toRoute(ref, nav)).toList(),
     );
   }
 }
@@ -88,6 +83,7 @@ extension NavigationHandler on BuildContext {
 }
 
 @riverpod
+// ignore: avoid_positional_boolean_parameters
 void Function(BuildContext, String, bool) navigationHandler(Ref ref, String route) {
   // Do stuff here, like log page view
 
@@ -103,7 +99,7 @@ void Function(BuildContext, String, bool) navigationHandler(Ref ref, String rout
 /// redirect. Don't set a login redirect on the root path ('/') since the login
 /// route is under that path root.
 @riverpod
-GoRouter router(Ref ref) => GoRouter(
+GoRouter router(Ref ref, Navigation nav, FlowConfig? flowConfig) => GoRouter(
   debugLogDiagnostics: kDebugMode,
   initialLocation: defaultPath,
   routes: [
@@ -115,16 +111,17 @@ GoRouter router(Ref ref) => GoRouter(
     ),
     defaultHomeRoute(
       ref,
+      nav,
       childRoutes: [],
     ),
+    // TODO
     // ...homeRedirectRoutes(ref),
-    ...screenRoutes(ref),
+    ...screenRoutes(ref, nav),
     GoRoute(
       path: '/$settingsPathSegment',
       builder: (context, state) => SettingsScreen(
         showProfileLink:
-            navigation.showProfileLinkInSettings ||
-            state.uri.queryParameters['showProfileLink'] == 'true',
+            nav.showProfileLinkInSettings || state.uri.queryParameters['showProfileLink'] == 'true',
       ),
     ),
     GoRoute(
@@ -136,28 +133,30 @@ GoRouter router(Ref ref) => GoRouter(
       builder: (context, state) => const UserProfileScreen(),
       redirect: (context, state) => _loginRedirect(context, state, ref),
     ),
+    if(flowConfig != null)
     GoRoute(
       path: '/$flowPathSegment/:name',
       builder: (context, state) => FlowScreen(
+        config: flowConfig,
         flowName: state.pathParameters['name']!,
       ),
     ),
   ],
 );
 
-RouteBase defaultHomeRoute(Ref ref, {required List<RouteBase> childRoutes}) {
-  final homeScreen = navigation.getHomeScreen(/* TODO Get user role */);
-  final route = homeScreen.toRoute(ref);
+RouteBase defaultHomeRoute(Ref ref, Navigation nav, {required List<RouteBase> childRoutes}) {
+  final homeScreen = nav.getHomeScreen(/* TODO Get user role */);
+  final route = homeScreen.toRoute(ref, nav);
   return route;
 }
 
-List<RouteBase> homeRedirectRoutes(Ref ref) {
+List<RouteBase> homeRedirectRoutes(Ref ref, Navigation nav) {
   return [
     GoRoute(
-      path: navigation.homeScreen.name,
+      path: nav.homeScreen.name,
       redirect: (context, state) => defaultPath,
     ),
-    ...navigation.homeScreenForRole?.values.map(
+    ...nav.homeScreenForRole?.values.map(
           (screen) => GoRoute(
             path: screen.name,
             redirect: (context, state) => defaultPath,
@@ -167,10 +166,10 @@ List<RouteBase> homeRedirectRoutes(Ref ref) {
   ];
 }
 
-List<RouteBase> screenRoutes(Ref ref) {
-  return navigation.screens
+List<RouteBase> screenRoutes(Ref ref, Navigation nav) {
+  return nav.screens
       .map(
-        (screen) => screen.toRoute(ref),
+        (screen) => screen.toRoute(ref, nav),
       )
       .toList();
 }

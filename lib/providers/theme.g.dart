@@ -6,7 +6,7 @@ part of 'theme.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$appThemeDataHash() => r'62cd0ea588a69067382ee9829a881eceb99ac35f';
+String _$appThemeDataHash() => r'80c2e09117821d89bbecd4048556faad12f1ed7a';
 
 /// See also [appThemeData].
 @ProviderFor(appThemeData)
@@ -22,7 +22,7 @@ final appThemeDataProvider = AutoDisposeProvider<ThemeData>.internal(
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef AppThemeDataRef = AutoDisposeProviderRef<ThemeData>;
-String _$darkThemeHash() => r'7b5d730c790fa3347a650604421f023612871a84';
+String _$darkThemeHash() => r'c6c71e997187d4b229368a9404aa62c75ec4802d';
 
 /// See also [DarkTheme].
 @ProviderFor(DarkTheme)
@@ -36,20 +36,21 @@ final darkThemeProvider = AutoDisposeNotifierProvider<DarkTheme, bool>.internal(
 );
 
 typedef _$DarkTheme = AutoDisposeNotifier<bool>;
-String _$primaryColorHash() => r'5a7b33b3573daecbd1868a1ab5db6556a125ca42';
+String _$themeSeedColorHash() => r'79d89badccabff04672951ae9c8c2e91b40d6c43';
 
-/// See also [PrimaryColor].
-@ProviderFor(PrimaryColor)
-final primaryColorProvider =
-    AutoDisposeNotifierProvider<PrimaryColor, Color>.internal(
-  PrimaryColor.new,
-  name: r'primaryColorProvider',
-  debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product') ? null : _$primaryColorHash,
+/// See also [ThemeSeedColor].
+@ProviderFor(ThemeSeedColor)
+final themeSeedColorProvider =
+    AutoDisposeNotifierProvider<ThemeSeedColor, Color>.internal(
+  ThemeSeedColor.new,
+  name: r'themeSeedColorProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$themeSeedColorHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef _$PrimaryColor = AutoDisposeNotifier<Color>;
+typedef _$ThemeSeedColor = AutoDisposeNotifier<Color>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

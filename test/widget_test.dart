@@ -7,12 +7,19 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-
-import 'package:torreyana_mob/main.dart';
+import 'package:torreyana_mob/localization.dart';
+import 'package:torreyana_mob/my_conf.dart';
+import 'package:torreyana_mob/my_navigation.dart';
+import 'package:torreyana_mob/widgets/app.dart';
 
 void main() {
   testWidgets('App starts', (WidgetTester tester) async {
-    await tester.pumpWidget(const App());
+    await tester.pumpWidget(    App.material(
+      nav: navigation,
+      localizationsDelegate: AppLocalizations.delegate,
+      title: appName,
+    ),
+);
 
     // Verify that our counter starts at 0.
     expect(find.text('Home'), findsOneWidget);

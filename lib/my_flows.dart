@@ -1,24 +1,28 @@
-part of 'providers/flows.dart';
+import 'package:flutter/material.dart' show Center;
+import 'package:flutter/widgets.dart' show Text;
+import 'package:torreyana_mob/providers/flows.dart';
+import 'package:torreyana_mob/widgets/settings.dart';
 
-final flows = {
-  'onboarding1': const Flow1('onboarding1'),
-  'intro': Intro(),
-};
-
-Widget buildFlowStep(
-  BuildContext context,
-  WidgetRef ref,
-  String stepName,
-  Map<String, dynamic> sessionData,
-) {
-  if (stepName.startsWith('intro')) {
-    return Center(child: Text(stepName));
-  }
-  return CachedToggleSetting(
-    title: stepName,
-    settingKey: 'key$stepName',
+final flowConfig = FlowConfig(
+    flows: {
+      'onboarding1': const Flow1('onboarding1'),
+      'intro': Intro(),
+    },
+    stepBuilder: (
+      context,
+      ref,
+      stepName,
+      sessionData,
+    ) {
+      if (stepName.startsWith('intro')) {
+        return Center(child: Text(stepName));
+      }
+      return CachedToggleSetting(
+        title: stepName,
+        settingKey: 'key$stepName',
+      );
+    },
   );
-}
 
 class Flow1 extends Flow {
   const Flow1(

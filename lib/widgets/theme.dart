@@ -3,11 +3,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:torreyana_mob/providers/theme.dart';
 import 'package:torreyana_mob/widgets/settings.dart';
 import 'package:torreyana_mob/widgets/theme_buttons.dart';
+
 import 'package:tourbillon/build_context.dart';
 
 /// A widget that allows to view and set the app's theme.
 ///
-/// This widget uses [darkThemeProvider] and [primaryColorProvider].
+/// This widget uses [darkThemeProvider] and [themeSeedColorProvider].
 class ThemeBuilder extends ConsumerWidget {
   const ThemeBuilder({super.key});
 
@@ -27,10 +28,10 @@ class ThemeBuilder extends ConsumerWidget {
             title: 'Theme seed color',
             subtitle: 'Pick a color to generate a color palette',
             actionChild: ThemePrimaryColorButton(
-              initialColor: ref.watch(primaryColorProvider),
+              initialColor: ref.watch(themeSeedColorProvider),
               pickerAlignment: PickerAlignment.rightBelow,
               onColor: (color) {
-                ref.read(primaryColorProvider.notifier).color = color;
+                ref.read(themeSeedColorProvider.notifier).color = color;
               },
             ),
           ),

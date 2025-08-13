@@ -2,14 +2,26 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import '../my_theme.dart';
-
 part 'theme.g.dart';
+
+class ThemeConfig {
+  
+  ThemeConfig._({required this.darkTheme, required this.seedColor, this.textThemeFunction});
+
+  static late final ThemeConfig _default;
+  static void initialize({required bool darkTheme, required Color seedColor, TextTheme Function([TextTheme? textTheme])? textThemeFunction}) {
+    _default = ThemeConfig._(darkTheme: darkTheme, seedColor: seedColor, textThemeFunction: textThemeFunction,);
+  }
+
+  final bool darkTheme;
+  final Color seedColor;
+  final TextTheme Function([TextTheme? textTheme])? textThemeFunction;
+}
 
 @riverpod
 class DarkTheme extends _$DarkTheme {
   @override
-  bool build() => darkTheme;
+  bool build() => ThemeConfig._default.darkTheme;
 
   void toggle() {
     state = !state;
@@ -17,13 +29,13 @@ class DarkTheme extends _$DarkTheme {
 }
 
 @riverpod
-class PrimaryColor extends _$PrimaryColor {
+class ThemeSeedColor extends _$ThemeSeedColor {
   @override
-  Color build() => seedColor;
+  Color build() => ThemeConfig._default.seedColor;
 
   // ignore: avoid_setters_without_getters
-  set color(Color color) {
-    state = color;
+  set color(Color seed) {
+    state = seed;
   }
 }
 
@@ -33,12 +45,10 @@ ThemeData appThemeData(Ref ref) {
   final baseTextTheme = darkTheme ? ThemeData.dark().textTheme : ThemeData.light().textTheme;
   return ThemeData.from(
     colorScheme: ColorScheme.fromSeed(
-      seedColor: ref.watch(primaryColorProvider),
-      brightness: darkTheme
-          ? Brightness.dark
-          : Brightness.light,
+      seedColor: ref.watch(themeSeedColorProvider),
+      brightness: darkTheme ? Brightness.dark : Brightness.light,
     ),
-    textTheme: textThemeFunction(baseTextTheme),
+    textTheme: ThemeConfig._default.textThemeFunction?.call(baseTextTheme),
     useMaterial3: true,
   );
 }

@@ -163,7 +163,7 @@ class _NavigationHandlerProviderElement extends AutoDisposeProviderElement<
   String get route => (origin as NavigationHandlerProvider).route;
 }
 
-String _$routerHash() => r'7fe94ed8365c535ecd4c2b32744b4725ed7837d1';
+String _$routerHash() => r'19a5a6ab7f0aadd8e09ed2adda63d7c4a2959bd8';
 
 /// go_router provider with all the registered routes.
 ///
@@ -173,17 +173,176 @@ String _$routerHash() => r'7fe94ed8365c535ecd4c2b32744b4725ed7837d1';
 ///
 /// Copied from [router].
 @ProviderFor(router)
-final routerProvider = AutoDisposeProvider<GoRouter>.internal(
-  router,
-  name: r'routerProvider',
-  debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product') ? null : _$routerHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+const routerProvider = RouterFamily();
+
+/// go_router provider with all the registered routes.
+///
+/// Includes a top-level route to the login screen, that can be used in a
+/// redirect. Don't set a login redirect on the root path ('/') since the login
+/// route is under that path root.
+///
+/// Copied from [router].
+class RouterFamily extends Family<GoRouter> {
+  /// go_router provider with all the registered routes.
+  ///
+  /// Includes a top-level route to the login screen, that can be used in a
+  /// redirect. Don't set a login redirect on the root path ('/') since the login
+  /// route is under that path root.
+  ///
+  /// Copied from [router].
+  const RouterFamily();
+
+  /// go_router provider with all the registered routes.
+  ///
+  /// Includes a top-level route to the login screen, that can be used in a
+  /// redirect. Don't set a login redirect on the root path ('/') since the login
+  /// route is under that path root.
+  ///
+  /// Copied from [router].
+  RouterProvider call(
+    Navigation nav,
+    FlowConfig? flowConfig,
+  ) {
+    return RouterProvider(
+      nav,
+      flowConfig,
+    );
+  }
+
+  @override
+  RouterProvider getProviderOverride(
+    covariant RouterProvider provider,
+  ) {
+    return call(
+      provider.nav,
+      provider.flowConfig,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'routerProvider';
+}
+
+/// go_router provider with all the registered routes.
+///
+/// Includes a top-level route to the login screen, that can be used in a
+/// redirect. Don't set a login redirect on the root path ('/') since the login
+/// route is under that path root.
+///
+/// Copied from [router].
+class RouterProvider extends AutoDisposeProvider<GoRouter> {
+  /// go_router provider with all the registered routes.
+  ///
+  /// Includes a top-level route to the login screen, that can be used in a
+  /// redirect. Don't set a login redirect on the root path ('/') since the login
+  /// route is under that path root.
+  ///
+  /// Copied from [router].
+  RouterProvider(
+    Navigation nav,
+    FlowConfig? flowConfig,
+  ) : this._internal(
+          (ref) => router(
+            ref as RouterRef,
+            nav,
+            flowConfig,
+          ),
+          from: routerProvider,
+          name: r'routerProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$routerHash,
+          dependencies: RouterFamily._dependencies,
+          allTransitiveDependencies: RouterFamily._allTransitiveDependencies,
+          nav: nav,
+          flowConfig: flowConfig,
+        );
+
+  RouterProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.nav,
+    required this.flowConfig,
+  }) : super.internal();
+
+  final Navigation nav;
+  final FlowConfig? flowConfig;
+
+  @override
+  Override overrideWith(
+    GoRouter Function(RouterRef provider) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: RouterProvider._internal(
+        (ref) => create(ref as RouterRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        nav: nav,
+        flowConfig: flowConfig,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeProviderElement<GoRouter> createElement() {
+    return _RouterProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is RouterProvider &&
+        other.nav == nav &&
+        other.flowConfig == flowConfig;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, nav.hashCode);
+    hash = _SystemHash.combine(hash, flowConfig.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
 
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
-typedef RouterRef = AutoDisposeProviderRef<GoRouter>;
+mixin RouterRef on AutoDisposeProviderRef<GoRouter> {
+  /// The parameter `nav` of this provider.
+  Navigation get nav;
+
+  /// The parameter `flowConfig` of this provider.
+  FlowConfig? get flowConfig;
+}
+
+class _RouterProviderElement extends AutoDisposeProviderElement<GoRouter>
+    with RouterRef {
+  _RouterProviderElement(super.provider);
+
+  @override
+  Navigation get nav => (origin as RouterProvider).nav;
+  @override
+  FlowConfig? get flowConfig => (origin as RouterProvider).flowConfig;
+}
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package
