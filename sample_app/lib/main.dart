@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:torreyana_mob/main.dart';
 import 'package:torreyana_mob/providers/theme.dart';
-import 'package:torreyana_mob_sample_app/firebase_options.dart';
-import 'package:torreyana_mob_sample_app/my_conf.dart';
-import 'package:torreyana_mob_sample_app/my_flows.dart';
-import 'package:torreyana_mob_sample_app/my_navigation.dart';
+import 'package:torreyana_sample_app/firebase_options.dart';
+import 'package:torreyana_sample_app/my_conf.dart';
+import 'package:torreyana_sample_app/my_flows.dart';
+import 'package:torreyana_sample_app/my_navigation.dart';
 
 Future<void> main() async {
   return runTorreyanaApp(
