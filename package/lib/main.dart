@@ -11,7 +11,7 @@ Future<void> runTorreyanaApp({
   required Navigation nav,
   required String title,
   FlowConfig? flowConfig,
-  LocalizationsDelegate<Map<String, Map<String, String>>>? localizationsDelegate,
+  LocalizationsDelegate<dynamic>? localizationsDelegate,
   FirebaseOptions? firebaseOptions,
   ThemeConfig? themeConfig,
 }) async {
