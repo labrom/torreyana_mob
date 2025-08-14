@@ -1,38 +1,22 @@
-import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:torreyana_mob/localization.dart';
+import 'package:torreyana_mob/main.dart';
 import 'package:torreyana_mob/providers/theme.dart';
-import 'package:torreyana_mob/widgets/app.dart';
 import 'package:torreyana_mob_sample_app/firebase_options.dart';
 import 'package:torreyana_mob_sample_app/my_conf.dart';
 import 'package:torreyana_mob_sample_app/my_flows.dart';
 import 'package:torreyana_mob_sample_app/my_navigation.dart';
-import 'package:tourbillauth/config.dart';
 
 Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
-  FirebaseUIAuth.configureProviders(authProviders);
-
-  ThemeConfig.initialize(
-    darkTheme: true,
-    seedColor: const Color.fromARGB(255, 0, 210, 186),
-    textThemeFunction: GoogleFonts.oxaniumTextTheme,
-  );
-
-  // ignore: missing_provider_scope
-  runApp(
-    // App.material includes a ProviderScope at its root
-    App.material(
-      nav: navigation,
-      flowConfig: flowConfig,
-      localizationsDelegate: LibLocalizations.delegate,
-      title: appName,
+  return runTorreyanaApp(
+    nav: navigation,
+    title: appName,
+    firebaseOptions: DefaultFirebaseOptions.currentPlatform,
+    flowConfig: flowConfig,
+    themeConfig: ThemeConfig.initialize(
+      darkTheme: true,
+      seedColor: const Color.fromARGB(255, 0, 210, 186),
+      textThemeFunction: GoogleFonts.oxaniumTextTheme,
     ),
   );
 }

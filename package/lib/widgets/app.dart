@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:torreyana_mob/localization.dart' as torreyana;
 import 'package:torreyana_mob/providers/flows.dart';
 import 'package:torreyana_mob/providers/navigation.dart';
 import 'package:torreyana_mob/providers/theme.dart';
 import 'package:tourbillauth/config.dart';
 import 'package:tourbillon/libloc.dart' as tourbillon;
-import 'package:torreyana_mob/localization.dart' as torreyana;
 
 class App extends StatelessWidget {
   const App.material({required this.nav, this.flowConfig, this.title, this.localizationsDelegate, super.key});

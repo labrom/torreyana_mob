@@ -376,8 +376,7 @@ class _TransparentColorBoxPainter extends BoxPainter {
 class ToggleIconButton extends StatefulWidget {
 
   const ToggleIconButton(
-      {super.key,
-      required this.icon,
+      {required this.icon, super.key,
       this.uncheckedIcon,
       this.onToggle,
       this.initiallyChecked = false,
@@ -385,6 +384,7 @@ class ToggleIconButton extends StatefulWidget {
   final IconData icon;
   final IconData? uncheckedIcon;
   final String? tooltip;
+  // ignore: avoid_positional_boolean_parameters
   final void Function(bool value)? onToggle;
   final bool initiallyChecked;
 

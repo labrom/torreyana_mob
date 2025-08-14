@@ -1,9 +1,9 @@
 import 'package:torreyana_mob/providers/navigation.dart';
 import 'package:torreyana_mob/screens/home.dart';
-import 'package:torreyana_mob_sample_app/my/screens/assignments.dart';
-import 'package:torreyana_mob_sample_app/my/screens/parent_home.dart';
-import 'package:torreyana_mob_sample_app/my/screens/schedule.dart';
-import 'package:torreyana_mob_sample_app/my/screens/student_home.dart';
+import 'package:torreyana_mob_sample_app/screens/assignments.dart';
+import 'package:torreyana_mob_sample_app/screens/parent_home.dart';
+import 'package:torreyana_mob_sample_app/screens/schedule.dart';
+import 'package:torreyana_mob_sample_app/screens/student_home.dart';
 
 final navigation = Navigation(
   homeScreen: Screen(
@@ -13,12 +13,12 @@ final navigation = Navigation(
   screens: [
     Screen(
       name: 'schedule',
-      builder: (context, parameters, _) => ScheduleScreen(),
+      builder: (context, parameters, _) => const ScheduleScreen(),
     ),
     Screen(
       name: 'assignments',
       requiresRole: 'student',
-      builder: (context, parameters, _) => AssignmentsScreen(),
+      builder: (context, parameters, _) => const AssignmentsScreen(),
     ),
   ],
   homeScreenForRole: {
@@ -28,7 +28,7 @@ final navigation = Navigation(
     ),
     'parent': Screen(
       name: 'parent-home',
-      builder: (context, parameters, _) => ParentHomeScreen(),
+      builder: (context, parameters, _) => const ParentHomeScreen(),
     )
   },
 );

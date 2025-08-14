@@ -5,13 +5,11 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'theme.g.dart';
 
 class ThemeConfig {
-  
-  ThemeConfig._({required this.darkTheme, required this.seedColor, this.textThemeFunction});
-
-  static late final ThemeConfig _default;
-  static void initialize({required bool darkTheme, required Color seedColor, TextTheme Function([TextTheme? textTheme])? textThemeFunction}) {
-    _default = ThemeConfig._(darkTheme: darkTheme, seedColor: seedColor, textThemeFunction: textThemeFunction,);
+  ThemeConfig.initialize({required this.darkTheme, required this.seedColor, this.textThemeFunction}) {
+    _default = this;
   }
+  
+  static late final ThemeConfig _default;
 
   final bool darkTheme;
   final Color seedColor;
