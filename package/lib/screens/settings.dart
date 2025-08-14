@@ -19,17 +19,6 @@ class SettingsScreen extends StatelessWidget {
           padding: const EdgeInsets.all(16),
           child: Column(
             children: [
-              // TODO Extract to a 'my' file
-              SettingsSection(
-                title: 'Connections',
-                children: [
-                  SettingsPageLink(
-                    title: 'Update Schwab',
-                    route: '/$flowPathSegment/schwab',
-                    push: pushSubPages,
-                  ),
-                ],
-              ),
               SettingsSection(
                 title: 'Profile',
                 children: [
