@@ -7,7 +7,7 @@ import 'package:torreyana_sample_app/screens/student_home.dart';
 
 final navigation = Navigation(
   homeScreen: Screen(
-    name: 'home',
+    name: '/',
     builder: (context, parameters, _) => const HomeScreen(),
   ),
   screens: [
