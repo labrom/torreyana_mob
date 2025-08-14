@@ -2,13 +2,13 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:torreyana_mob/firebase_options.dart';
 import 'package:torreyana_mob/localization.dart';
-import 'package:torreyana_mob/my_conf.dart';
-import 'package:torreyana_mob/my_flows.dart';
-import 'package:torreyana_mob/my_navigation.dart';
 import 'package:torreyana_mob/providers/theme.dart';
 import 'package:torreyana_mob/widgets/app.dart';
+import 'package:torreyana_mob_sample_app/firebase_options.dart';
+import 'package:torreyana_mob_sample_app/my_conf.dart';
+import 'package:torreyana_mob_sample_app/my_flows.dart';
+import 'package:torreyana_mob_sample_app/my_navigation.dart';
 import 'package:tourbillauth/config.dart';
 
 Future<void> main() async {
@@ -31,7 +31,7 @@ Future<void> main() async {
     App.material(
       nav: navigation,
       flowConfig: flowConfig,
-      localizationsDelegate: AppLocalizations.delegate,
+      localizationsDelegate: LibLocalizations.delegate,
       title: appName,
     ),
   );

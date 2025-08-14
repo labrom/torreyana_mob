@@ -17,14 +17,14 @@ class HomeScreen extends StatelessWidget {
           Consumer(
             builder: (context, ref, child) => IconButton(
               icon: const Icon(Icons.settings),
-              tooltip: apploc(context).settingsLabel,
+              tooltip: torreyanaLoc(context).settingsLabel,
               onPressed: () => context.navigate(ref, '/$settingsPathSegment'),
             ),
           ),
           Consumer(
             builder: (context, ref, child) => IconButton(
               icon: const Icon(Icons.person),
-              tooltip: apploc(context).userProfileLabel,
+              tooltip: torreyanaLoc(context).userProfileLabel,
               onPressed: () => context.navigate(ref, '/$profilePathSegment'),
             ),
           ),

@@ -1,0 +1,13 @@
+name: torreyana_mob
+
+packages:
+  - sample_app
+  - package
+
+command:
+  bootstrap:
+    dependencies:
+
+ide:
+  intellij:
+    enabled: false

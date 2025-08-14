@@ -1,0 +1,40 @@
+name: torreyana_mob
+description: Torreyana Flutter app building blocks.
+version: 0.0.1+1
+
+environment:
+  sdk: '>=3.8.0 <4.0.0'
+
+dependencies:
+  cloud_firestore:
+  firebase_analytics:
+  firebase_auth:
+  firebase_core:
+  firebase_ui_auth:
+  firebase_ui_oauth_google:
+  flutter:
+    sdk: flutter
+  flutter_riverpod:
+  go_router:
+  google_fonts:
+  riverpod:
+  riverpod_annotation:
+  tourbillauth:
+    git:
+      https://github.com/labrom/tourbillauth.git
+  tourbillon:
+    git:
+      https://github.com/labrom/tourbillon.git
+
+
+dev_dependencies:
+  build_runner:
+  riverpod_generator:
+  riverpod_lint:
+
+flutter:
+  uses-material-design: true
+  fonts:
+    - family: SocialIcons
+      fonts:
+        - asset: packages/firebase_ui_auth/fonts/SocialIcons.ttf

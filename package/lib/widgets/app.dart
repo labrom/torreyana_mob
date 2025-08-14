@@ -5,6 +5,7 @@ import 'package:torreyana_mob/providers/navigation.dart';
 import 'package:torreyana_mob/providers/theme.dart';
 import 'package:tourbillauth/config.dart';
 import 'package:tourbillon/libloc.dart' as tourbillon;
+import 'package:torreyana_mob/localization.dart' as torreyana;
 
 class App extends StatelessWidget {
   const App.material({required this.nav, this.flowConfig, this.title, this.localizationsDelegate, super.key});
@@ -28,6 +29,7 @@ class App extends StatelessWidget {
           theme: ref.watch(appThemeDataProvider),
           localizationsDelegates: [
             if (localizationsDelegate != null) localizationsDelegate!,
+            torreyana.LibLocalizations.delegate,
             tourbillon.LibLocalizations.delegate,
           ],
         ),

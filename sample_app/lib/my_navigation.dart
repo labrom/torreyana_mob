@@ -1,9 +1,9 @@
-import 'package:torreyana_mob/my/screens/assignments.dart';
-import 'package:torreyana_mob/my/screens/parent_home.dart';
-import 'package:torreyana_mob/my/screens/schedule.dart';
-import 'package:torreyana_mob/my/screens/student_home.dart';
 import 'package:torreyana_mob/providers/navigation.dart';
 import 'package:torreyana_mob/screens/home.dart';
+import 'package:torreyana_mob_sample_app/my/screens/assignments.dart';
+import 'package:torreyana_mob_sample_app/my/screens/parent_home.dart';
+import 'package:torreyana_mob_sample_app/my/screens/schedule.dart';
+import 'package:torreyana_mob_sample_app/my/screens/student_home.dart';
 
 final navigation = Navigation(
   homeScreen: Screen(

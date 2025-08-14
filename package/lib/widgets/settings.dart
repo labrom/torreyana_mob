@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:torreyana_mob/providers/flows.dart';
 import 'package:torreyana_mob/providers/navigation.dart';
 import 'package:torreyana_mob/providers/settings.dart';
+import 'package:tourbillon/build_context.dart';
 
 class SettingsPageLink extends ConsumerWidget {
 
@@ -44,10 +45,6 @@ class SettingsSection extends StatelessWidget {
           ...children,
         ],
       );
-}
-
-extension on BuildContext {
-  get textTheme => null;
 }
 
 class SimpleWidgetSetting extends StatelessWidget {

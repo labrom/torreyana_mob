@@ -8,15 +8,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:torreyana_mob/localization.dart';
-import 'package:torreyana_mob/my_conf.dart';
-import 'package:torreyana_mob/my_navigation.dart';
 import 'package:torreyana_mob/widgets/app.dart';
+import 'package:torreyana_mob_sample_app/my_conf.dart';
+import 'package:torreyana_mob_sample_app/my_navigation.dart';
 
 void main() {
   testWidgets('App starts', (WidgetTester tester) async {
     await tester.pumpWidget(    App.material(
       nav: navigation,
-      localizationsDelegate: AppLocalizations.delegate,
+      localizationsDelegate: LibLocalizations.delegate,
       title: appName,
     ),
 );

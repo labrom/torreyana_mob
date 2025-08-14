@@ -1,10 +1,12 @@
 import 'package:flutter/widgets.dart';
 import 'package:tourbillon/loc.dart';
 
-AppLocalizations apploc(BuildContext context) => loc<AppLocalizations>(context);
+LibLocalizations torreyanaLoc(BuildContext context) => loc<LibLocalizations>(context);
 
-class AppLocalizations extends BaseLocalizations {
-  static final delegate = AppLocalizationsDelegate<AppLocalizations>(
+class LibLocalizations extends BaseLocalizations {
+
+  LibLocalizations._(Locale locale, Map<String, Map<String, String>> values) : super(locale, values);
+  static final delegate = AppLocalizationsDelegate<LibLocalizations>(
     supportedLocales: const ['en', 'fr'],
     values: {
       'settingsLabel': {
@@ -16,10 +18,8 @@ class AppLocalizations extends BaseLocalizations {
         fr: 'Profil',
       },
     },
-    builder: (locale, values) => AppLocalizations._(locale, values),
+    builder: (locale, values) => LibLocalizations._(locale, values),
   );
-
-  AppLocalizations._(locale, values) : super(locale, values);
 
   String get settingsLabel => get('settingsLabel');
   String get userProfileLabel => get('userProfileLabel');
