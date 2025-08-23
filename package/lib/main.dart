@@ -13,6 +13,8 @@ Future<void> runTorreyanaApp({
   FlowConfig? flowConfig,
   LocalizationsDelegate<dynamic>? localizationsDelegate,
   FirebaseOptions? firebaseOptions,
+  String? usersFirestoreDatabaseName,
+  String? usersCollectionName,
   ThemeConfig? themeConfig,
 }) async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -30,6 +32,8 @@ Future<void> runTorreyanaApp({
       flowConfig: flowConfig,
       localizationsDelegate: localizationsDelegate,
       title: title,
+      usersFirestoreDatabaseName: usersFirestoreDatabaseName,
+      usersCollectionName: usersCollectionName,
     ),
   );
 }
