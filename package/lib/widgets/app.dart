@@ -8,19 +8,31 @@ import 'package:tourbillauth/config.dart';
 import 'package:tourbillon/libloc.dart' as tourbillon;
 
 class App extends StatelessWidget {
-  const App.material({required this.nav, this.flowConfig, this.title, this.localizationsDelegate, super.key});
+  const App.material({
+    required this.nav,
+    this.flowConfig,
+    this.title,
+    this.localizationsDelegate,
+    this.usersFirestoreDatabaseName,
+    this.usersCollectionName,
+    super.key,
+  });
 
   final Navigation nav;
   final FlowConfig? flowConfig;
   final String? title;
   final LocalizationsDelegate<dynamic>? localizationsDelegate;
+  final String? usersFirestoreDatabaseName;
+  final String? usersCollectionName;
 
   @override
   Widget build(BuildContext context) {
     return ProviderScope(
       overrides: [
-        usersFirestoreDatabaseNameProvider.overrideWith((_) => 'user'),
-        // usersCollectionNameProvider doesn't need to be overridden, using default: 'users'
+        if (usersFirestoreDatabaseName != null)
+        usersFirestoreDatabaseNameProvider.overrideWith((_) => usersFirestoreDatabaseName),
+        if (usersCollectionName != null)
+        usersCollectionNameProvider.overrideWith((_) => usersCollectionName!),
       ],
       child: Consumer(
         builder: (context, ref, child) => MaterialApp.router(
