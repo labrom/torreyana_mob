@@ -3,10 +3,12 @@ import 'package:torreyana_mob/providers/navigation.dart';
 import 'package:torreyana_mob/widgets/settings.dart';
 
 class SettingsScreen extends StatelessWidget {
-  const SettingsScreen({super.key, this.showProfileLink = false, this.pushSubPages = true});
+  const SettingsScreen({super.key, this.showProfileLink = false, this.showThemeSettings = true, this.pushSubPages = true, this.children});
 
   final bool showProfileLink;
+  final bool showThemeSettings;
   final bool pushSubPages;
+  final List<Widget>? children;
 
   @override
   Widget build(BuildContext context) {
@@ -19,6 +21,8 @@ class SettingsScreen extends StatelessWidget {
           padding: const EdgeInsets.all(16),
           child: Column(
             children: [
+              if (children != null)
+              ...children!,
               SettingsSection(
                 title: 'Profile',
                 children: [
@@ -35,6 +39,7 @@ class SettingsScreen extends StatelessWidget {
                   ),
                 ],
               ),
+              if (showThemeSettings)
               SettingsPageLink(
                 title: 'Theme',
                 route: '/$settingsPathSegment/theme',
