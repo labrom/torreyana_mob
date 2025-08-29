@@ -63,14 +63,18 @@ class Navigation {
     required this.homeScreen,
     required this.screens,
     this.homeScreenForRole,
+    this.settingsWidgets,
     this.homeRequiresLogin = false,
     this.showProfileLinkInSettings = false,
+    this.showThemeSettings = true,
   });
   final Screen homeScreen;
   final List<Screen> screens;
   final Map<String, Screen>? homeScreenForRole;
   final bool homeRequiresLogin;
   final bool showProfileLinkInSettings;
+  final bool showThemeSettings;
+  final List<Widget>? settingsWidgets;
 
   Screen getHomeScreen({String? role}) => homeScreenForRole?[role] ?? homeScreen;
 }
@@ -122,6 +126,8 @@ GoRouter router(Ref ref, Navigation nav, FlowConfig? flowConfig) => GoRouter(
       builder: (context, state) => SettingsScreen(
         showProfileLink:
             nav.showProfileLinkInSettings || state.uri.queryParameters['showProfileLink'] == 'true',
+        showThemeSettings: nav.showThemeSettings,
+        children: nav.settingsWidgets,
       ),
     ),
     GoRoute(
@@ -133,14 +139,14 @@ GoRouter router(Ref ref, Navigation nav, FlowConfig? flowConfig) => GoRouter(
       builder: (context, state) => const UserProfileScreen(),
       redirect: (context, state) => _loginRedirect(context, state, ref),
     ),
-    if(flowConfig != null)
-    GoRoute(
-      path: '/$flowPathSegment/:name',
-      builder: (context, state) => FlowScreen(
-        config: flowConfig,
-        flowName: state.pathParameters['name']!,
+    if (flowConfig != null)
+      GoRoute(
+        path: '/$flowPathSegment/:name',
+        builder: (context, state) => FlowScreen(
+          config: flowConfig,
+          flowName: state.pathParameters['name']!,
+        ),
       ),
-    ),
   ],
 );
 
