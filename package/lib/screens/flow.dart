@@ -85,7 +85,7 @@ class FlowScreen extends ConsumerWidget {
           )
         : TextButton(
             onPressed: nextStepAllowed
-                ? currentUserFlowStateNotifier.nextStep
+                ? () => currentUserFlowStateNotifier.nextStep(config)
                 : null,
             child: const Text('Next'),
           );

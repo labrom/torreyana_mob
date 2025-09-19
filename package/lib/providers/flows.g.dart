@@ -40,24 +40,15 @@ class StepBuilderFamily
   const StepBuilderFamily();
 
   /// See also [stepBuilder].
-  StepBuilderProvider call({
-    required FlowConfig config,
-    required String flow,
-  }) {
-    return StepBuilderProvider(
-      config: config,
-      flow: flow,
-    );
+  StepBuilderProvider call({required FlowConfig config, required String flow}) {
+    return StepBuilderProvider(config: config, flow: flow);
   }
 
   @override
   StepBuilderProvider getProviderOverride(
     covariant StepBuilderProvider provider,
   ) {
-    return call(
-      config: provider.config,
-      flow: provider.flow,
-    );
+    return call(config: provider.config, flow: provider.flow);
   }
 
   static const Iterable<ProviderOrFamily>? _dependencies = null;
@@ -79,27 +70,19 @@ class StepBuilderFamily
 class StepBuilderProvider
     extends AutoDisposeProvider<Widget Function(BuildContext, WidgetRef)> {
   /// See also [stepBuilder].
-  StepBuilderProvider({
-    required FlowConfig config,
-    required String flow,
-  }) : this._internal(
-          (ref) => stepBuilder(
-            ref as StepBuilderRef,
-            config: config,
-            flow: flow,
-          ),
-          from: stepBuilderProvider,
-          name: r'stepBuilderProvider',
-          debugGetCreateSourceHash:
-              const bool.fromEnvironment('dart.vm.product')
-                  ? null
-                  : _$stepBuilderHash,
-          dependencies: StepBuilderFamily._dependencies,
-          allTransitiveDependencies:
-              StepBuilderFamily._allTransitiveDependencies,
-          config: config,
-          flow: flow,
-        );
+  StepBuilderProvider({required FlowConfig config, required String flow})
+    : this._internal(
+        (ref) => stepBuilder(ref as StepBuilderRef, config: config, flow: flow),
+        from: stepBuilderProvider,
+        name: r'stepBuilderProvider',
+        debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+            ? null
+            : _$stepBuilderHash,
+        dependencies: StepBuilderFamily._dependencies,
+        allTransitiveDependencies: StepBuilderFamily._allTransitiveDependencies,
+        config: config,
+        flow: flow,
+      );
 
   StepBuilderProvider._internal(
     super._createNotifier, {
@@ -118,7 +101,7 @@ class StepBuilderProvider
   @override
   Override overrideWith(
     Widget Function(BuildContext, WidgetRef) Function(StepBuilderRef provider)
-        create,
+    create,
   ) {
     return ProviderOverride(
       origin: this,
@@ -137,7 +120,7 @@ class StepBuilderProvider
 
   @override
   AutoDisposeProviderElement<Widget Function(BuildContext, WidgetRef)>
-      createElement() {
+  createElement() {
     return _StepBuilderProviderElement(this);
   }
 
@@ -181,17 +164,14 @@ class _StepBuilderProviderElement
 }
 
 String _$currentUserFlowStateHash() =>
-    r'314e03a10eda96a932fb08389559b6ef7e007b71';
+    r'cad9a032346e128542a3db2830008c96daf635da';
 
 abstract class _$CurrentUserFlowState
     extends BuildlessAutoDisposeNotifier<UserFlowState> {
   late final FlowConfig config;
   late final String flowName;
 
-  UserFlowState build({
-    required FlowConfig config,
-    required String flowName,
-  });
+  UserFlowState build({required FlowConfig config, required String flowName});
 }
 
 /// See also [CurrentUserFlowState].
@@ -208,20 +188,14 @@ class CurrentUserFlowStateFamily extends Family<UserFlowState> {
     required FlowConfig config,
     required String flowName,
   }) {
-    return CurrentUserFlowStateProvider(
-      config: config,
-      flowName: flowName,
-    );
+    return CurrentUserFlowStateProvider(config: config, flowName: flowName);
   }
 
   @override
   CurrentUserFlowStateProvider getProviderOverride(
     covariant CurrentUserFlowStateProvider provider,
   ) {
-    return call(
-      config: provider.config,
-      flowName: provider.flowName,
-    );
+    return call(config: provider.config, flowName: provider.flowName);
   }
 
   static const Iterable<ProviderOrFamily>? _dependencies = null;
@@ -240,28 +214,28 @@ class CurrentUserFlowStateFamily extends Family<UserFlowState> {
 }
 
 /// See also [CurrentUserFlowState].
-class CurrentUserFlowStateProvider extends AutoDisposeNotifierProviderImpl<
-    CurrentUserFlowState, UserFlowState> {
+class CurrentUserFlowStateProvider
+    extends
+        AutoDisposeNotifierProviderImpl<CurrentUserFlowState, UserFlowState> {
   /// See also [CurrentUserFlowState].
   CurrentUserFlowStateProvider({
     required FlowConfig config,
     required String flowName,
   }) : this._internal(
-          () => CurrentUserFlowState()
-            ..config = config
-            ..flowName = flowName,
-          from: currentUserFlowStateProvider,
-          name: r'currentUserFlowStateProvider',
-          debugGetCreateSourceHash:
-              const bool.fromEnvironment('dart.vm.product')
-                  ? null
-                  : _$currentUserFlowStateHash,
-          dependencies: CurrentUserFlowStateFamily._dependencies,
-          allTransitiveDependencies:
-              CurrentUserFlowStateFamily._allTransitiveDependencies,
-          config: config,
-          flowName: flowName,
-        );
+         () => CurrentUserFlowState()
+           ..config = config
+           ..flowName = flowName,
+         from: currentUserFlowStateProvider,
+         name: r'currentUserFlowStateProvider',
+         debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+             ? null
+             : _$currentUserFlowStateHash,
+         dependencies: CurrentUserFlowStateFamily._dependencies,
+         allTransitiveDependencies:
+             CurrentUserFlowStateFamily._allTransitiveDependencies,
+         config: config,
+         flowName: flowName,
+       );
 
   CurrentUserFlowStateProvider._internal(
     super._createNotifier, {
@@ -278,13 +252,8 @@ class CurrentUserFlowStateProvider extends AutoDisposeNotifierProviderImpl<
   final String flowName;
 
   @override
-  UserFlowState runNotifierBuild(
-    covariant CurrentUserFlowState notifier,
-  ) {
-    return notifier.build(
-      config: config,
-      flowName: flowName,
-    );
+  UserFlowState runNotifierBuild(covariant CurrentUserFlowState notifier) {
+    return notifier.build(config: config, flowName: flowName);
   }
 
   @override
@@ -308,7 +277,7 @@ class CurrentUserFlowStateProvider extends AutoDisposeNotifierProviderImpl<
 
   @override
   AutoDisposeNotifierProviderElement<CurrentUserFlowState, UserFlowState>
-      createElement() {
+  createElement() {
     return _CurrentUserFlowStateProviderElement(this);
   }
 
@@ -340,8 +309,9 @@ mixin CurrentUserFlowStateRef on AutoDisposeNotifierProviderRef<UserFlowState> {
 }
 
 class _CurrentUserFlowStateProviderElement
-    extends AutoDisposeNotifierProviderElement<CurrentUserFlowState,
-        UserFlowState> with CurrentUserFlowStateRef {
+    extends
+        AutoDisposeNotifierProviderElement<CurrentUserFlowState, UserFlowState>
+    with CurrentUserFlowStateRef {
   _CurrentUserFlowStateProviderElement(super.provider);
 
   @override
@@ -355,18 +325,21 @@ String _$memorySessionDataRepositoryHash() =>
 
 /// See also [MemorySessionDataRepository].
 @ProviderFor(MemorySessionDataRepository)
-final memorySessionDataRepositoryProvider = AutoDisposeNotifierProvider<
-    MemorySessionDataRepository, Map<String, dynamic>>.internal(
-  MemorySessionDataRepository.new,
-  name: r'memorySessionDataRepositoryProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$memorySessionDataRepositoryHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+final memorySessionDataRepositoryProvider =
+    AutoDisposeNotifierProvider<
+      MemorySessionDataRepository,
+      Map<String, dynamic>
+    >.internal(
+      MemorySessionDataRepository.new,
+      name: r'memorySessionDataRepositoryProvider',
+      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+          ? null
+          : _$memorySessionDataRepositoryHash,
+      dependencies: null,
+      allTransitiveDependencies: null,
+    );
 
-typedef _$MemorySessionDataRepository
-    = AutoDisposeNotifier<Map<String, dynamic>>;
+typedef _$MemorySessionDataRepository =
+    AutoDisposeNotifier<Map<String, dynamic>>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

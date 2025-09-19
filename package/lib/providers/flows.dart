@@ -149,14 +149,13 @@ class UserFlowState {
 class CurrentUserFlowState extends _$CurrentUserFlowState {
   @override
   UserFlowState build({required FlowConfig config, required String flowName}) {
-    this.config = config;
     return UserFlowState(
       flow: flowName,
       steps: [config.flows[flowName]!.firstStep],
     );
   }
 
-  void nextStep() {
+  void nextStep(FlowConfig config) {
     if (state.started && !state.last) {
       final flow = config.flows[state.flow]!;
       final nextStep = flow.nextStep(
