@@ -143,9 +143,10 @@ GoRouter router(Ref ref, Navigation nav, FlowConfig? flowConfig) => GoRouter(
     // TODO
     // ...homeRedirectRoutes(ref),
 
-    // If the home screen is a shell screen, settings screens will need to be
-    // pushed on top of it in order to preserve back button behavior
-    if (nav.homeScreen.isShell) ...settingsRoutes(ref, nav, topLevel: true),
+    // If the home screen is a shell screen, settings screens are set up
+    // as top-level screens and will need to be pushed on top of the home screen
+    // in order to preserve back button behavior
+    if (nav.homeScreen.isShell) ...settingsRoutes(ref, nav),
 
     // Top-level custom screens (path starts with /)
     ...topLevelScreenRoutes(ref, nav),
@@ -175,11 +176,11 @@ List<RouteBase> homeRedirectRoutes(Ref ref, Navigation nav) {
   ];
 }
 
-List<RouteBase> settingsRoutes(Ref ref, Navigation nav, {bool topLevel = false}) {
+List<RouteBase> settingsRoutes(Ref ref, Navigation nav) {
   return [
     // Settings
     GoRoute(
-      path: '${topLevel ? '/' : ''}$settingsPathSegment',
+      path: '/$settingsPathSegment',
       builder: (context, state) => SettingsScreen(
         showProfileLink:
             nav.showProfileLinkInSettings || state.uri.queryParameters['showProfileLink'] == 'true',
@@ -197,7 +198,7 @@ List<RouteBase> settingsRoutes(Ref ref, Navigation nav, {bool topLevel = false})
 
     // Profile
     GoRoute(
-      path: '${topLevel ? '/' : ''}$profilePathSegment',
+      path: '/$profilePathSegment',
       builder: (context, state) => const UserProfileScreen(),
       redirect: (context, state) => _loginRedirect(context, state, ref),
     ),
