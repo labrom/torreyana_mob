@@ -109,6 +109,7 @@ void Function(BuildContext, String, bool) navigationHandler(Ref ref, String rout
 @riverpod
 GoRouter router(Ref ref, Navigation nav, FlowConfig? flowConfig) => GoRouter(
   debugLogDiagnostics: kDebugMode,
+  initialLocation: defaultPath,
   routes: [
     GoRoute(
       path: loginPath,
