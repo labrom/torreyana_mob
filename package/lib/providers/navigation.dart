@@ -25,7 +25,7 @@ class Screen {
     required this.builder,
     this.requiresLogin = false,
     this.requiresRole = '',
-    this.children = const [],
+    this.shellChildren = const [],
     this.isShell = false,
   });
   final String name;
@@ -34,14 +34,18 @@ class Screen {
   final bool requiresLogin;
   final String requiresRole;
   final bool isShell;
-  final List<Screen> children;
+  final List<Screen> shellChildren;
 
-  RouteBase toRoute(Ref ref, Navigation nav) {
+  RouteBase toRoute(
+    Ref ref,
+    Navigation nav, {
+    List<RouteBase> routes = const [],
+  }) {
     if (isShell) {
       return ShellRoute(
         builder: (context, state, child) =>
             builder(context, state.pathParameters..addAll(state.uri.queryParameters), child),
-        routes: children.map((screen) => screen.toRoute(ref, nav)).toList(),
+        routes: shellChildren.map((screen) => screen.toRoute(ref, nav)).toList(),
       );
     }
     return GoRoute(
@@ -53,7 +57,7 @@ class Screen {
               (name == defaultPath && nav.homeRequiresLogin)
           ? (context, state) => _loginRedirect(context, state, ref)
           : null,
-      routes: children.map((screen) => screen.toRoute(ref, nav)).toList(),
+      routes: routes,
     );
   }
 }
@@ -105,7 +109,6 @@ void Function(BuildContext, String, bool) navigationHandler(Ref ref, String rout
 @riverpod
 GoRouter router(Ref ref, Navigation nav, FlowConfig? flowConfig) => GoRouter(
   debugLogDiagnostics: kDebugMode,
-  initialLocation: defaultPath,
   routes: [
     GoRoute(
       path: loginPath,
@@ -116,43 +119,57 @@ GoRouter router(Ref ref, Navigation nav, FlowConfig? flowConfig) => GoRouter(
     defaultHomeRoute(
       ref,
       nav,
-      childRoutes: [],
+      routes: [
+        // Settings
+        GoRoute(
+          path: settingsPathSegment,
+          builder: (context, state) => SettingsScreen(
+            showProfileLink:
+                nav.showProfileLinkInSettings ||
+                state.uri.queryParameters['showProfileLink'] == 'true',
+            showThemeSettings: nav.showThemeSettings,
+            children: nav.settingsWidgets,
+          ),
+          routes: [
+            GoRoute(
+              path: 'theme',
+              builder: (context, state) => const ThemeSettingsScreen(),
+            ),
+          ],
+        ),
+
+        // Profile
+        GoRoute(
+          path: '/$profilePathSegment',
+          builder: (context, state) => const UserProfileScreen(),
+          redirect: (context, state) => _loginRedirect(context, state, ref),
+        ),
+
+        // Flows
+        if (flowConfig != null)
+          GoRoute(
+            path: '$flowPathSegment/:name',
+            builder: (context, state) => FlowScreen(
+              config: flowConfig,
+              flowName: state.pathParameters['name']!,
+            ),
+          ),
+
+        // Custom screens that are children of the default screen
+        ...childScreenRoutes(ref, nav),
+      ],
     ),
     // TODO
     // ...homeRedirectRoutes(ref),
-    ...screenRoutes(ref, nav),
-    GoRoute(
-      path: '/$settingsPathSegment',
-      builder: (context, state) => SettingsScreen(
-        showProfileLink:
-            nav.showProfileLinkInSettings || state.uri.queryParameters['showProfileLink'] == 'true',
-        showThemeSettings: nav.showThemeSettings,
-        children: nav.settingsWidgets,
-      ),
-    ),
-    GoRoute(
-      path: '/$settingsPathSegment/theme',
-      builder: (context, state) => const ThemeSettingsScreen(),
-    ),
-    GoRoute(
-      path: '/$profilePathSegment',
-      builder: (context, state) => const UserProfileScreen(),
-      redirect: (context, state) => _loginRedirect(context, state, ref),
-    ),
-    if (flowConfig != null)
-      GoRoute(
-        path: '/$flowPathSegment/:name',
-        builder: (context, state) => FlowScreen(
-          config: flowConfig,
-          flowName: state.pathParameters['name']!,
-        ),
-      ),
+    // Top-level custom screens
+    ...topLevelScreenRoutes(ref, nav),
   ],
 );
 
-RouteBase defaultHomeRoute(Ref ref, Navigation nav, {required List<RouteBase> childRoutes}) {
+RouteBase defaultHomeRoute(Ref ref, Navigation nav, {required List<RouteBase> routes}) {
   final homeScreen = nav.getHomeScreen(/* TODO Get user role */);
-  final route = homeScreen.toRoute(ref, nav);
+  assert(homeScreen.name == defaultPath);
+  final route = homeScreen.toRoute(ref, nav, routes: routes);
   return route;
 }
 
@@ -172,8 +189,18 @@ List<RouteBase> homeRedirectRoutes(Ref ref, Navigation nav) {
   ];
 }
 
-List<RouteBase> screenRoutes(Ref ref, Navigation nav) {
+List<RouteBase> topLevelScreenRoutes(Ref ref, Navigation nav) {
   return nav.screens
+      .where((screen) => screen.name.startsWith('/'))
+      .map(
+        (screen) => screen.toRoute(ref, nav),
+      )
+      .toList();
+}
+
+List<RouteBase> childScreenRoutes(Ref ref, Navigation nav) {
+  return nav.screens
+      .where((screen) => !screen.name.startsWith('/'))
       .map(
         (screen) => screen.toRoute(ref, nav),
       )
