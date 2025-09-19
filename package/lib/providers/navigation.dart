@@ -120,30 +120,9 @@ GoRouter router(Ref ref, Navigation nav, FlowConfig? flowConfig) => GoRouter(
       ref,
       nav,
       routes: [
-        // Settings
-        GoRoute(
-          path: settingsPathSegment,
-          builder: (context, state) => SettingsScreen(
-            showProfileLink:
-                nav.showProfileLinkInSettings ||
-                state.uri.queryParameters['showProfileLink'] == 'true',
-            showThemeSettings: nav.showThemeSettings,
-            children: nav.settingsWidgets,
-          ),
-          routes: [
-            GoRoute(
-              path: 'theme',
-              builder: (context, state) => const ThemeSettingsScreen(),
-            ),
-          ],
-        ),
-
-        // Profile
-        GoRoute(
-          path: '/$profilePathSegment',
-          builder: (context, state) => const UserProfileScreen(),
-          redirect: (context, state) => _loginRedirect(context, state, ref),
-        ),
+        // If the home screen is a regular screen (not a shell), settings screens
+        // are set up as child screens
+        if (!nav.homeScreen.isShell) ...settingsRoutes(ref, nav),
 
         // Flows
         if (flowConfig != null)
@@ -156,12 +135,19 @@ GoRouter router(Ref ref, Navigation nav, FlowConfig? flowConfig) => GoRouter(
           ),
 
         // Custom screens that are children of the default screen
+        // (path doesn't start with /)
         ...childScreenRoutes(ref, nav),
       ],
     ),
+
     // TODO
     // ...homeRedirectRoutes(ref),
-    // Top-level custom screens
+
+    // If the home screen is a shell screen, settings screens will need to be
+    // pushed on top of it in order to preserve back button behavior
+    if (nav.homeScreen.isShell) ...settingsRoutes(ref, nav, topLevel: true),
+
+    // Top-level custom screens (path starts with /)
     ...topLevelScreenRoutes(ref, nav),
   ],
 );
@@ -186,6 +172,35 @@ List<RouteBase> homeRedirectRoutes(Ref ref, Navigation nav) {
           ),
         ) ??
         [],
+  ];
+}
+
+List<RouteBase> settingsRoutes(Ref ref, Navigation nav, {bool topLevel = false}) {
+  return [
+    // Settings
+    GoRoute(
+      path: '${topLevel ? '/' : ''}$settingsPathSegment',
+      builder: (context, state) => SettingsScreen(
+        showProfileLink:
+            nav.showProfileLinkInSettings || state.uri.queryParameters['showProfileLink'] == 'true',
+        showThemeSettings: nav.showThemeSettings,
+        children: nav.settingsWidgets,
+      ),
+      routes: [
+        if (nav.showThemeSettings)
+          GoRoute(
+            path: 'theme',
+            builder: (context, state) => const ThemeSettingsScreen(),
+          ),
+      ],
+    ),
+
+    // Profile
+    GoRoute(
+      path: '${topLevel ? '/' : ''}$profilePathSegment',
+      builder: (context, state) => const UserProfileScreen(),
+      redirect: (context, state) => _loginRedirect(context, state, ref),
+    ),
   ];
 }
 
