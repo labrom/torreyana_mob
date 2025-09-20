@@ -26,15 +26,15 @@ class Screen {
     this.requiresLogin = false,
     this.requiresRole = '',
     this.shellChildren = const [],
-    this.isShell = false,
   });
   final String name;
   final Widget Function(BuildContext context, Map<String, String> parameters, Widget? child)
   builder;
   final bool requiresLogin;
   final String requiresRole;
-  final bool isShell;
   final List<Screen> shellChildren;
+
+  bool get isShell => shellChildren.isNotEmpty;
 
   RouteBase toRoute(
     Ref ref,
