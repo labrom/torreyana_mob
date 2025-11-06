@@ -1,8 +1,10 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:torreyana_mob/providers/analytics.dart';
 import 'package:torreyana_mob/providers/flows.dart';
 import 'package:torreyana_mob/screens/flow.dart';
 import 'package:torreyana_mob/screens/login.dart';
@@ -108,6 +110,7 @@ void Function(BuildContext, String, bool) navigationHandler(Ref ref, String rout
 /// route is under that path root.
 @riverpod
 GoRouter router(Ref ref, Navigation nav, FlowConfig? flowConfig) => GoRouter(
+  observers: [FirebaseAnalyticsObserver(analytics: ref.watch(analyticsProvider))],
   debugLogDiagnostics: kDebugMode,
   initialLocation: defaultPath,
   routes: [
