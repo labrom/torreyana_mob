@@ -6,24 +6,62 @@ part of 'settings.dart';
 // RiverpodGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
+
+@ProviderFor(FirestoreUserSettingsRepository)
+const firestoreUserSettingsRepositoryProvider =
+    FirestoreUserSettingsRepositoryProvider._();
+
+final class FirestoreUserSettingsRepositoryProvider
+    extends
+        $StreamNotifierProvider<
+          FirestoreUserSettingsRepository,
+          Map<String, dynamic>
+        > {
+  const FirestoreUserSettingsRepositoryProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'firestoreUserSettingsRepositoryProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$firestoreUserSettingsRepositoryHash();
+
+  @$internal
+  @override
+  FirestoreUserSettingsRepository create() => FirestoreUserSettingsRepository();
+}
+
 String _$firestoreUserSettingsRepositoryHash() =>
     r'48d558996a06c39b4f5ad8b2b86ff3be276a3938';
 
-/// See also [FirestoreUserSettingsRepository].
-@ProviderFor(FirestoreUserSettingsRepository)
-final firestoreUserSettingsRepositoryProvider =
-    AutoDisposeStreamNotifierProvider<FirestoreUserSettingsRepository,
-        Map<String, dynamic>>.internal(
-  FirestoreUserSettingsRepository.new,
-  name: r'firestoreUserSettingsRepositoryProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$firestoreUserSettingsRepositoryHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
-
-typedef _$FirestoreUserSettingsRepository
-    = AutoDisposeStreamNotifier<Map<String, dynamic>>;
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package
+abstract class _$FirestoreUserSettingsRepository
+    extends $StreamNotifier<Map<String, dynamic>> {
+  Stream<Map<String, dynamic>> build();
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final created = build();
+    final ref =
+        this.ref
+            as $Ref<AsyncValue<Map<String, dynamic>>, Map<String, dynamic>>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<
+                AsyncValue<Map<String, dynamic>>,
+                Map<String, dynamic>
+              >,
+              AsyncValue<Map<String, dynamic>>,
+              Object?,
+              Object?
+            >;
+    element.handleValue(ref, created);
+  }
+}

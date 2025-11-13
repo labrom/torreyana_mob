@@ -6,51 +6,151 @@ part of 'theme.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$appThemeDataHash() => r'80c2e09117821d89bbecd4048556faad12f1ed7a';
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
 
-/// See also [appThemeData].
-@ProviderFor(appThemeData)
-final appThemeDataProvider = AutoDisposeProvider<ThemeData>.internal(
-  appThemeData,
-  name: r'appThemeDataProvider',
-  debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product') ? null : _$appThemeDataHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+@ProviderFor(DarkTheme)
+const darkThemeProvider = DarkThemeProvider._();
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-typedef AppThemeDataRef = AutoDisposeProviderRef<ThemeData>;
+final class DarkThemeProvider extends $NotifierProvider<DarkTheme, bool> {
+  const DarkThemeProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'darkThemeProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$darkThemeHash();
+
+  @$internal
+  @override
+  DarkTheme create() => DarkTheme();
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(bool value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<bool>(value),
+    );
+  }
+}
+
 String _$darkThemeHash() => r'c6c71e997187d4b229368a9404aa62c75ec4802d';
 
-/// See also [DarkTheme].
-@ProviderFor(DarkTheme)
-final darkThemeProvider = AutoDisposeNotifierProvider<DarkTheme, bool>.internal(
-  DarkTheme.new,
-  name: r'darkThemeProvider',
-  debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product') ? null : _$darkThemeHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+abstract class _$DarkTheme extends $Notifier<bool> {
+  bool build();
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final created = build();
+    final ref = this.ref as $Ref<bool, bool>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<bool, bool>,
+              bool,
+              Object?,
+              Object?
+            >;
+    element.handleValue(ref, created);
+  }
+}
 
-typedef _$DarkTheme = AutoDisposeNotifier<bool>;
+@ProviderFor(ThemeSeedColor)
+const themeSeedColorProvider = ThemeSeedColorProvider._();
+
+final class ThemeSeedColorProvider
+    extends $NotifierProvider<ThemeSeedColor, Color> {
+  const ThemeSeedColorProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'themeSeedColorProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$themeSeedColorHash();
+
+  @$internal
+  @override
+  ThemeSeedColor create() => ThemeSeedColor();
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(Color value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<Color>(value),
+    );
+  }
+}
+
 String _$themeSeedColorHash() => r'79d89badccabff04672951ae9c8c2e91b40d6c43';
 
-/// See also [ThemeSeedColor].
-@ProviderFor(ThemeSeedColor)
-final themeSeedColorProvider =
-    AutoDisposeNotifierProvider<ThemeSeedColor, Color>.internal(
-  ThemeSeedColor.new,
-  name: r'themeSeedColorProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$themeSeedColorHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+abstract class _$ThemeSeedColor extends $Notifier<Color> {
+  Color build();
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final created = build();
+    final ref = this.ref as $Ref<Color, Color>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<Color, Color>,
+              Color,
+              Object?,
+              Object?
+            >;
+    element.handleValue(ref, created);
+  }
+}
 
-typedef _$ThemeSeedColor = AutoDisposeNotifier<Color>;
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package
+@ProviderFor(appThemeData)
+const appThemeDataProvider = AppThemeDataProvider._();
+
+final class AppThemeDataProvider
+    extends $FunctionalProvider<ThemeData, ThemeData, ThemeData>
+    with $Provider<ThemeData> {
+  const AppThemeDataProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'appThemeDataProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$appThemeDataHash();
+
+  @$internal
+  @override
+  $ProviderElement<ThemeData> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  ThemeData create(Ref ref) {
+    return appThemeData(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(ThemeData value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<ThemeData>(value),
+    );
+  }
+}
+
+String _$appThemeDataHash() => r'80c2e09117821d89bbecd4048556faad12f1ed7a';
