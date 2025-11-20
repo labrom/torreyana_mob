@@ -8,27 +8,27 @@ import 'package:torreyana_sample_app/screens/student_home.dart';
 final navigation = Navigation(
   homeScreen: Screen(
     name: '/',
-    builder: (context, parameters, _) => const HomeScreen(),
+    builder: (context, parameters) => const HomeScreen(),
   ),
   screens: [
     Screen(
       name: 'schedule',
-      builder: (context, parameters, _) => const ScheduleScreen(),
+      builder: (context, parameters) => const ScheduleScreen(),
     ),
     Screen(
       name: 'assignments',
       requiresRole: 'student',
-      builder: (context, parameters, _) => const AssignmentsScreen(),
+      builder: (context, parameters) => const AssignmentsScreen(),
     ),
   ],
   homeScreenForRole: {
     'student': Screen(
       name: 'student-home',
-      builder: (context, parameters, _) => const StudentHomeScreen(),
+      builder: (context, parameters) => const StudentHomeScreen(),
     ),
     'parent': Screen(
       name: 'parent-home',
-      builder: (context, parameters, _) => const ParentHomeScreen(),
+      builder: (context, parameters) => const ParentHomeScreen(),
     )
   },
 );

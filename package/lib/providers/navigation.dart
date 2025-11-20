@@ -21,20 +21,47 @@ const flowPathSegment = '_flow';
 const settingsPathSegment = '_settings';
 const profilePathSegment = '_profile';
 
+/// A screen definition.
+///
+/// A screen can be a shell screen, meaning that it will display one of its
+/// [shellChildren] at a time, and it will allow the user to navigate to the
+/// other children.
+@immutable
 class Screen {
-  Screen({
+  const Screen({
     required this.name,
-    required this.builder,
+    this.builder,
+    this.shellBuilder,
     this.requiresLogin = false,
     this.requiresRole = '',
     this.shellChildren = const [],
-  });
+  }) : assert(shellChildren.length > 0 && shellBuilder != null || builder != null);
+  // The screen's name in the router.
   final String name;
-  final Widget Function(BuildContext context, Map<String, String> parameters, Widget? child)
+
+  // The builder function that creates the screen's widget.
+  final Widget Function(
+    BuildContext context,
+    Map<String, String> parameters,
+  )?
   builder;
+
+  // The builder function that creates the screen's widget
+  // when the screen is a shell.
+  final Widget Function(
+    BuildContext context,
+    Map<String, String> parameters, {
+    // The screen's current child.
+    required Widget child,
+    // The list of all child destinations.
+    required List<Destination> shellChildren,
+  })?
+  shellBuilder;
+
   final bool requiresLogin;
   final String requiresRole;
-  final List<Screen> shellChildren;
+  // The list of child destinations, if this screen is a shell.
+  final List<Destination> shellChildren;
 
   bool get isShell => shellChildren.isNotEmpty;
 
@@ -45,15 +72,19 @@ class Screen {
   }) {
     if (isShell) {
       return ShellRoute(
-        builder: (context, state, child) =>
-            builder(context, state.pathParameters..addAll(state.uri.queryParameters), child),
-        routes: shellChildren.map((screen) => screen.toRoute(ref, nav)).toList(),
+        builder: (context, state, child) => shellBuilder!(
+          context,
+          state.pathParameters..addAll(state.uri.queryParameters),
+          child: child,
+          shellChildren: shellChildren,
+        ),
+        routes: shellChildren.map((destination) => destination.screen.toRoute(ref, nav)).toList(),
       );
     }
     return GoRoute(
       path: name,
       builder: (context, state) =>
-          builder(context, state.pathParameters..addAll(state.uri.queryParameters), null),
+          builder!(context, state.pathParameters..addAll(state.uri.queryParameters)),
       redirect:
           (requiresLogin && !nav.homeRequiresLogin) ||
               (name == defaultPath && nav.homeRequiresLogin)
@@ -64,8 +95,25 @@ class Screen {
   }
 }
 
+/// A destination within a shell screen.
+///
+/// A destination describes a navigation affordance ([label] and [icon]) and the definition
+/// of the screen it should navigate to.
+@immutable
+class Destination {
+  const Destination(
+    this.screen,
+    this.label,
+    this.icon,
+  );
+  final String label;
+  final Icon icon;
+  final Screen screen;
+}
+
+@immutable
 class Navigation {
-  Navigation({
+  const Navigation({
     required this.homeScreen,
     required this.screens,
     this.homeScreenForRole,
