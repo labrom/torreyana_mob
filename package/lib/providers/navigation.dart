@@ -144,6 +144,7 @@ extension NavigationHandler on BuildContext {
 // ignore: avoid_positional_boolean_parameters
 void Function(BuildContext, String, bool) navigationHandler(Ref ref, String route) {
   // Do stuff here, like log page view
+  ref.watch(analyticsProvider).logScreenView(screenName: route);
 
   // Pass through to go_router.
   return (context, route, push) {
@@ -158,7 +159,6 @@ void Function(BuildContext, String, bool) navigationHandler(Ref ref, String rout
 /// route is under that path root.
 @riverpod
 GoRouter router(Ref ref, Navigation nav, FlowConfig? flowConfig) => GoRouter(
-  observers: [FirebaseAnalyticsObserver(analytics: ref.watch(analyticsProvider))],
   debugLogDiagnostics: kDebugMode,
   initialLocation: defaultPath,
   routes: [
