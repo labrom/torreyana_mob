@@ -1,4 +1,3 @@
-import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -69,22 +68,31 @@ class Screen {
     Ref ref,
     Navigation nav, {
     List<RouteBase> routes = const [],
+    Widget Function(Widget child)? wrap,
   }) {
     if (isShell) {
       return ShellRoute(
-        builder: (context, state, child) => shellBuilder!(
-          context,
-          state.pathParameters..addAll(state.uri.queryParameters),
-          child: child,
-          shellChildren: shellChildren,
-        ),
+        builder: (context, state, child) {
+          final screen = shellBuilder!(
+            context,
+            state.pathParameters..addAll(state.uri.queryParameters),
+            child: child,
+            shellChildren: shellChildren,
+          );
+          return wrap?.call(screen) ?? screen;
+        },
         routes: shellChildren.map((destination) => destination.screen.toRoute(ref, nav)).toList(),
       );
     }
     return GoRoute(
       path: name,
-      builder: (context, state) =>
-          builder!(context, state.pathParameters..addAll(state.uri.queryParameters)),
+      builder: (context, state) {
+        final screen = builder!(
+          context,
+          state.pathParameters..addAll(state.uri.queryParameters),
+        );
+        return wrap?.call(screen) ?? screen;
+      },
       redirect:
           (requiresLogin && !nav.homeRequiresLogin) ||
               (name == defaultPath && nav.homeRequiresLogin)
@@ -261,7 +269,11 @@ List<RouteBase> topLevelScreenRoutes(Ref ref, Navigation nav) {
   return nav.screens
       .where((screen) => screen.name.startsWith('/'))
       .map(
-        (screen) => screen.toRoute(ref, nav),
+        (screen) => screen.toRoute(
+          ref,
+          nav,
+          wrap: (child) => _DefaultRouteBackNavigation(child: child),
+        ),
       )
       .toList();
 }
@@ -286,3 +298,47 @@ String? _loginRedirect(BuildContext context, GoRouterState state, Ref ref) =>
 
 String _redirectUri(GoRouterState state) =>
     Uri(path: loginPath, queryParameters: {'target': state.fullPath ?? defaultPath}).toString();
+
+class _DefaultRouteBackNavigation extends StatefulWidget {
+  const _DefaultRouteBackNavigation({required this.child});
+
+  final Widget child;
+
+  @override
+  State<_DefaultRouteBackNavigation> createState() => _DefaultRouteBackNavigationState();
+}
+
+class _DefaultRouteBackNavigationState extends State<_DefaultRouteBackNavigation> {
+  LocalHistoryEntry? _entry;
+  bool _removingEntry = false;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final route = ModalRoute.of(context);
+    if (_entry == null && route != null && !route.canPop) {
+      _entry = LocalHistoryEntry(onRemove: _onBackNavigation);
+      route.addLocalHistoryEntry(_entry!);
+    }
+  }
+
+  @override
+  void dispose() {
+    final entry = _entry;
+    if (entry != null) {
+      _removingEntry = true;
+      entry.remove();
+      _entry = null;
+    }
+    super.dispose();
+  }
+
+  void _onBackNavigation() {
+    _entry = null;
+    if (_removingEntry || !mounted) return;
+    context.go(defaultPath);
+  }
+
+  @override
+  Widget build(BuildContext context) => widget.child;
+}
