@@ -6,95 +6,104 @@ import 'package:torreyana_mob/providers/settings.dart';
 import 'package:tourbillon/build_context.dart';
 
 class SettingsPageLink extends ConsumerWidget {
-
-  const SettingsPageLink({required this.title, required this.route, super.key, this.push = false});
+  const SettingsPageLink({
+    required this.title,
+    required this.route,
+    super.key,
+    this.push = false,
+  });
   final String title;
   final String route;
   final bool push;
+
   @override
-  Widget build(BuildContext context, WidgetRef ref) => SimpleWidgetSetting(
-        title: title,
-        actionChild: IconButton(
-          onPressed: () {
-            context.navigate(ref, route, push: push);
-          },
-          icon: const Icon(Icons.chevron_right),
-        ),
-      );
+  Widget build(BuildContext context, WidgetRef ref) {
+    void navigate() {
+      context.navigate(ref, route, push: push);
+    }
+
+    return SimpleWidgetSetting(
+      title: title,
+      actionChild: IconButton(
+        onPressed: navigate,
+        icon: const Icon(Icons.chevron_right),
+      ),
+      onTap: navigate,
+    );
+  }
 }
 
 class SettingsSection extends StatelessWidget {
-
   const SettingsSection({
-    required this.title, required this.children, super.key,
+    required this.title,
+    required this.children,
+    super.key,
   });
   final String title;
   final List<Widget> children;
 
   @override
   Widget build(BuildContext context) => Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(top: 24, bottom: 8),
-            child: Text(
-              title,
-              style: context.textTheme.titleLarge,
-            ),
-          ),
-          ...children,
-        ],
-      );
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Padding(
+        padding: const EdgeInsets.only(top: 24, bottom: 8),
+        child: Text(title, style: context.textTheme.titleLarge),
+      ),
+      ...children,
+    ],
+  );
 }
 
 class SimpleWidgetSetting extends StatelessWidget {
-
   const SimpleWidgetSetting({
-    required this.title, required this.actionChild, super.key,
+    required this.title,
+    required this.actionChild,
+    super.key,
     this.subtitle,
+    this.onTap,
   });
   final String title;
   final String? subtitle;
   final Widget actionChild;
+  final VoidCallback? onTap;
 
   @override
-  Widget build(BuildContext context) => Padding(
-        padding: const EdgeInsets.symmetric(vertical: 16),
-        child: Row(
-          children: [
-            Expanded(
-              child: subtitle != null
-                  ? Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          title,
-                          style: context.textTheme.titleMedium,
+  Widget build(BuildContext context) => InkWell(
+    onTap: onTap,
+    child: Padding(
+      padding: const EdgeInsets.symmetric(vertical: 16),
+      child: Row(
+        children: [
+          Expanded(
+            child: subtitle != null
+                ? Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(title, style: context.textTheme.titleMedium),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 8),
+                        child: Text(
+                          subtitle!,
+                          style: context.textTheme.titleSmall,
                         ),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 8),
-                          child: Text(
-                            subtitle!,
-                            style: context.textTheme.titleSmall,
-                          ),
-                        ),
-                      ],
-                    )
-                  : Text(
-                      title,
-                      style: context.textTheme.titleMedium,
-                    ),
-            ),
-            actionChild,
-          ],
-        ),
-      );
+                      ),
+                    ],
+                  )
+                : Text(title, style: context.textTheme.titleMedium),
+          ),
+          actionChild,
+        ],
+      ),
+    ),
+  );
 }
 
 class ToggleSetting extends StatelessWidget {
-
   const ToggleSetting({
-    required this.value, required this.title, super.key,
+    required this.value,
+    required this.title,
+    super.key,
     this.onChanged,
     this.subtitle,
   });
@@ -106,19 +115,17 @@ class ToggleSetting extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => SimpleWidgetSetting(
-        title: title,
-        subtitle: subtitle,
-        actionChild: Switch(
-          value: value,
-          onChanged: onChanged,
-        ),
-      );
+    title: title,
+    subtitle: subtitle,
+    actionChild: Switch(value: value, onChanged: onChanged),
+  );
 }
 
 class ConnectedToggleSetting extends ConsumerWidget {
-
   const ConnectedToggleSetting({
-    required this.settingKey, required this.title, super.key,
+    required this.settingKey,
+    required this.title,
+    super.key,
     this.subtitle,
   });
   final String settingKey;
@@ -127,27 +134,29 @@ class ConnectedToggleSetting extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) => ToggleSetting(
-        title: title,
-        subtitle: subtitle,
-        value: ref
-                .watch(firestoreUserSettingsRepositoryProvider)
-                .whenData((settings) => settings[settingKey])
-                .value ==
-            true,
-        onChanged: ref.watch(firestoreUserSettingsRepositoryProvider).isLoading
-            ? null
-            : (value) {
-                ref
-                    .read(firestoreUserSettingsRepositoryProvider.notifier)
-                    .write(settingKey, value);
-              },
-      );
+    title: title,
+    subtitle: subtitle,
+    value:
+        ref
+            .watch(firestoreUserSettingsRepositoryProvider)
+            .whenData((settings) => settings[settingKey])
+            .value ==
+        true,
+    onChanged: ref.watch(firestoreUserSettingsRepositoryProvider).isLoading
+        ? null
+        : (value) {
+            ref
+                .read(firestoreUserSettingsRepositoryProvider.notifier)
+                .write(settingKey, value);
+          },
+  );
 }
 
 class CachedToggleSetting extends ConsumerWidget {
-
   const CachedToggleSetting({
-    required this.settingKey, required this.title, super.key,
+    required this.settingKey,
+    required this.title,
+    super.key,
     this.subtitle,
   });
   final String settingKey;
@@ -156,14 +165,13 @@ class CachedToggleSetting extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) => ToggleSetting(
-        title: title,
-        subtitle: subtitle,
-        value:
-            ref.watch(memorySessionDataRepositoryProvider)[settingKey] == true,
-        onChanged: (value) {
-          ref
-              .read(memorySessionDataRepositoryProvider.notifier)
-              .write(settingKey, value);
-        },
-      );
+    title: title,
+    subtitle: subtitle,
+    value: ref.watch(memorySessionDataRepositoryProvider)[settingKey] == true,
+    onChanged: (value) {
+      ref
+          .read(memorySessionDataRepositoryProvider.notifier)
+          .write(settingKey, value);
+    },
+  );
 }
