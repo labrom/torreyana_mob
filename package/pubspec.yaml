@@ -17,6 +17,7 @@ dependencies:
   flutter_riverpod: ^3.0.3
   go_router:
   google_fonts:
+  package_info_plus:
   riverpod_annotation: ^3.0.3
   tourbillauth:
     git:

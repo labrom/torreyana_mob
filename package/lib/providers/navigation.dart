@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:torreyana_mob/providers/analytics.dart';
 import 'package:torreyana_mob/providers/flows.dart';
+import 'package:torreyana_mob/screens/app_info.dart';
 import 'package:torreyana_mob/screens/flow.dart';
 import 'package:torreyana_mob/screens/login.dart';
 import 'package:torreyana_mob/screens/settings.dart';
@@ -18,6 +19,7 @@ const defaultPath = '/';
 const loginPath = '/_login';
 const flowPathSegment = '_flow';
 const settingsPathSegment = '_settings';
+const appInfoPathSegment = 'app-info';
 const profilePathSegment = '_profile';
 
 /// A screen definition.
@@ -34,15 +36,14 @@ class Screen {
     this.requiresLogin = false,
     this.requiresRole = '',
     this.shellChildren = const [],
-  }) : assert(shellChildren.length > 0 && shellBuilder != null || builder != null);
+  }) : assert(
+         shellChildren.length > 0 && shellBuilder != null || builder != null,
+       );
   // The screen's name in the router.
   final String name;
 
   // The builder function that creates the screen's widget.
-  final Widget Function(
-    BuildContext context,
-    Map<String, String> parameters,
-  )?
+  final Widget Function(BuildContext context, Map<String, String> parameters)?
   builder;
 
   // The builder function that creates the screen's widget
@@ -81,7 +82,9 @@ class Screen {
           );
           return wrap?.call(screen) ?? screen;
         },
-        routes: shellChildren.map((destination) => destination.screen.toRoute(ref, nav)).toList(),
+        routes: shellChildren
+            .map((destination) => destination.screen.toRoute(ref, nav))
+            .toList(),
       );
     }
     return GoRoute(
@@ -109,11 +112,7 @@ class Screen {
 /// of the screen it should navigate to.
 @immutable
 class Destination {
-  const Destination(
-    this.screen,
-    this.label,
-    this.icon,
-  );
+  const Destination(this.screen, this.label, this.icon);
   final String label;
   final Icon icon;
   final Screen screen;
@@ -128,6 +127,7 @@ class Navigation {
     this.settingsWidgets,
     this.homeRequiresLogin = false,
     this.showProfileLinkInSettings = false,
+    this.showAppInfoInSettings = false,
     this.showThemeSettings = true,
   });
   final Screen homeScreen;
@@ -135,10 +135,12 @@ class Navigation {
   final Map<String, Screen>? homeScreenForRole;
   final bool homeRequiresLogin;
   final bool showProfileLinkInSettings;
+  final bool showAppInfoInSettings;
   final bool showThemeSettings;
   final List<Widget>? settingsWidgets;
 
-  Screen getHomeScreen({String? role}) => homeScreenForRole?[role] ?? homeScreen;
+  Screen getHomeScreen({String? role}) =>
+      homeScreenForRole?[role] ?? homeScreen;
 }
 
 extension NavigationHandler on BuildContext {
@@ -150,7 +152,10 @@ extension NavigationHandler on BuildContext {
 
 @riverpod
 // ignore: avoid_positional_boolean_parameters
-void Function(BuildContext, String, bool) navigationHandler(Ref ref, String route) {
+void Function(BuildContext, String, bool) navigationHandler(
+  Ref ref,
+  String route,
+) {
   // Do stuff here, like log page view
   ref.watch(analyticsProvider).logScreenView(screenName: route);
 
@@ -172,9 +177,8 @@ GoRouter router(Ref ref, Navigation nav, FlowConfig? flowConfig) => GoRouter(
   routes: [
     GoRoute(
       path: loginPath,
-      builder: (context, state) => LoginScreen(
-        targetRoute: state.uri.queryParameters['target'],
-      ),
+      builder: (context, state) =>
+          LoginScreen(targetRoute: state.uri.queryParameters['target']),
     ),
     defaultHomeRoute(
       ref,
@@ -213,7 +217,11 @@ GoRouter router(Ref ref, Navigation nav, FlowConfig? flowConfig) => GoRouter(
   ],
 );
 
-RouteBase defaultHomeRoute(Ref ref, Navigation nav, {required List<RouteBase> routes}) {
+RouteBase defaultHomeRoute(
+  Ref ref,
+  Navigation nav, {
+  required List<RouteBase> routes,
+}) {
   final homeScreen = nav.getHomeScreen(/* TODO Get user role */);
   assert(homeScreen.name == defaultPath);
   final route = homeScreen.toRoute(ref, nav, routes: routes);
@@ -243,7 +251,11 @@ List<RouteBase> settingsRoutes(Ref ref, Navigation nav) {
       path: '/$settingsPathSegment',
       builder: (context, state) => SettingsScreen(
         showProfileLink:
-            nav.showProfileLinkInSettings || state.uri.queryParameters['showProfileLink'] == 'true',
+            nav.showProfileLinkInSettings ||
+            state.uri.queryParameters['showProfileLink'] == 'true',
+        showAppInfo:
+            nav.showAppInfoInSettings ||
+            state.uri.queryParameters['showAppInfo'] == 'true',
         showThemeSettings: nav.showThemeSettings,
         children: nav.settingsWidgets,
       ),
@@ -253,6 +265,10 @@ List<RouteBase> settingsRoutes(Ref ref, Navigation nav) {
             path: 'theme',
             builder: (context, state) => const ThemeSettingsScreen(),
           ),
+        GoRoute(
+          path: appInfoPathSegment,
+          builder: (context, state) => const AppInfoScreen(),
+        ),
       ],
     ),
 
@@ -281,14 +297,14 @@ List<RouteBase> topLevelScreenRoutes(Ref ref, Navigation nav) {
 List<RouteBase> childScreenRoutes(Ref ref, Navigation nav) {
   return nav.screens
       .where((screen) => !screen.name.startsWith('/'))
-      .map(
-        (screen) => screen.toRoute(ref, nav),
-      )
+      .map((screen) => screen.toRoute(ref, nav))
       .toList();
 }
 
 String? _loginRedirect(BuildContext context, GoRouterState state, Ref ref) =>
-    ref.read(firebaseAuthProvider).currentUser == null ? _redirectUri(state) : null;
+    ref.read(firebaseAuthProvider).currentUser == null
+    ? _redirectUri(state)
+    : null;
 
 // ref.read(authStateChangesProvider).when(
 //       data: (user) => user == null ? _redirectUri(state) : null,
@@ -296,8 +312,10 @@ String? _loginRedirect(BuildContext context, GoRouterState state, Ref ref) =>
 //       error: (err, stack) => _redirectUri(state),
 //     )
 
-String _redirectUri(GoRouterState state) =>
-    Uri(path: loginPath, queryParameters: {'target': state.fullPath ?? defaultPath}).toString();
+String _redirectUri(GoRouterState state) => Uri(
+  path: loginPath,
+  queryParameters: {'target': state.fullPath ?? defaultPath},
+).toString();
 
 class _DefaultRouteBackNavigation extends StatefulWidget {
   const _DefaultRouteBackNavigation({required this.child});
@@ -305,10 +323,12 @@ class _DefaultRouteBackNavigation extends StatefulWidget {
   final Widget child;
 
   @override
-  State<_DefaultRouteBackNavigation> createState() => _DefaultRouteBackNavigationState();
+  State<_DefaultRouteBackNavigation> createState() =>
+      _DefaultRouteBackNavigationState();
 }
 
-class _DefaultRouteBackNavigationState extends State<_DefaultRouteBackNavigation> {
+class _DefaultRouteBackNavigationState
+    extends State<_DefaultRouteBackNavigation> {
   LocalHistoryEntry? _entry;
   bool _removingEntry = false;
 
