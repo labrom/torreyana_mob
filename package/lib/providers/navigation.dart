@@ -1,3 +1,4 @@
+import 'package:firebase_analytics/observer.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -43,8 +44,7 @@ class Screen {
   final String name;
 
   // The builder function that creates the screen's widget.
-  final Widget Function(BuildContext context, Map<String, String> parameters)?
-  builder;
+  final Widget Function(BuildContext context, Map<String, String> parameters)? builder;
 
   // The builder function that creates the screen's widget
   // when the screen is a shell.
@@ -82,9 +82,7 @@ class Screen {
           );
           return wrap?.call(screen) ?? screen;
         },
-        routes: shellChildren
-            .map((destination) => destination.screen.toRoute(ref, nav))
-            .toList(),
+        routes: shellChildren.map((destination) => destination.screen.toRoute(ref, nav)).toList(),
       );
     }
     return GoRoute(
@@ -139,8 +137,7 @@ class Navigation {
   final bool showThemeSettings;
   final List<Widget>? settingsWidgets;
 
-  Screen getHomeScreen({String? role}) =>
-      homeScreenForRole?[role] ?? homeScreen;
+  Screen getHomeScreen({String? role}) => homeScreenForRole?[role] ?? homeScreen;
 }
 
 extension NavigationHandler on BuildContext {
@@ -156,9 +153,6 @@ void Function(BuildContext, String, bool) navigationHandler(
   Ref ref,
   String route,
 ) {
-  // Do stuff here, like log page view
-  ref.watch(analyticsProvider).logScreenView(screenName: route);
-
   // Pass through to go_router.
   return (context, route, push) {
     push ? context.push(route) : context.go(route);
@@ -174,11 +168,13 @@ void Function(BuildContext, String, bool) navigationHandler(
 GoRouter router(Ref ref, Navigation nav, FlowConfig? flowConfig) => GoRouter(
   debugLogDiagnostics: kDebugMode,
   initialLocation: defaultPath,
+  observers: [
+    FirebaseAnalyticsObserver(analytics: ref.watch(analyticsProvider)),
+  ],
   routes: [
     GoRoute(
       path: loginPath,
-      builder: (context, state) =>
-          LoginScreen(targetRoute: state.uri.queryParameters['target']),
+      builder: (context, state) => LoginScreen(targetRoute: state.uri.queryParameters['target']),
     ),
     defaultHomeRoute(
       ref,
@@ -251,11 +247,9 @@ List<RouteBase> settingsRoutes(Ref ref, Navigation nav) {
       path: '/$settingsPathSegment',
       builder: (context, state) => SettingsScreen(
         showProfileLink:
-            nav.showProfileLinkInSettings ||
-            state.uri.queryParameters['showProfileLink'] == 'true',
+            nav.showProfileLinkInSettings || state.uri.queryParameters['showProfileLink'] == 'true',
         showAppInfo:
-            nav.showAppInfoInSettings ||
-            state.uri.queryParameters['showAppInfo'] == 'true',
+            nav.showAppInfoInSettings || state.uri.queryParameters['showAppInfo'] == 'true',
         showThemeSettings: nav.showThemeSettings,
         children: nav.settingsWidgets,
       ),
@@ -302,9 +296,7 @@ List<RouteBase> childScreenRoutes(Ref ref, Navigation nav) {
 }
 
 String? _loginRedirect(BuildContext context, GoRouterState state, Ref ref) =>
-    ref.read(firebaseAuthProvider).currentUser == null
-    ? _redirectUri(state)
-    : null;
+    ref.read(firebaseAuthProvider).currentUser == null ? _redirectUri(state) : null;
 
 // ref.read(authStateChangesProvider).when(
 //       data: (user) => user == null ? _redirectUri(state) : null,
@@ -323,12 +315,10 @@ class _DefaultRouteBackNavigation extends StatefulWidget {
   final Widget child;
 
   @override
-  State<_DefaultRouteBackNavigation> createState() =>
-      _DefaultRouteBackNavigationState();
+  State<_DefaultRouteBackNavigation> createState() => _DefaultRouteBackNavigationState();
 }
 
-class _DefaultRouteBackNavigationState
-    extends State<_DefaultRouteBackNavigation> {
+class _DefaultRouteBackNavigationState extends State<_DefaultRouteBackNavigation> {
   LocalHistoryEntry? _entry;
   bool _removingEntry = false;
 
