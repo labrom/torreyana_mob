@@ -1,11 +1,11 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:flutter/widgets.dart';
+import 'package:torreyana_mob/providers/auth.dart';
 import 'package:torreyana_mob/providers/flows.dart';
 import 'package:torreyana_mob/providers/navigation.dart';
 import 'package:torreyana_mob/providers/theme.dart';
 import 'package:torreyana_mob/widgets/app.dart';
-import 'package:tourbillauth/config.dart';
 
 Future<void> runTorreyanaApp({
   required Navigation nav,
@@ -16,13 +16,16 @@ Future<void> runTorreyanaApp({
   String? usersFirestoreDatabaseName,
   String? usersCollectionName,
   ThemeConfig? themeConfig,
+  bool enableEmailPasswordAuth = false,
+  List<AuthProvider>? authProviders,
 }) async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  await Firebase.initializeApp(
-    options: firebaseOptions,
-  );
-  FirebaseUIAuth.configureProviders(authProviders);
+  await Firebase.initializeApp(options: firebaseOptions);
+  final configuredAuthProviders =
+      authProviders ??
+      defaultAuthProviders(enableEmailPasswordAuth: enableEmailPasswordAuth);
+  FirebaseUIAuth.configureProviders(configuredAuthProviders);
 
   // ignore: missing_provider_scope
   runApp(
@@ -34,6 +37,7 @@ Future<void> runTorreyanaApp({
       title: title,
       usersFirestoreDatabaseName: usersFirestoreDatabaseName,
       usersCollectionName: usersCollectionName,
+      authProviders: configuredAuthProviders,
     ),
   );
 }

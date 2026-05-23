@@ -1,6 +1,8 @@
+import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:torreyana_mob/localization.dart' as torreyana;
+import 'package:torreyana_mob/providers/auth.dart';
 import 'package:torreyana_mob/providers/flows.dart';
 import 'package:torreyana_mob/providers/navigation.dart';
 import 'package:torreyana_mob/providers/theme.dart';
@@ -15,6 +17,7 @@ class App extends StatelessWidget {
     this.localizationsDelegate,
     this.usersFirestoreDatabaseName,
     this.usersCollectionName,
+    this.authProviders,
     super.key,
   });
 
@@ -24,15 +27,20 @@ class App extends StatelessWidget {
   final LocalizationsDelegate<dynamic>? localizationsDelegate;
   final String? usersFirestoreDatabaseName;
   final String? usersCollectionName;
+  final List<AuthProvider>? authProviders;
 
   @override
   Widget build(BuildContext context) {
     return ProviderScope(
       overrides: [
+        if (authProviders != null)
+          authProvidersProvider.overrideWithValue(authProviders!),
         if (usersFirestoreDatabaseName != null)
-        usersFirestoreDatabaseNameProvider.overrideWith((_) => usersFirestoreDatabaseName),
+          usersFirestoreDatabaseNameProvider.overrideWith(
+            (_) => usersFirestoreDatabaseName,
+          ),
         if (usersCollectionName != null)
-        usersCollectionNameProvider.overrideWith((_) => usersCollectionName!),
+          usersCollectionNameProvider.overrideWith((_) => usersCollectionName!),
       ],
       child: Consumer(
         builder: (context, ref, child) => MaterialApp.router(
