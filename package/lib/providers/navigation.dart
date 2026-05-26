@@ -44,7 +44,8 @@ class Screen {
   final String name;
 
   // The builder function that creates the screen's widget.
-  final Widget Function(BuildContext context, Map<String, String> parameters)? builder;
+  final Widget Function(BuildContext context, Map<String, String> parameters)?
+  builder;
 
   // The builder function that creates the screen's widget
   // when the screen is a shell.
@@ -82,7 +83,9 @@ class Screen {
           );
           return wrap?.call(screen) ?? screen;
         },
-        routes: shellChildren.map((destination) => destination.screen.toRoute(ref, nav)).toList(),
+        routes: shellChildren
+            .map((destination) => destination.screen.toRoute(ref, nav))
+            .toList(),
       );
     }
     return GoRoute(
@@ -123,6 +126,7 @@ class Navigation {
     required this.screens,
     this.homeScreenForRole,
     this.settingsWidgets,
+    this.profileDeleteConfirmation,
     this.homeRequiresLogin = false,
     this.showProfileLinkInSettings = false,
     this.showAppInfoInSettings = false,
@@ -136,8 +140,11 @@ class Navigation {
   final bool showAppInfoInSettings;
   final bool showThemeSettings;
   final List<Widget>? settingsWidgets;
+  final Future<bool> Function(BuildContext context, WidgetRef ref)?
+  profileDeleteConfirmation;
 
-  Screen getHomeScreen({String? role}) => homeScreenForRole?[role] ?? homeScreen;
+  Screen getHomeScreen({String? role}) =>
+      homeScreenForRole?[role] ?? homeScreen;
 }
 
 extension NavigationHandler on BuildContext {
@@ -174,7 +181,8 @@ GoRouter router(Ref ref, Navigation nav, FlowConfig? flowConfig) => GoRouter(
   routes: [
     GoRoute(
       path: loginPath,
-      builder: (context, state) => LoginScreen(targetRoute: state.uri.queryParameters['target']),
+      builder: (context, state) =>
+          LoginScreen(targetRoute: state.uri.queryParameters['target']),
     ),
     defaultHomeRoute(
       ref,
@@ -247,9 +255,11 @@ List<RouteBase> settingsRoutes(Ref ref, Navigation nav) {
       path: '/$settingsPathSegment',
       builder: (context, state) => SettingsScreen(
         showProfileLink:
-            nav.showProfileLinkInSettings || state.uri.queryParameters['showProfileLink'] == 'true',
+            nav.showProfileLinkInSettings ||
+            state.uri.queryParameters['showProfileLink'] == 'true',
         showAppInfo:
-            nav.showAppInfoInSettings || state.uri.queryParameters['showAppInfo'] == 'true',
+            nav.showAppInfoInSettings ||
+            state.uri.queryParameters['showAppInfo'] == 'true',
         showThemeSettings: nav.showThemeSettings,
         children: nav.settingsWidgets,
       ),
@@ -269,7 +279,8 @@ List<RouteBase> settingsRoutes(Ref ref, Navigation nav) {
     // Profile
     GoRoute(
       path: '/$profilePathSegment',
-      builder: (context, state) => const UserProfileScreen(),
+      builder: (context, state) =>
+          UserProfileScreen(deleteConfirmation: nav.profileDeleteConfirmation),
       redirect: (context, state) => _loginRedirect(context, state, ref),
     ),
   ];
@@ -296,7 +307,9 @@ List<RouteBase> childScreenRoutes(Ref ref, Navigation nav) {
 }
 
 String? _loginRedirect(BuildContext context, GoRouterState state, Ref ref) =>
-    ref.read(firebaseAuthProvider).currentUser == null ? _redirectUri(state) : null;
+    ref.read(firebaseAuthProvider).currentUser == null
+    ? _redirectUri(state)
+    : null;
 
 // ref.read(authStateChangesProvider).when(
 //       data: (user) => user == null ? _redirectUri(state) : null,
@@ -315,10 +328,12 @@ class _DefaultRouteBackNavigation extends StatefulWidget {
   final Widget child;
 
   @override
-  State<_DefaultRouteBackNavigation> createState() => _DefaultRouteBackNavigationState();
+  State<_DefaultRouteBackNavigation> createState() =>
+      _DefaultRouteBackNavigationState();
 }
 
-class _DefaultRouteBackNavigationState extends State<_DefaultRouteBackNavigation> {
+class _DefaultRouteBackNavigationState
+    extends State<_DefaultRouteBackNavigation> {
   LocalHistoryEntry? _entry;
   bool _removingEntry = false;
 

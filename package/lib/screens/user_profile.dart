@@ -8,7 +8,10 @@ import 'package:torreyana_mob/providers/navigation.dart';
 import 'package:tourbillauth/auth.dart';
 
 class UserProfileScreen extends ConsumerWidget {
-  const UserProfileScreen({super.key});
+  const UserProfileScreen({this.deleteConfirmation, super.key});
+
+  final Future<bool> Function(BuildContext context, WidgetRef ref)?
+  deleteConfirmation;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -29,6 +32,9 @@ class UserProfileScreen extends ConsumerWidget {
                             SignedOutAction((context) => context.go(loginPath)),
                           ],
                           showDeleteConfirmationDialog: true,
+                          deleteConfirmation: deleteConfirmation == null
+                              ? null
+                              : (context) => deleteConfirmation!(context, ref),
                         ),
                       ),
                     ],
