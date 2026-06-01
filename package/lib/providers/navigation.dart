@@ -214,7 +214,12 @@ GoRouter router(Ref ref, Navigation nav, FlowConfig? flowConfig) => GoRouter(
     // If the home screen is a shell screen, settings screens are set up
     // as top-level screens and will need to be pushed on top of the home screen
     // in order to preserve back button behavior
-    if (nav.homeScreen.isShell) ...settingsRoutes(ref, nav),
+    if (nav.homeScreen.isShell)
+      ...settingsRoutes(
+        ref,
+        nav,
+        wrap: (child) => _DefaultRouteBackNavigation(child: child),
+      ),
 
     // Top-level custom screens (path starts with /)
     ...topLevelScreenRoutes(ref, nav),
@@ -248,21 +253,28 @@ List<RouteBase> homeRedirectRoutes(Ref ref, Navigation nav) {
   ];
 }
 
-List<RouteBase> settingsRoutes(Ref ref, Navigation nav) {
+List<RouteBase> settingsRoutes(
+  Ref ref,
+  Navigation nav, {
+  Widget Function(Widget child)? wrap,
+}) {
   return [
     // Settings
     GoRoute(
       path: '/$settingsPathSegment',
-      builder: (context, state) => SettingsScreen(
-        showProfileLink:
-            nav.showProfileLinkInSettings ||
-            state.uri.queryParameters['showProfileLink'] == 'true',
-        showAppInfo:
-            nav.showAppInfoInSettings ||
-            state.uri.queryParameters['showAppInfo'] == 'true',
-        showThemeSettings: nav.showThemeSettings,
-        children: nav.settingsWidgets,
-      ),
+      builder: (context, state) {
+        final screen = SettingsScreen(
+          showProfileLink:
+              nav.showProfileLinkInSettings ||
+              state.uri.queryParameters['showProfileLink'] == 'true',
+          showAppInfo:
+              nav.showAppInfoInSettings ||
+              state.uri.queryParameters['showAppInfo'] == 'true',
+          showThemeSettings: nav.showThemeSettings,
+          children: nav.settingsWidgets,
+        );
+        return wrap?.call(screen) ?? screen;
+      },
       routes: [
         if (nav.showThemeSettings)
           GoRoute(
@@ -279,8 +291,12 @@ List<RouteBase> settingsRoutes(Ref ref, Navigation nav) {
     // Profile
     GoRoute(
       path: '/$profilePathSegment',
-      builder: (context, state) =>
-          UserProfileScreen(deleteConfirmation: nav.profileDeleteConfirmation),
+      builder: (context, state) {
+        final screen = UserProfileScreen(
+          deleteConfirmation: nav.profileDeleteConfirmation,
+        );
+        return wrap?.call(screen) ?? screen;
+      },
       redirect: (context, state) => _loginRedirect(context, state, ref),
     ),
   ];
