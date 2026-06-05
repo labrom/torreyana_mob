@@ -40,7 +40,7 @@ final class DarkThemeProvider extends $NotifierProvider<DarkTheme, bool> {
   }
 }
 
-String _$darkThemeHash() => r'c6c71e997187d4b229368a9404aa62c75ec4802d';
+String _$darkThemeHash() => r'513270ef690c955e56f01766dd089a15393ed8d4';
 
 abstract class _$DarkTheme extends $Notifier<bool> {
   bool build();
@@ -93,7 +93,7 @@ final class ThemeSeedColorProvider
   }
 }
 
-String _$themeSeedColorHash() => r'79d89badccabff04672951ae9c8c2e91b40d6c43';
+String _$themeSeedColorHash() => r'56225ce4362113a40f20ea7508790554191e0116';
 
 abstract class _$ThemeSeedColor extends $Notifier<Color> {
   Color build();
@@ -153,4 +153,4 @@ final class AppThemeDataProvider
   }
 }
 
-String _$appThemeDataHash() => r'80c2e09117821d89bbecd4048556faad12f1ed7a';
+String _$appThemeDataHash() => r'fd40e1460758a65ffb828efc65dbc9328322d121';

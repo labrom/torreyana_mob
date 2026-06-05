@@ -23,8 +23,7 @@ Future<void> runTorreyanaApp({
 
   await Firebase.initializeApp(options: firebaseOptions);
   final configuredAuthProviders =
-      authProviders ??
-      defaultAuthProviders(enableEmailPasswordAuth: enableEmailPasswordAuth);
+      authProviders ?? defaultAuthProviders(enableEmailPasswordAuth: enableEmailPasswordAuth);
   FirebaseUIAuth.configureProviders(configuredAuthProviders);
 
   // ignore: missing_provider_scope

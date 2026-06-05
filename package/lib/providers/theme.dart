@@ -1,25 +1,40 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'theme.g.dart';
 
 class ThemeConfig {
-  ThemeConfig.initialize({required this.darkTheme, required this.seedColor, this.textThemeFunction}) {
+  ThemeConfig.initialize({
+    required this.darkTheme,
+    required this.seedColor,
+    this.textThemeFunction,
+  }) : themeData = null {
     _default = this;
   }
-  
-  static late final ThemeConfig _default;
+
+  ThemeConfig.fromThemeData(this.themeData)
+    : darkTheme = themeData!.brightness == Brightness.dark,
+      seedColor = themeData.colorScheme.primary,
+      textThemeFunction = null {
+    _default = this;
+  }
+
+  // ignore: prefer_constructors_over_static_methods
+  static ThemeConfig get defaultTheme =>
+      _default ?? ThemeConfig.initialize(darkTheme: false, seedColor: Colors.blue);
+
+  static ThemeConfig? _default;
 
   final bool darkTheme;
   final Color seedColor;
+  final ThemeData? themeData;
   final TextTheme Function([TextTheme? textTheme])? textThemeFunction;
 }
 
 @riverpod
 class DarkTheme extends _$DarkTheme {
   @override
-  bool build() => ThemeConfig._default.darkTheme;
+  bool build() => ThemeConfig.defaultTheme.darkTheme;
 
   void toggle() {
     state = !state;
@@ -29,7 +44,7 @@ class DarkTheme extends _$DarkTheme {
 @riverpod
 class ThemeSeedColor extends _$ThemeSeedColor {
   @override
-  Color build() => ThemeConfig._default.seedColor;
+  Color build() => ThemeConfig.defaultTheme.seedColor;
 
   // ignore: avoid_setters_without_getters
   set color(Color seed) {
@@ -39,6 +54,12 @@ class ThemeSeedColor extends _$ThemeSeedColor {
 
 @riverpod
 ThemeData appThemeData(Ref ref) {
+  final themeConfig = ThemeConfig.defaultTheme;
+  final themeData = themeConfig.themeData;
+  if (themeData != null) {
+    return themeData;
+  }
+
   final darkTheme = ref.watch(darkThemeProvider);
   final baseTextTheme = darkTheme ? ThemeData.dark().textTheme : ThemeData.light().textTheme;
   return ThemeData.from(
@@ -46,7 +67,7 @@ ThemeData appThemeData(Ref ref) {
       seedColor: ref.watch(themeSeedColorProvider),
       brightness: darkTheme ? Brightness.dark : Brightness.light,
     ),
-    textTheme: ThemeConfig._default.textThemeFunction?.call(baseTextTheme),
+    textTheme: themeConfig.textThemeFunction?.call(baseTextTheme),
     useMaterial3: true,
   );
 }
