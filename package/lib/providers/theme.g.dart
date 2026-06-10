@@ -153,4 +153,4 @@ final class AppThemeDataProvider
   }
 }
 
-String _$appThemeDataHash() => r'fd40e1460758a65ffb828efc65dbc9328322d121';
+String _$appThemeDataHash() => r'2911528246354c7f20a5583f80f5406d3d8b052f';

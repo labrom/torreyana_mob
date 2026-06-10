@@ -8,14 +8,31 @@ class ThemeConfig {
     required this.darkTheme,
     required this.seedColor,
     this.textThemeFunction,
-  }) : themeData = null {
+  }) : darkThemeData = null,
+       lightThemeData = null,
+       themeData = null {
     _default = this;
   }
 
-  ThemeConfig.fromThemeData(this.themeData)
-    : darkTheme = themeData!.brightness == Brightness.dark,
+  ThemeConfig.fromThemeData(ThemeData this.themeData)
+    : darkTheme = themeData.brightness == Brightness.dark,
       seedColor = themeData.colorScheme.primary,
+      darkThemeData = null,
+      lightThemeData = null,
       textThemeFunction = null {
+    _default = this;
+  }
+
+  ThemeConfig.fromThemeDataPair({
+    required ThemeData lightTheme,
+    required ThemeData darkTheme,
+    bool useDarkTheme = false,
+  }) : darkTheme = useDarkTheme,
+       seedColor = (useDarkTheme ? darkTheme : lightTheme).colorScheme.primary,
+       darkThemeData = darkTheme,
+       lightThemeData = lightTheme,
+       themeData = null,
+       textThemeFunction = null {
     _default = this;
   }
 
@@ -27,6 +44,8 @@ class ThemeConfig {
 
   final bool darkTheme;
   final Color seedColor;
+  final ThemeData? darkThemeData;
+  final ThemeData? lightThemeData;
   final ThemeData? themeData;
   final TextTheme Function([TextTheme? textTheme])? textThemeFunction;
 }
@@ -55,6 +74,12 @@ class ThemeSeedColor extends _$ThemeSeedColor {
 @riverpod
 ThemeData appThemeData(Ref ref) {
   final themeConfig = ThemeConfig.defaultTheme;
+  final lightThemeData = themeConfig.lightThemeData;
+  final darkThemeData = themeConfig.darkThemeData;
+  if (lightThemeData != null && darkThemeData != null) {
+    return ref.watch(darkThemeProvider) ? darkThemeData : lightThemeData;
+  }
+
   final themeData = themeConfig.themeData;
   if (themeData != null) {
     return themeData;
