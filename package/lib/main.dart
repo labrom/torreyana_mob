@@ -1,11 +1,22 @@
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:flutter/widgets.dart';
 import 'package:torreyana_mob/providers/auth.dart';
 import 'package:torreyana_mob/providers/flows.dart';
 import 'package:torreyana_mob/providers/navigation.dart';
+import 'package:torreyana_mob/providers/push_notifications.dart';
 import 'package:torreyana_mob/providers/theme.dart';
 import 'package:torreyana_mob/widgets/app.dart';
+
+export 'package:torreyana_mob/providers/push_notifications.dart'
+    show
+        PushNotificationMessageHandler,
+        PushNotificationsConfig,
+        PushNotificationsController,
+        PushTokenRegistration,
+        PushTokenRegistry,
+        pushNotificationsControllerProvider;
 
 Future<void> runTorreyanaApp({
   required Navigation nav,
@@ -18,12 +29,19 @@ Future<void> runTorreyanaApp({
   ThemeConfig? themeConfig,
   bool enableEmailPasswordAuth = false,
   List<AuthProvider>? authProviders,
+  PushNotificationsConfig? pushNotificationsConfig,
 }) async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await Firebase.initializeApp(options: firebaseOptions);
+  final backgroundMessageHandler =
+      pushNotificationsConfig?.backgroundMessageHandler;
+  if (backgroundMessageHandler != null) {
+    FirebaseMessaging.onBackgroundMessage(backgroundMessageHandler);
+  }
   final configuredAuthProviders =
-      authProviders ?? defaultAuthProviders(enableEmailPasswordAuth: enableEmailPasswordAuth);
+      authProviders ??
+      defaultAuthProviders(enableEmailPasswordAuth: enableEmailPasswordAuth);
   FirebaseUIAuth.configureProviders(configuredAuthProviders);
 
   // ignore: missing_provider_scope
@@ -37,6 +55,7 @@ Future<void> runTorreyanaApp({
       usersFirestoreDatabaseName: usersFirestoreDatabaseName,
       usersCollectionName: usersCollectionName,
       authProviders: configuredAuthProviders,
+      pushNotificationsConfig: pushNotificationsConfig,
     ),
   );
 }
