@@ -1,15 +1,17 @@
 import 'dart:async';
 
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_auth/firebase_auth.dart' show User;
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/misc.dart' show ProviderListenable;
+import 'package:tourbillauth/auth.dart';
 
 typedef PushNotificationMessageHandler =
     FutureOr<void> Function(RemoteMessage message);
 
 class PushNotificationsConfig {
   const PushNotificationsConfig({
-    required this.tokenRegistry,
+    required this.tokenRegistryProvider,
     this.requestPermissionOnStart = false,
     this.autoRegisterToken = true,
     this.topics = const {},
@@ -18,7 +20,7 @@ class PushNotificationsConfig {
     this.backgroundMessageHandler,
   });
 
-  final PushTokenRegistry tokenRegistry;
+  final ProviderListenable<PushTokenRegistry> tokenRegistryProvider;
   final bool requestPermissionOnStart;
   final bool autoRegisterToken;
   final Set<String> topics;
@@ -44,7 +46,7 @@ final pushNotificationsConfigProvider = Provider<PushNotificationsConfig?>(
   (_) => null,
 );
 
-final Provider<PushNotificationsController> pushNotificationsControllerProvider = Provider(
+final pushNotificationsControllerProvider = Provider(
   PushNotificationsController.new,
 );
 
@@ -55,7 +57,8 @@ class PushNotificationsController {
   StreamSubscription<String>? _tokenRefreshSubscription;
   StreamSubscription<RemoteMessage>? _foregroundMessageSubscription;
   StreamSubscription<RemoteMessage>? _messageOpenedSubscription;
-  StreamSubscription<User?>? _authStateSubscription;
+  ProviderSubscription<AsyncValue<User?>>? _authStateSubscription;
+  String? _currentUserId;
   String? _registeredToken;
   String? _registeredUserId;
   bool _initialized = false;
@@ -95,19 +98,13 @@ class PushNotificationsController {
     }
 
     if (config.autoRegisterToken) {
-      await registerCurrentToken();
+      _authStateSubscription = _ref.listen(authStateChangesProvider, (_, next) {
+        unawaited(_handleAuthState(next));
+      }, fireImmediately: true);
       _tokenRefreshSubscription = FirebaseMessaging.instance.onTokenRefresh
           .listen((token) async {
             await _registerToken(token);
           });
-      _authStateSubscription = FirebaseAuth.instance.authStateChanges().listen((
-        user,
-      ) async {
-        final token = await FirebaseMessaging.instance.getToken();
-        if (token != null) {
-          await _syncToken(token, user?.uid);
-        }
-      });
     }
   }
 
@@ -118,9 +115,12 @@ class PushNotificationsController {
   Future<String?> getToken() => FirebaseMessaging.instance.getToken();
 
   Future<void> registerCurrentToken() async {
+    final userId = _currentUserId;
+    if (userId == null) return;
+
     final token = await FirebaseMessaging.instance.getToken();
     if (token != null) {
-      await _registerToken(token);
+      await _syncToken(token, userId);
     }
   }
 
@@ -131,9 +131,11 @@ class PushNotificationsController {
 
     final config = _config;
     if (config != null) {
-      await config.tokenRegistry.unregisterToken(
-        PushTokenRegistration(token: token, userId: _registeredUserId),
-      );
+      await _ref
+          .read(config.tokenRegistryProvider)
+          .unregisterToken(
+            PushTokenRegistration(token: token, userId: _registeredUserId),
+          );
     }
     _registeredToken = null;
     _registeredUserId = null;
@@ -155,7 +157,7 @@ class PushNotificationsController {
     await _tokenRefreshSubscription?.cancel();
     await _foregroundMessageSubscription?.cancel();
     await _messageOpenedSubscription?.cancel();
-    await _authStateSubscription?.cancel();
+    _authStateSubscription?.close();
     _tokenRefreshSubscription = null;
     _foregroundMessageSubscription = null;
     _messageOpenedSubscription = null;
@@ -164,17 +166,38 @@ class PushNotificationsController {
   }
 
   Future<void> _registerToken(String token) async {
-    await _syncToken(token, FirebaseAuth.instance.currentUser?.uid);
+    final userId = _currentUserId;
+    if (userId == null) return;
+
+    await _syncToken(token, userId);
   }
 
-  Future<void> _syncToken(String token, String? userId) async {
+  Future<void> _handleAuthState(AsyncValue<User?> authState) async {
+    await authState.maybeWhen(
+      data: (user) async {
+        _currentUserId = user?.uid;
+
+        if (_currentUserId == null) {
+          await unregisterCurrentToken();
+          return;
+        }
+
+        await registerCurrentToken();
+      },
+      orElse: () async {},
+    );
+  }
+
+  Future<void> _syncToken(String token, String userId) async {
     final config = _config;
     if (config == null) return;
 
     if (_registeredToken == token && _registeredUserId == userId) return;
 
+    final registry = _ref.read(config.tokenRegistryProvider);
+
     if (_registeredToken != null) {
-      await config.tokenRegistry.unregisterToken(
+      await registry.unregisterToken(
         PushTokenRegistration(
           token: _registeredToken!,
           userId: _registeredUserId,
@@ -182,7 +205,7 @@ class PushNotificationsController {
       );
     }
 
-    await config.tokenRegistry.registerToken(
+    await registry.registerToken(
       PushTokenRegistration(token: token, userId: userId),
     );
     _registeredToken = token;
