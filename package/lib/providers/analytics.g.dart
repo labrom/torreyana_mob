@@ -10,7 +10,7 @@ part of 'analytics.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(analytics)
-const analyticsProvider = AnalyticsProvider._();
+final analyticsProvider = AnalyticsProvider._();
 
 final class AnalyticsProvider
     extends
@@ -20,7 +20,7 @@ final class AnalyticsProvider
           FirebaseAnalytics
         >
     with $Provider<FirebaseAnalytics> {
-  const AnalyticsProvider._()
+  AnalyticsProvider._()
     : super(
         from: null,
         argument: null,

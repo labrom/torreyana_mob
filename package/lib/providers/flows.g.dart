@@ -10,11 +10,11 @@ part of 'flows.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(CurrentUserFlowState)
-const currentUserFlowStateProvider = CurrentUserFlowStateFamily._();
+final currentUserFlowStateProvider = CurrentUserFlowStateFamily._();
 
 final class CurrentUserFlowStateProvider
     extends $NotifierProvider<CurrentUserFlowState, UserFlowState> {
-  const CurrentUserFlowStateProvider._({
+  CurrentUserFlowStateProvider._({
     required CurrentUserFlowStateFamily super.from,
     required ({FlowConfig config, String flowName}) super.argument,
   }) : super(
@@ -70,7 +70,7 @@ final class CurrentUserFlowStateFamily extends $Family
           UserFlowState,
           ({FlowConfig config, String flowName})
         > {
-  const CurrentUserFlowStateFamily._()
+  CurrentUserFlowStateFamily._()
     : super(
         retry: null,
         name: r'currentUserFlowStateProvider',
@@ -99,8 +99,7 @@ abstract class _$CurrentUserFlowState extends $Notifier<UserFlowState> {
   UserFlowState build({required FlowConfig config, required String flowName});
   @$mustCallSuper
   @override
-  void runBuild() {
-    final created = build(config: _$args.config, flowName: _$args.flowName);
+  WhenComplete runBuild() {
     final ref = this.ref as $Ref<UserFlowState, UserFlowState>;
     final element =
         ref.element
@@ -110,18 +109,21 @@ abstract class _$CurrentUserFlowState extends $Notifier<UserFlowState> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    return element.handleCreate(
+      ref,
+      () => build(config: _$args.config, flowName: _$args.flowName),
+    );
   }
 }
 
 @ProviderFor(MemorySessionDataRepository)
-const memorySessionDataRepositoryProvider =
+final memorySessionDataRepositoryProvider =
     MemorySessionDataRepositoryProvider._();
 
 final class MemorySessionDataRepositoryProvider
     extends
         $NotifierProvider<MemorySessionDataRepository, Map<String, dynamic>> {
-  const MemorySessionDataRepositoryProvider._()
+  MemorySessionDataRepositoryProvider._()
     : super(
         from: null,
         argument: null,
@@ -156,8 +158,7 @@ abstract class _$MemorySessionDataRepository
   Map<String, dynamic> build();
   @$mustCallSuper
   @override
-  void runBuild() {
-    final created = build();
+  WhenComplete runBuild() {
     final ref = this.ref as $Ref<Map<String, dynamic>, Map<String, dynamic>>;
     final element =
         ref.element
@@ -167,12 +168,12 @@ abstract class _$MemorySessionDataRepository
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    return element.handleCreate(ref, build);
   }
 }
 
 @ProviderFor(stepBuilder)
-const stepBuilderProvider = StepBuilderFamily._();
+final stepBuilderProvider = StepBuilderFamily._();
 
 final class StepBuilderProvider
     extends
@@ -182,7 +183,7 @@ final class StepBuilderProvider
           Widget Function(BuildContext, WidgetRef)
         >
     with $Provider<Widget Function(BuildContext, WidgetRef)> {
-  const StepBuilderProvider._({
+  StepBuilderProvider._({
     required StepBuilderFamily super.from,
     required ({FlowConfig config, String flow}) super.argument,
   }) : super(
@@ -243,7 +244,7 @@ final class StepBuilderFamily extends $Family
           Widget Function(BuildContext, WidgetRef),
           ({FlowConfig config, String flow})
         > {
-  const StepBuilderFamily._()
+  StepBuilderFamily._()
     : super(
         retry: null,
         name: r'stepBuilderProvider',

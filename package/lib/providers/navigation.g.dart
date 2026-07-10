@@ -10,7 +10,7 @@ part of 'navigation.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(navigationHandler)
-const navigationHandlerProvider = NavigationHandlerFamily._();
+final navigationHandlerProvider = NavigationHandlerFamily._();
 
 final class NavigationHandlerProvider
     extends
@@ -20,7 +20,7 @@ final class NavigationHandlerProvider
           void Function(BuildContext, String, bool)
         >
     with $Provider<void Function(BuildContext, String, bool)> {
-  const NavigationHandlerProvider._({
+  NavigationHandlerProvider._({
     required NavigationHandlerFamily super.from,
     required String super.argument,
   }) : super(
@@ -81,7 +81,7 @@ final class NavigationHandlerFamily extends $Family
           void Function(BuildContext, String, bool),
           String
         > {
-  const NavigationHandlerFamily._()
+  NavigationHandlerFamily._()
     : super(
         retry: null,
         name: r'navigationHandlerProvider',
@@ -104,7 +104,7 @@ final class NavigationHandlerFamily extends $Family
 /// route is under that path root.
 
 @ProviderFor(router)
-const routerProvider = RouterFamily._();
+final routerProvider = RouterFamily._();
 
 /// go_router provider with all the registered routes.
 ///
@@ -120,7 +120,7 @@ final class RouterProvider
   /// Includes a top-level route to the login screen, that can be used in a
   /// redirect. Don't set a login redirect on the root path ('/') since the login
   /// route is under that path root.
-  const RouterProvider._({
+  RouterProvider._({
     required RouterFamily super.from,
     required (Navigation, FlowConfig?) super.argument,
   }) : super(
@@ -171,7 +171,7 @@ final class RouterProvider
   }
 }
 
-String _$routerHash() => r'33db27f8d6c609f26aa404849653510d49c5f9c8';
+String _$routerHash() => r'e169cf253c224a04858f385b5b7e9386359e8111';
 
 /// go_router provider with all the registered routes.
 ///
@@ -181,7 +181,7 @@ String _$routerHash() => r'33db27f8d6c609f26aa404849653510d49c5f9c8';
 
 final class RouterFamily extends $Family
     with $FunctionalFamilyOverride<GoRouter, (Navigation, FlowConfig?)> {
-  const RouterFamily._()
+  RouterFamily._()
     : super(
         retry: null,
         name: r'routerProvider',

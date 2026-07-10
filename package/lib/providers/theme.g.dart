@@ -10,10 +10,10 @@ part of 'theme.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(DarkTheme)
-const darkThemeProvider = DarkThemeProvider._();
+final darkThemeProvider = DarkThemeProvider._();
 
 final class DarkThemeProvider extends $NotifierProvider<DarkTheme, bool> {
-  const DarkThemeProvider._()
+  DarkThemeProvider._()
     : super(
         from: null,
         argument: null,
@@ -46,8 +46,7 @@ abstract class _$DarkTheme extends $Notifier<bool> {
   bool build();
   @$mustCallSuper
   @override
-  void runBuild() {
-    final created = build();
+  WhenComplete runBuild() {
     final ref = this.ref as $Ref<bool, bool>;
     final element =
         ref.element
@@ -57,16 +56,16 @@ abstract class _$DarkTheme extends $Notifier<bool> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    return element.handleCreate(ref, build);
   }
 }
 
 @ProviderFor(ThemeSeedColor)
-const themeSeedColorProvider = ThemeSeedColorProvider._();
+final themeSeedColorProvider = ThemeSeedColorProvider._();
 
 final class ThemeSeedColorProvider
     extends $NotifierProvider<ThemeSeedColor, Color> {
-  const ThemeSeedColorProvider._()
+  ThemeSeedColorProvider._()
     : super(
         from: null,
         argument: null,
@@ -99,8 +98,7 @@ abstract class _$ThemeSeedColor extends $Notifier<Color> {
   Color build();
   @$mustCallSuper
   @override
-  void runBuild() {
-    final created = build();
+  WhenComplete runBuild() {
     final ref = this.ref as $Ref<Color, Color>;
     final element =
         ref.element
@@ -110,17 +108,17 @@ abstract class _$ThemeSeedColor extends $Notifier<Color> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    return element.handleCreate(ref, build);
   }
 }
 
 @ProviderFor(appThemeData)
-const appThemeDataProvider = AppThemeDataProvider._();
+final appThemeDataProvider = AppThemeDataProvider._();
 
 final class AppThemeDataProvider
     extends $FunctionalProvider<ThemeData, ThemeData, ThemeData>
     with $Provider<ThemeData> {
-  const AppThemeDataProvider._()
+  AppThemeDataProvider._()
     : super(
         from: null,
         argument: null,

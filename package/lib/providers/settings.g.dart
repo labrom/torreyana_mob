@@ -10,7 +10,7 @@ part of 'settings.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(FirestoreUserSettingsRepository)
-const firestoreUserSettingsRepositoryProvider =
+final firestoreUserSettingsRepositoryProvider =
     FirestoreUserSettingsRepositoryProvider._();
 
 final class FirestoreUserSettingsRepositoryProvider
@@ -19,7 +19,7 @@ final class FirestoreUserSettingsRepositoryProvider
           FirestoreUserSettingsRepository,
           Map<String, dynamic>
         > {
-  const FirestoreUserSettingsRepositoryProvider._()
+  FirestoreUserSettingsRepositoryProvider._()
     : super(
         from: null,
         argument: null,
@@ -46,8 +46,7 @@ abstract class _$FirestoreUserSettingsRepository
   Stream<Map<String, dynamic>> build();
   @$mustCallSuper
   @override
-  void runBuild() {
-    final created = build();
+  WhenComplete runBuild() {
     final ref =
         this.ref
             as $Ref<AsyncValue<Map<String, dynamic>>, Map<String, dynamic>>;
@@ -62,6 +61,6 @@ abstract class _$FirestoreUserSettingsRepository
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    return element.handleCreate(ref, build);
   }
 }
