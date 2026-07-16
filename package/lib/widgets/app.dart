@@ -8,6 +8,7 @@ import 'package:torreyana_mob/providers/auth.dart';
 import 'package:torreyana_mob/providers/flows.dart';
 import 'package:torreyana_mob/providers/navigation.dart';
 import 'package:torreyana_mob/providers/push_notifications.dart';
+import 'package:torreyana_mob/providers/settings.dart';
 import 'package:torreyana_mob/providers/theme.dart';
 import 'package:tourbillauth/config.dart';
 import 'package:tourbillon/libloc.dart' as tourbillon;
@@ -22,6 +23,7 @@ class App extends StatelessWidget {
     this.usersCollectionName,
     this.authProviders,
     this.pushNotificationsConfig,
+    this.userPreferencesHandler,
     super.key,
   });
 
@@ -33,6 +35,7 @@ class App extends StatelessWidget {
   final String? usersCollectionName;
   final List<AuthProvider>? authProviders;
   final PushNotificationsConfig? pushNotificationsConfig;
+  final UserPreferencesHandler? userPreferencesHandler;
 
   @override
   Widget build(BuildContext context) {
@@ -49,6 +52,10 @@ class App extends StatelessWidget {
         if (pushNotificationsConfig != null)
           pushNotificationsConfigProvider.overrideWithValue(
             pushNotificationsConfig,
+          ),
+        if (userPreferencesHandler != null)
+          userPreferencesHandlerProvider.overrideWithValue(
+            userPreferencesHandler!,
           ),
       ],
       child: _AppRouter(

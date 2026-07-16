@@ -6,6 +6,7 @@ import 'package:torreyana_mob/providers/auth.dart';
 import 'package:torreyana_mob/providers/flows.dart';
 import 'package:torreyana_mob/providers/navigation.dart';
 import 'package:torreyana_mob/providers/push_notifications.dart';
+import 'package:torreyana_mob/providers/settings.dart';
 import 'package:torreyana_mob/providers/theme.dart';
 import 'package:torreyana_mob/widgets/app.dart';
 
@@ -17,6 +18,13 @@ export 'package:torreyana_mob/providers/push_notifications.dart'
         PushTokenRegistration,
         PushTokenRegistry,
         pushNotificationsControllerProvider;
+export 'package:torreyana_mob/providers/settings.dart'
+    show
+        FirestoreUserPreferencesHandler,
+        UserPreferencesHandler,
+        UserPreferencesRepository,
+        userPreferencesHandlerProvider,
+        userPreferencesRepositoryProvider;
 
 Future<void> runTorreyanaApp({
   required Navigation nav,
@@ -30,6 +38,7 @@ Future<void> runTorreyanaApp({
   bool enableEmailPasswordAuth = false,
   List<AuthProvider>? authProviders,
   PushNotificationsConfig? pushNotificationsConfig,
+  UserPreferencesHandler? userPreferencesHandler,
 }) async {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -56,6 +65,7 @@ Future<void> runTorreyanaApp({
       usersCollectionName: usersCollectionName,
       authProviders: configuredAuthProviders,
       pushNotificationsConfig: pushNotificationsConfig,
+      userPreferencesHandler: userPreferencesHandler,
     ),
   );
 }

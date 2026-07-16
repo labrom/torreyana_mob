@@ -201,11 +201,11 @@ class MemorySessionDataRepository extends _$MemorySessionDataRepository {
 
   Future<void> writeToUserSettings({required FlowConfig config, required String flowName}) async {
     final dataStorage = config.flows[flowName]!.dataStorage;
-    final firestore = ref.read(firestoreUserSettingsRepositoryProvider.notifier);
+    final preferences = ref.read(userPreferencesRepositoryProvider.notifier);
     switch (dataStorage) {
       case FlowDataStorage.mergedUserSettings:
         for (final entry in state.entries) {
-          await firestore.write(entry.key, entry.value);
+          await preferences.write(entry.key, entry.value);
         }
       // TODO
       case FlowDataStorage.flowNameUserSettingsGroup:

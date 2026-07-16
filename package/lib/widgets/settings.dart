@@ -138,15 +138,15 @@ class ConnectedToggleSetting extends ConsumerWidget {
     subtitle: subtitle,
     value:
         ref
-            .watch(firestoreUserSettingsRepositoryProvider)
+            .watch(userPreferencesRepositoryProvider)
             .whenData((settings) => settings[settingKey])
             .value ==
         true,
-    onChanged: ref.watch(firestoreUserSettingsRepositoryProvider).isLoading
+    onChanged: ref.watch(userPreferencesRepositoryProvider).isLoading
         ? null
         : (value) {
             ref
-                .read(firestoreUserSettingsRepositoryProvider.notifier)
+                .read(userPreferencesRepositoryProvider.notifier)
                 .write(settingKey, value);
           },
   );
