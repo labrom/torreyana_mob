@@ -171,7 +171,7 @@ final class RouterProvider
   }
 }
 
-String _$routerHash() => r'e169cf253c224a04858f385b5b7e9386359e8111';
+String _$routerHash() => r'32fb2ac31f0eef52ed2ffa82c70aa965b8c2e4c5';
 
 /// go_router provider with all the registered routes.
 ///

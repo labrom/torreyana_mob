@@ -33,6 +33,7 @@ const profilePathSegment = '_profile';
 class Screen {
   const Screen({
     required this.name,
+    this.semanticName,
     this.builder,
     this.shellBuilder,
     this.requiresLogin = false,
@@ -41,8 +42,14 @@ class Screen {
   }) : assert(
          shellChildren.length > 0 && shellBuilder != null || builder != null,
        );
-  // The screen's name in the router.
+  /// The screen's path name in the router.
   final String name;
+
+  /// An optional meaningful path name for a screen whose router name is `/`.
+  ///
+  /// For example, a home screen with `name: '/'` and `semanticName: 'home'`
+  /// can be reached through both `/` and `/home`.
+  final String? semanticName;
 
   // The builder function that creates the screen's widget.
   final Widget Function(BuildContext context, Map<String, String> parameters)?
@@ -209,8 +216,8 @@ GoRouter router(Ref ref, Navigation nav, FlowConfig? flowConfig) => GoRouter(
       ],
     ),
 
-    // TODO
-    // ...homeRedirectRoutes(ref),
+    if (nav.homeScreen.semanticName != null)
+      homeSemanticNameRoute(nav.homeScreen),
 
     // If the home screen is a shell screen, settings screens are set up
     // as top-level screens and will need to be pushed on top of the home screen
@@ -238,20 +245,20 @@ RouteBase defaultHomeRoute(
   return route;
 }
 
-List<RouteBase> homeRedirectRoutes(Ref ref, Navigation nav) {
-  return [
-    GoRoute(
-      path: nav.homeScreen.name,
-      redirect: (context, state) => defaultPath,
-    ),
-    ...nav.homeScreenForRole?.values.map(
-          (screen) => GoRoute(
-            path: screen.name,
-            redirect: (context, state) => defaultPath,
-          ),
-        ) ??
-        [],
-  ];
+RouteBase homeSemanticNameRoute(Screen homeScreen) {
+  final semanticName = homeScreen.semanticName!;
+  final path = semanticName.startsWith('/')
+      ? semanticName
+      : '/$semanticName';
+  return GoRoute(
+    path: path,
+    redirect: (context, state) => Uri(
+      path: defaultPath,
+      queryParameters: state.uri.queryParameters.isEmpty
+          ? null
+          : state.uri.queryParameters,
+    ).toString(),
+  );
 }
 
 List<RouteBase> settingsRoutes(
