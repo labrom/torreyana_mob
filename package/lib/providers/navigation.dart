@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:torreyana_mob/providers/analytics.dart';
 import 'package:torreyana_mob/providers/flows.dart';
+import 'package:torreyana_mob/providers/theme.dart';
 import 'package:torreyana_mob/screens/app_info.dart';
 import 'package:torreyana_mob/screens/flow.dart';
 import 'package:torreyana_mob/screens/login.dart';
@@ -276,7 +277,7 @@ List<RouteBase> settingsRoutes(
         return wrap?.call(screen) ?? screen;
       },
       routes: [
-        if (nav.showThemeSettings)
+        if (nav.showThemeSettings && ThemeConfig.defaultTheme.isCustomizable)
           GoRoute(
             path: 'theme',
             builder: (context, state) => const ThemeSettingsScreen(),

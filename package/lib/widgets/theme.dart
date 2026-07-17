@@ -8,7 +8,7 @@ import 'package:tourbillon/build_context.dart';
 
 /// A widget that allows to view and set the app's theme.
 ///
-/// This widget uses [darkThemeProvider] and [themeSeedColorProvider].
+/// This widget uses [appThemeModeProvider] and [themeSeedColorProvider].
 class ThemeBuilder extends ConsumerWidget {
   const ThemeBuilder({super.key});
 
@@ -16,22 +16,17 @@ class ThemeBuilder extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) => SettingsSection(
         title: 'Theme',
         children: [
-          ToggleSetting(
-            value: ref.watch(darkThemeProvider),
-            title: 'Use dark theme',
-            subtitle: 'Whether to use the dark theme or not',
-            onChanged: (value) {
-              ref.read(darkThemeProvider.notifier).toggle();
-            },
-          ),
+          const ThemeModeSetting(),
           SimpleWidgetSetting(
             title: 'Theme seed color',
             subtitle: 'Pick a color to generate a color palette',
             actionChild: ThemePrimaryColorButton(
               initialColor: ref.watch(themeSeedColorProvider),
               pickerAlignment: PickerAlignment.rightBelow,
-              onColor: (color) {
-                ref.read(themeSeedColorProvider.notifier).color = color;
+              onColor: (color) async {
+                await ref
+                    .read(themeSeedColorProvider.notifier)
+                    .setColor(color);
               },
             ),
           ),
@@ -40,9 +35,33 @@ class ThemeBuilder extends ConsumerWidget {
       );
 }
 
+/// A setting that selects the system, light, or dark appearance.
+class ThemeModeSetting extends ConsumerWidget {
+  const ThemeModeSetting({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) => Padding(
+    padding: const EdgeInsets.symmetric(vertical: 16),
+    child: SegmentedButton<ThemeMode>(
+      segments: const [
+        ButtonSegment(value: ThemeMode.system, label: Text('System')),
+        ButtonSegment(value: ThemeMode.light, label: Text('Light')),
+        ButtonSegment(value: ThemeMode.dark, label: Text('Dark')),
+      ],
+      selected: {ref.watch(appThemeModeProvider)},
+      showSelectedIcon: false,
+      onSelectionChanged: (selection) async {
+        await ref
+            .read(appThemeModeProvider.notifier)
+            .setThemeMode(selection.single);
+      },
+    ),
+  );
+}
+
 /// A widget that shows the Material 3 colors currently used.
 ///
-/// This widget uses [appThemeDataProvider].
+/// This widget shows the colors inherited from the active app theme.
 class ThemeColorsView extends ConsumerWidget {
 
   const ThemeColorsView({super.key});

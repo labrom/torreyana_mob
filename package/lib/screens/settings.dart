@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:torreyana_mob/providers/navigation.dart';
+import 'package:torreyana_mob/providers/theme.dart';
 import 'package:torreyana_mob/widgets/settings.dart';
+import 'package:torreyana_mob/widgets/theme.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({
@@ -20,6 +22,7 @@ class SettingsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final themeConfig = ThemeConfig.defaultTheme;
     return Scaffold(
       appBar: AppBar(title: const Text('Settings')),
       body: SingleChildScrollView(
@@ -44,11 +47,16 @@ class SettingsScreen extends StatelessWidget {
                   ),
                 ],
               ),
-              if (showThemeSettings)
+              if (showThemeSettings && themeConfig.isCustomizable)
                 SettingsPageLink(
                   title: 'Theme',
                   route: '/$settingsPathSegment/theme',
                   push: pushSubPages,
+                ),
+              if (showThemeSettings && themeConfig.hasFixedThemePair)
+                const SettingsSection(
+                  title: 'Theme',
+                  children: [ThemeModeSetting()],
                 ),
               if (showAppInfo)
                 SettingsSection(

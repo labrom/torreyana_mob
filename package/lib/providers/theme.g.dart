@@ -9,50 +9,51 @@ part of 'theme.dart';
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
 
-@ProviderFor(DarkTheme)
-final darkThemeProvider = DarkThemeProvider._();
+@ProviderFor(AppThemeMode)
+final appThemeModeProvider = AppThemeModeProvider._();
 
-final class DarkThemeProvider extends $NotifierProvider<DarkTheme, bool> {
-  DarkThemeProvider._()
+final class AppThemeModeProvider
+    extends $NotifierProvider<AppThemeMode, ThemeMode> {
+  AppThemeModeProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
-        name: r'darkThemeProvider',
+        name: r'appThemeModeProvider',
         isAutoDispose: true,
         dependencies: null,
         $allTransitiveDependencies: null,
       );
 
   @override
-  String debugGetCreateSourceHash() => _$darkThemeHash();
+  String debugGetCreateSourceHash() => _$appThemeModeHash();
 
   @$internal
   @override
-  DarkTheme create() => DarkTheme();
+  AppThemeMode create() => AppThemeMode();
 
   /// {@macro riverpod.override_with_value}
-  Override overrideWithValue(bool value) {
+  Override overrideWithValue(ThemeMode value) {
     return $ProviderOverride(
       origin: this,
-      providerOverride: $SyncValueProvider<bool>(value),
+      providerOverride: $SyncValueProvider<ThemeMode>(value),
     );
   }
 }
 
-String _$darkThemeHash() => r'513270ef690c955e56f01766dd089a15393ed8d4';
+String _$appThemeModeHash() => r'b58dc2efc05a893e9f5d37d6fc98678440d773b4';
 
-abstract class _$DarkTheme extends $Notifier<bool> {
-  bool build();
+abstract class _$AppThemeMode extends $Notifier<ThemeMode> {
+  ThemeMode build();
   @$mustCallSuper
   @override
   WhenComplete runBuild() {
-    final ref = this.ref as $Ref<bool, bool>;
+    final ref = this.ref as $Ref<ThemeMode, ThemeMode>;
     final element =
         ref.element
             as $ClassProviderElement<
-              AnyNotifier<bool, bool>,
-              bool,
+              AnyNotifier<ThemeMode, ThemeMode>,
+              ThemeMode,
               Object?,
               Object?
             >;
@@ -92,7 +93,7 @@ final class ThemeSeedColorProvider
   }
 }
 
-String _$themeSeedColorHash() => r'56225ce4362113a40f20ea7508790554191e0116';
+String _$themeSeedColorHash() => r'e71a7d98ac707035f5a829897fea2fae3dfa3862';
 
 abstract class _$ThemeSeedColor extends $Notifier<Color> {
   Color build();
@@ -112,25 +113,25 @@ abstract class _$ThemeSeedColor extends $Notifier<Color> {
   }
 }
 
-@ProviderFor(appThemeData)
-final appThemeDataProvider = AppThemeDataProvider._();
+@ProviderFor(appLightThemeData)
+final appLightThemeDataProvider = AppLightThemeDataProvider._();
 
-final class AppThemeDataProvider
+final class AppLightThemeDataProvider
     extends $FunctionalProvider<ThemeData, ThemeData, ThemeData>
     with $Provider<ThemeData> {
-  AppThemeDataProvider._()
+  AppLightThemeDataProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
-        name: r'appThemeDataProvider',
+        name: r'appLightThemeDataProvider',
         isAutoDispose: true,
         dependencies: null,
         $allTransitiveDependencies: null,
       );
 
   @override
-  String debugGetCreateSourceHash() => _$appThemeDataHash();
+  String debugGetCreateSourceHash() => _$appLightThemeDataHash();
 
   @$internal
   @override
@@ -139,7 +140,7 @@ final class AppThemeDataProvider
 
   @override
   ThemeData create(Ref ref) {
-    return appThemeData(ref);
+    return appLightThemeData(ref);
   }
 
   /// {@macro riverpod.override_with_value}
@@ -151,4 +152,45 @@ final class AppThemeDataProvider
   }
 }
 
-String _$appThemeDataHash() => r'2911528246354c7f20a5583f80f5406d3d8b052f';
+String _$appLightThemeDataHash() => r'5c077f97cb52b82d894f82a812998101f3196008';
+
+@ProviderFor(appDarkThemeData)
+final appDarkThemeDataProvider = AppDarkThemeDataProvider._();
+
+final class AppDarkThemeDataProvider
+    extends $FunctionalProvider<ThemeData, ThemeData, ThemeData>
+    with $Provider<ThemeData> {
+  AppDarkThemeDataProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'appDarkThemeDataProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$appDarkThemeDataHash();
+
+  @$internal
+  @override
+  $ProviderElement<ThemeData> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  ThemeData create(Ref ref) {
+    return appDarkThemeData(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(ThemeData value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<ThemeData>(value),
+    );
+  }
+}
+
+String _$appDarkThemeDataHash() => r'd3a31630f7e9aa6c0123d4e8dbfa5df5b21d1ddb';

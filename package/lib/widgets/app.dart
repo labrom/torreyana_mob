@@ -99,14 +99,23 @@ class _AppRouterState extends ConsumerState<_AppRouter> {
   }
 
   @override
-  Widget build(BuildContext context) => MaterialApp.router(
-    routerConfig: ref.watch(routerProvider(widget.nav, widget.flowConfig)),
-    title: widget.title,
-    theme: ref.watch(appThemeDataProvider),
-    localizationsDelegates: [
-      if (widget.localizationsDelegate != null) widget.localizationsDelegate!,
-      torreyana.LibLocalizations.delegate,
-      tourbillon.LibLocalizations.delegate,
-    ],
-  );
+  Widget build(BuildContext context) {
+    final themeConfig = ThemeConfig.defaultTheme;
+    return MaterialApp.router(
+      routerConfig: ref.watch(routerProvider(widget.nav, widget.flowConfig)),
+      title: widget.title,
+      theme: themeConfig.themeData ?? ref.watch(appLightThemeDataProvider),
+      darkTheme: themeConfig.hasFixedTheme
+          ? null
+          : ref.watch(appDarkThemeDataProvider),
+      themeMode: themeConfig.hasFixedTheme
+          ? ThemeMode.light
+          : ref.watch(appThemeModeProvider),
+      localizationsDelegates: [
+        if (widget.localizationsDelegate != null) widget.localizationsDelegate!,
+        torreyana.LibLocalizations.delegate,
+        tourbillon.LibLocalizations.delegate,
+      ],
+    );
+  }
 }
