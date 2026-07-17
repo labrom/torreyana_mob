@@ -40,9 +40,9 @@ class ThemeModeSetting extends ConsumerWidget {
   const ThemeModeSetting({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) => Padding(
-    padding: const EdgeInsets.symmetric(vertical: 16),
-    child: SegmentedButton<ThemeMode>(
+  Widget build(BuildContext context, WidgetRef ref) => SimpleWidgetSetting(
+    title: 'Mode',
+    actionChild: SegmentedButton<ThemeMode>(
       segments: const [
         ButtonSegment(value: ThemeMode.system, label: Text('System')),
         ButtonSegment(value: ThemeMode.light, label: Text('Light')),
