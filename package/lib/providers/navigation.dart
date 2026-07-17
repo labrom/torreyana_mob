@@ -39,16 +39,18 @@ class Screen {
     this.requiresLogin = false,
     this.requiresRole = '',
     this.shellChildren = const [],
-  }) : assert(
+  }) : assert(semanticName == null || semanticName != '' && semanticName != '/'),
+       assert(
          shellChildren.length > 0 && shellBuilder != null || builder != null,
        );
   /// The screen's path name in the router.
   final String name;
 
-  /// An optional meaningful path name for a screen whose router name is `/`.
+  /// An optional meaningful path alias for this screen.
   ///
   /// For example, a home screen with `name: '/'` and `semanticName: 'home'`
-  /// can be reached through both `/` and `/home`.
+  /// can be reached through both `/` and `/home`. This also applies when the
+  /// screen is a child of a shell screen.
   final String? semanticName;
 
   // The builder function that creates the screen's widget.
@@ -91,9 +93,14 @@ class Screen {
           );
           return wrap?.call(screen) ?? screen;
         },
-        routes: shellChildren
-            .map((destination) => destination.screen.toRoute(ref, nav))
-            .toList(),
+        routes: [
+          for (final destination in shellChildren) ...[
+            destination.screen.toRoute(ref, nav),
+            if (!destination.screen.isShell &&
+                destination.screen.semanticName != null)
+              _semanticNameRoute(destination.screen),
+          ],
+        ],
       );
     }
     return GoRoute(
@@ -246,19 +253,33 @@ RouteBase defaultHomeRoute(
 }
 
 RouteBase homeSemanticNameRoute(Screen homeScreen) {
-  final semanticName = homeScreen.semanticName!;
-  final path = semanticName.startsWith('/')
-      ? semanticName
-      : '/$semanticName';
+  return _semanticNameRoute(homeScreen, topLevel: true);
+}
+
+RouteBase _semanticNameRoute(Screen screen, {bool topLevel = false}) {
+  final semanticName = screen.semanticName!;
+  final path = topLevel
+      ? _absolutePath(semanticName)
+      : semanticName.startsWith('/')
+      ? semanticName.substring(1)
+      : semanticName;
+  final canonicalPath = _absolutePath(screen.name);
   return GoRoute(
     path: path,
     redirect: (context, state) => Uri(
-      path: defaultPath,
+      path: canonicalPath,
       queryParameters: state.uri.queryParameters.isEmpty
           ? null
           : state.uri.queryParameters,
     ).toString(),
   );
+}
+
+String _absolutePath(String path) {
+  if (path == defaultPath || path.startsWith('/')) {
+    return path;
+  }
+  return '/$path';
 }
 
 List<RouteBase> settingsRoutes(
