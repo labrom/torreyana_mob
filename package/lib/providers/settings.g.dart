@@ -62,7 +62,7 @@ final class UserPreferencesHandlerFactoryProvider
 }
 
 String _$userPreferencesHandlerFactoryHash() =>
-    r'db9f13922442425095bbe6817d18524a8b3d5170';
+    r'b928ae723443469f110863898c511f6fcc581460';
 
 /// The preference storage for the current authenticated user.
 ///
@@ -118,7 +118,7 @@ final class UserPreferencesHandlerProvider
 }
 
 String _$userPreferencesHandlerHash() =>
-    r'4b03d743a28ab6f4a766732cdef2e75abc0d7493';
+    r'7a342220d71c5e918861baa72611fda393a6f018';
 
 /// Provides reactive access to the current user's preferences.
 

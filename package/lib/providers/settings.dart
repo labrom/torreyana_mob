@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart' show User;
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:tourbillauth/auth.dart';
 
@@ -18,7 +19,7 @@ abstract interface class UserPreferencesHandler {
 
 /// Creates preference storage scoped to an authenticated user.
 typedef UserPreferencesHandlerFactory =
-    UserPreferencesHandler Function(String userId);
+    UserPreferencesHandler Function(User user);
 
 /// Stores user preferences in a Firestore document.
 class FirestoreUserPreferencesHandler implements UserPreferencesHandler {
@@ -43,7 +44,7 @@ class FirestoreUserPreferencesHandler implements UserPreferencesHandler {
 /// Creates the preference storage for the current authenticated user.
 @riverpod
 UserPreferencesHandlerFactory userPreferencesHandlerFactory(Ref ref) =>
-    (userId) => FirestoreUserPreferencesHandler(userId: userId);
+    (user) => FirestoreUserPreferencesHandler(userId: user.uid);
 
 /// The preference storage for the current authenticated user.
 ///
@@ -60,7 +61,7 @@ Future<UserPreferencesHandler> userPreferencesHandler(Ref ref) async {
   if (user == null) {
     throw StateError('User preferences require an authenticated user');
   }
-  return ref.watch(userPreferencesHandlerFactoryProvider)(user.uid);
+  return ref.watch(userPreferencesHandlerFactoryProvider)(user);
 }
 
 /// Provides reactive access to the current user's preferences.
