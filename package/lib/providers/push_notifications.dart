@@ -46,7 +46,7 @@ final pushNotificationsConfigProvider = Provider<PushNotificationsConfig?>(
   (_) => null,
 );
 
-final pushNotificationsControllerProvider = Provider(
+final Provider<PushNotificationsController> pushNotificationsControllerProvider = Provider(
   PushNotificationsController.new,
 );
 
@@ -58,6 +58,7 @@ class PushNotificationsController {
   StreamSubscription<RemoteMessage>? _foregroundMessageSubscription;
   StreamSubscription<RemoteMessage>? _messageOpenedSubscription;
   ProviderSubscription<AsyncValue<User?>>? _authStateSubscription;
+  Future<void> _tokenOperations = Future.value();
   String? _currentUserId;
   String? _registeredToken;
   String? _registeredUserId;
@@ -99,11 +100,11 @@ class PushNotificationsController {
 
     if (config.autoRegisterToken) {
       _authStateSubscription = _ref.listen(authStateChangesProvider, (_, next) {
-        unawaited(_handleAuthState(next));
+        unawaited(_enqueueTokenOperation(() => _handleAuthState(next)));
       }, fireImmediately: true);
       _tokenRefreshSubscription = FirebaseMessaging.instance.onTokenRefresh
-          .listen((token) async {
-            await _registerToken(token);
+          .listen((token) {
+            unawaited(_enqueueTokenOperation(() => _registerToken(token)));
           });
     }
   }
@@ -114,7 +115,10 @@ class PushNotificationsController {
 
   Future<String?> getToken() => FirebaseMessaging.instance.getToken();
 
-  Future<void> registerCurrentToken() async {
+  Future<void> registerCurrentToken() =>
+      _enqueueTokenOperation(_registerCurrentToken);
+
+  Future<void> _registerCurrentToken() async {
     final userId = _currentUserId;
     if (userId == null) return;
 
@@ -124,7 +128,12 @@ class PushNotificationsController {
     }
   }
 
-  Future<void> unregisterCurrentToken({bool deleteToken = false}) async {
+  Future<void> unregisterCurrentToken({bool deleteToken = false}) =>
+      _enqueueTokenOperation(
+        () => _unregisterCurrentToken(deleteToken: deleteToken),
+      );
+
+  Future<void> _unregisterCurrentToken({bool deleteToken = false}) async {
     final token =
         _registeredToken ?? await FirebaseMessaging.instance.getToken();
     if (token == null) return;
@@ -162,6 +171,7 @@ class PushNotificationsController {
     _foregroundMessageSubscription = null;
     _messageOpenedSubscription = null;
     _authStateSubscription = null;
+    await _tokenOperations;
     _initialized = false;
   }
 
@@ -178,14 +188,20 @@ class PushNotificationsController {
         _currentUserId = user?.uid;
 
         if (_currentUserId == null) {
-          await unregisterCurrentToken();
+          await _unregisterCurrentToken();
           return;
         }
 
-        await registerCurrentToken();
+        await _registerCurrentToken();
       },
       orElse: () async {},
     );
+  }
+
+  Future<void> _enqueueTokenOperation(Future<void> Function() operation) {
+    final result = _tokenOperations.then((_) => operation());
+    _tokenOperations = result.onError((_, _) {});
+    return result;
   }
 
   Future<void> _syncToken(String token, String userId) async {

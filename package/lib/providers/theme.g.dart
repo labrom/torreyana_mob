@@ -41,7 +41,7 @@ final class AppThemeModeProvider
   }
 }
 
-String _$appThemeModeHash() => r'b58dc2efc05a893e9f5d37d6fc98678440d773b4';
+String _$appThemeModeHash() => r'96938655dc7cf3ce13baa6ad9fb9c09e1a535a97';
 
 abstract class _$AppThemeMode extends $Notifier<ThemeMode> {
   ThemeMode build();
@@ -93,7 +93,7 @@ final class ThemeSeedColorProvider
   }
 }
 
-String _$themeSeedColorHash() => r'e71a7d98ac707035f5a829897fea2fae3dfa3862';
+String _$themeSeedColorHash() => r'6c8f985590dcba92c168379f888b1740128761b4';
 
 abstract class _$ThemeSeedColor extends $Notifier<Color> {
   Color build();

@@ -39,10 +39,13 @@ class Screen {
     this.requiresLogin = false,
     this.requiresRole = '',
     this.shellChildren = const [],
-  }) : assert(semanticName == null || semanticName != '' && semanticName != '/'),
+  }) : assert(
+         semanticName == null || semanticName != '' && semanticName != '/',
+       ),
        assert(
          shellChildren.length > 0 && shellBuilder != null || builder != null,
        );
+
   /// The screen's path name in the router.
   final String name;
 
@@ -115,7 +118,7 @@ class Screen {
       redirect:
           (requiresLogin && !nav.homeRequiresLogin) ||
               (name == defaultPath && nav.homeRequiresLogin)
-          ? (context, state) => _loginRedirect(context, state, ref)
+          ? (context, state) => _loginRedirect(state, ref)
           : null,
       routes: routes,
     );
@@ -187,59 +190,62 @@ void Function(BuildContext, String, bool) navigationHandler(
 /// redirect. Don't set a login redirect on the root path ('/') since the login
 /// route is under that path root.
 @riverpod
-GoRouter router(Ref ref, Navigation nav, FlowConfig? flowConfig) => GoRouter(
-  debugLogDiagnostics: kDebugMode,
-  initialLocation: defaultPath,
-  observers: [
-    FirebaseAnalyticsObserver(analytics: ref.watch(analyticsProvider)),
-  ],
-  routes: [
-    GoRoute(
-      path: loginPath,
-      builder: (context, state) =>
-          LoginScreen(targetRoute: state.uri.queryParameters['target']),
-    ),
-    defaultHomeRoute(
-      ref,
-      nav,
-      routes: [
-        // If the home screen is a regular screen (not a shell), settings screens
-        // are set up as child screens
-        if (!nav.homeScreen.isShell) ...settingsRoutes(ref, nav),
-
-        // Flows
-        if (flowConfig != null)
-          GoRoute(
-            path: '$flowPathSegment/:name',
-            builder: (context, state) => FlowScreen(
-              config: flowConfig,
-              flowName: state.pathParameters['name']!,
-            ),
-          ),
-
-        // Custom screens that are children of the default screen
-        // (path doesn't start with /)
-        ...childScreenRoutes(ref, nav),
-      ],
-    ),
-
-    if (nav.homeScreen.semanticName != null)
-      homeSemanticNameRoute(nav.homeScreen),
-
-    // If the home screen is a shell screen, settings screens are set up
-    // as top-level screens and will need to be pushed on top of the home screen
-    // in order to preserve back button behavior
-    if (nav.homeScreen.isShell)
-      ...settingsRoutes(
+GoRouter router(Ref ref, Navigation nav, FlowConfig? flowConfig) {
+  ref.watch(authStateChangesProvider);
+  return GoRouter(
+    debugLogDiagnostics: kDebugMode,
+    initialLocation: defaultPath,
+    observers: [
+      FirebaseAnalyticsObserver(analytics: ref.watch(analyticsProvider)),
+    ],
+    routes: [
+      GoRoute(
+        path: loginPath,
+        builder: (context, state) =>
+            LoginScreen(targetRoute: state.uri.queryParameters['target']),
+      ),
+      defaultHomeRoute(
         ref,
         nav,
-        wrap: (child) => _DefaultRouteBackNavigation(child: child),
+        routes: [
+          // If the home screen is a regular screen (not a shell), settings screens
+          // are set up as child screens
+          if (!nav.homeScreen.isShell) ...settingsRoutes(ref, nav),
+
+          // Flows
+          if (flowConfig != null)
+            GoRoute(
+              path: '$flowPathSegment/:name',
+              builder: (context, state) => FlowScreen(
+                config: flowConfig,
+                flowName: state.pathParameters['name']!,
+              ),
+            ),
+
+          // Custom screens that are children of the default screen
+          // (path doesn't start with /)
+          ...childScreenRoutes(ref, nav),
+        ],
       ),
 
-    // Top-level custom screens (path starts with /)
-    ...topLevelScreenRoutes(ref, nav),
-  ],
-);
+      if (nav.homeScreen.semanticName != null)
+        homeSemanticNameRoute(nav.homeScreen),
+
+      // If the home screen is a shell screen, settings screens are set up
+      // as top-level screens and will need to be pushed on top of the home screen
+      // in order to preserve back button behavior
+      if (nav.homeScreen.isShell)
+        ...settingsRoutes(
+          ref,
+          nav,
+          wrap: (child) => _DefaultRouteBackNavigation(child: child),
+        ),
+
+      // Top-level custom screens (path starts with /)
+      ...topLevelScreenRoutes(ref, nav),
+    ],
+  );
+}
 
 RouteBase defaultHomeRoute(
   Ref ref,
@@ -326,7 +332,7 @@ List<RouteBase> settingsRoutes(
         );
         return wrap?.call(screen) ?? screen;
       },
-      redirect: (context, state) => _loginRedirect(context, state, ref),
+      redirect: (context, state) => _loginRedirect(state, ref),
     ),
   ];
 }
@@ -351,16 +357,13 @@ List<RouteBase> childScreenRoutes(Ref ref, Navigation nav) {
       .toList();
 }
 
-String? _loginRedirect(BuildContext context, GoRouterState state, Ref ref) =>
-    ref.read(firebaseAuthProvider).currentUser == null
-    ? _redirectUri(state)
-    : null;
-
-// ref.read(authStateChangesProvider).when(
-//       data: (user) => user == null ? _redirectUri(state) : null,
-//       loading: () => _redirectUri(state),
-//       error: (err, stack) => _redirectUri(state),
-//     )
+String? _loginRedirect(GoRouterState state, Ref ref) => ref
+    .read(authStateChangesProvider)
+    .when(
+      data: (user) => user == null ? _redirectUri(state) : null,
+      loading: () => null,
+      error: (_, _) => _redirectUri(state),
+    );
 
 String _redirectUri(GoRouterState state) => Uri(
   path: loginPath,

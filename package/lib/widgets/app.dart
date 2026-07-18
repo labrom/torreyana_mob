@@ -23,7 +23,7 @@ class App extends StatelessWidget {
     this.usersCollectionName,
     this.authProviders,
     this.pushNotificationsConfig,
-    this.userPreferencesHandler,
+    this.userPreferencesHandlerFactory,
     super.key,
   });
 
@@ -35,7 +35,7 @@ class App extends StatelessWidget {
   final String? usersCollectionName;
   final List<AuthProvider>? authProviders;
   final PushNotificationsConfig? pushNotificationsConfig;
-  final UserPreferencesHandler? userPreferencesHandler;
+  final UserPreferencesHandlerFactory? userPreferencesHandlerFactory;
 
   @override
   Widget build(BuildContext context) {
@@ -53,9 +53,9 @@ class App extends StatelessWidget {
           pushNotificationsConfigProvider.overrideWithValue(
             pushNotificationsConfig,
           ),
-        if (userPreferencesHandler != null)
-          userPreferencesHandlerProvider.overrideWithValue(
-            userPreferencesHandler!,
+        if (userPreferencesHandlerFactory != null)
+          userPreferencesHandlerFactoryProvider.overrideWithValue(
+            userPreferencesHandlerFactory!,
           ),
       ],
       child: _AppRouter(

@@ -16,6 +16,10 @@ abstract interface class UserPreferencesHandler {
   Future<void> writePreference(String field, dynamic value);
 }
 
+/// Creates preference storage scoped to an authenticated user.
+typedef UserPreferencesHandlerFactory =
+    UserPreferencesHandler Function(String userId);
+
 /// Stores user preferences in a Firestore document.
 class FirestoreUserPreferencesHandler implements UserPreferencesHandler {
   FirestoreUserPreferencesHandler({
@@ -36,23 +40,42 @@ class FirestoreUserPreferencesHandler implements UserPreferencesHandler {
       _document.set({field: value}, SetOptions(merge: true));
 }
 
-/// The user preference storage configured for this application.
+/// Creates the preference storage for the current authenticated user.
 @riverpod
-UserPreferencesHandler userPreferencesHandler(Ref ref) =>
-    FirestoreUserPreferencesHandler(
-      // TODO Replace 'anon' with anonymous Firebase sign-in.
-      userId: ref.watch(firebaseAuthProvider).currentUser?.uid ?? 'anon',
-    );
+UserPreferencesHandlerFactory userPreferencesHandlerFactory(Ref ref) =>
+    (userId) => FirestoreUserPreferencesHandler(userId: userId);
+
+/// The preference storage for the current authenticated user.
+///
+/// Watching the authentication stream makes the handler, its subscriptions,
+/// and any handler-local caches change ownership when the user changes.
+@riverpod
+Future<UserPreferencesHandler> userPreferencesHandler(Ref ref) async {
+  final authState = ref.watch(authStateChangesProvider);
+  final user = await authState.when(
+    data: Future.value,
+    error: Future.error,
+    loading: () => ref.watch(authStateChangesProvider.future),
+  );
+  if (user == null) {
+    throw StateError('User preferences require an authenticated user');
+  }
+  return ref.watch(userPreferencesHandlerFactoryProvider)(user.uid);
+}
 
 /// Provides reactive access to the current user's preferences.
 @riverpod
 class UserPreferencesRepository extends _$UserPreferencesRepository {
   @override
-  Stream<Map<String, dynamic>> build() =>
-      ref.watch(userPreferencesHandlerProvider).watchPreferences();
+  Stream<Map<String, dynamic>> build() async* {
+    final handler = await ref.watch(userPreferencesHandlerProvider.future);
+    yield* handler.watchPreferences();
+  }
 
-  Future<void> write(String field, dynamic value) =>
-      ref.read(userPreferencesHandlerProvider).writePreference(field, value);
+  Future<void> write(String field, dynamic value) async {
+    final handler = await ref.read(userPreferencesHandlerProvider.future);
+    await handler.writePreference(field, value);
+  }
 }
 
 /// Use [UserPreferencesRepository] instead.
@@ -61,5 +84,5 @@ typedef FirestoreUserSettingsRepository = UserPreferencesRepository;
 
 /// Use [userPreferencesRepositoryProvider] instead.
 @Deprecated('Use userPreferencesRepositoryProvider instead.')
-final firestoreUserSettingsRepositoryProvider =
+final UserPreferencesRepositoryProvider firestoreUserSettingsRepositoryProvider =
     userPreferencesRepositoryProvider;

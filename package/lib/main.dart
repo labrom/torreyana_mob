@@ -22,7 +22,9 @@ export 'package:torreyana_mob/providers/settings.dart'
     show
         FirestoreUserPreferencesHandler,
         UserPreferencesHandler,
+        UserPreferencesHandlerFactory,
         UserPreferencesRepository,
+        userPreferencesHandlerFactoryProvider,
         userPreferencesHandlerProvider,
         userPreferencesRepositoryProvider;
 
@@ -38,7 +40,7 @@ Future<void> runTorreyanaApp({
   bool enableEmailPasswordAuth = false,
   List<AuthProvider>? authProviders,
   PushNotificationsConfig? pushNotificationsConfig,
-  UserPreferencesHandler? userPreferencesHandler,
+  UserPreferencesHandlerFactory? userPreferencesHandlerFactory,
 }) async {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -65,7 +67,7 @@ Future<void> runTorreyanaApp({
       usersCollectionName: usersCollectionName,
       authProviders: configuredAuthProviders,
       pushNotificationsConfig: pushNotificationsConfig,
-      userPreferencesHandler: userPreferencesHandler,
+      userPreferencesHandlerFactory: userPreferencesHandlerFactory,
     ),
   );
 }

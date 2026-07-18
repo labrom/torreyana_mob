@@ -59,7 +59,7 @@ final class CurrentUserFlowStateProvider
 }
 
 String _$currentUserFlowStateHash() =>
-    r'cad9a032346e128542a3db2830008c96daf635da';
+    r'78cb81e074cda5ab632beccb5074cdfee506f8a4';
 
 final class CurrentUserFlowStateFamily extends $Family
     with
@@ -151,7 +151,7 @@ final class MemorySessionDataRepositoryProvider
 }
 
 String _$memorySessionDataRepositoryHash() =>
-    r'b2588e3a431260f30d295f7940aaa3f6d442705b';
+    r'9d25fbd552b3dd15a9673ea0ac6fd6f6fb5e4a49';
 
 abstract class _$MemorySessionDataRepository
     extends $Notifier<Map<String, dynamic>> {

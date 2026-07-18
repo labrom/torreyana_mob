@@ -8,22 +8,89 @@ part of 'settings.dart';
 
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
-/// The user preference storage configured for this application.
+/// Creates the preference storage for the current authenticated user.
+
+@ProviderFor(userPreferencesHandlerFactory)
+final userPreferencesHandlerFactoryProvider =
+    UserPreferencesHandlerFactoryProvider._();
+
+/// Creates the preference storage for the current authenticated user.
+
+final class UserPreferencesHandlerFactoryProvider
+    extends
+        $FunctionalProvider<
+          UserPreferencesHandlerFactory,
+          UserPreferencesHandlerFactory,
+          UserPreferencesHandlerFactory
+        >
+    with $Provider<UserPreferencesHandlerFactory> {
+  /// Creates the preference storage for the current authenticated user.
+  UserPreferencesHandlerFactoryProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'userPreferencesHandlerFactoryProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$userPreferencesHandlerFactoryHash();
+
+  @$internal
+  @override
+  $ProviderElement<UserPreferencesHandlerFactory> $createElement(
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
+
+  @override
+  UserPreferencesHandlerFactory create(Ref ref) {
+    return userPreferencesHandlerFactory(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(UserPreferencesHandlerFactory value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<UserPreferencesHandlerFactory>(
+        value,
+      ),
+    );
+  }
+}
+
+String _$userPreferencesHandlerFactoryHash() =>
+    r'db9f13922442425095bbe6817d18524a8b3d5170';
+
+/// The preference storage for the current authenticated user.
+///
+/// Watching the authentication stream makes the handler, its subscriptions,
+/// and any handler-local caches change ownership when the user changes.
 
 @ProviderFor(userPreferencesHandler)
 final userPreferencesHandlerProvider = UserPreferencesHandlerProvider._();
 
-/// The user preference storage configured for this application.
+/// The preference storage for the current authenticated user.
+///
+/// Watching the authentication stream makes the handler, its subscriptions,
+/// and any handler-local caches change ownership when the user changes.
 
 final class UserPreferencesHandlerProvider
     extends
         $FunctionalProvider<
+          AsyncValue<UserPreferencesHandler>,
           UserPreferencesHandler,
-          UserPreferencesHandler,
-          UserPreferencesHandler
+          FutureOr<UserPreferencesHandler>
         >
-    with $Provider<UserPreferencesHandler> {
-  /// The user preference storage configured for this application.
+    with
+        $FutureModifier<UserPreferencesHandler>,
+        $FutureProvider<UserPreferencesHandler> {
+  /// The preference storage for the current authenticated user.
+  ///
+  /// Watching the authentication stream makes the handler, its subscriptions,
+  /// and any handler-local caches change ownership when the user changes.
   UserPreferencesHandlerProvider._()
     : super(
         from: null,
@@ -40,26 +107,18 @@ final class UserPreferencesHandlerProvider
 
   @$internal
   @override
-  $ProviderElement<UserPreferencesHandler> $createElement(
+  $FutureProviderElement<UserPreferencesHandler> $createElement(
     $ProviderPointer pointer,
-  ) => $ProviderElement(pointer);
+  ) => $FutureProviderElement(pointer);
 
   @override
-  UserPreferencesHandler create(Ref ref) {
+  FutureOr<UserPreferencesHandler> create(Ref ref) {
     return userPreferencesHandler(ref);
-  }
-
-  /// {@macro riverpod.override_with_value}
-  Override overrideWithValue(UserPreferencesHandler value) {
-    return $ProviderOverride(
-      origin: this,
-      providerOverride: $SyncValueProvider<UserPreferencesHandler>(value),
-    );
   }
 }
 
 String _$userPreferencesHandlerHash() =>
-    r'261124724a5214fe5541fdf609ceed8932780fac';
+    r'4b03d743a28ab6f4a766732cdef2e75abc0d7493';
 
 /// Provides reactive access to the current user's preferences.
 
@@ -94,7 +153,7 @@ final class UserPreferencesRepositoryProvider
 }
 
 String _$userPreferencesRepositoryHash() =>
-    r'6bf27afe11a1b0c5acf881249a43c04dac152150';
+    r'8bb6a52e3a374fcd4b5fc5186b32894fa98e04b1';
 
 /// Provides reactive access to the current user's preferences.
 

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:torreyana_mob/providers/settings.dart';
+import 'package:tourbillauth/auth.dart';
 import 'package:tourbillon/log.dart';
 
 part 'flows.g.dart';
@@ -10,7 +11,12 @@ class FlowConfig {
   FlowConfig({required this.flows, required this.stepBuilder});
 
   final Map<String, Flow> flows;
-  final Widget Function(BuildContext, WidgetRef, String stepName, Map<String, dynamic> sessionData)
+  final Widget Function(
+    BuildContext,
+    WidgetRef,
+    String stepName,
+    Map<String, dynamic> sessionData,
+  )
   stepBuilder;
 }
 
@@ -132,7 +138,11 @@ class UserFlowState {
     : assert(flow.isNotEmpty && steps.isNotEmpty),
       started = true;
 
-  UserFlowState.initial() : flow = '', steps = [], last = false, started = false;
+  UserFlowState.initial()
+    : flow = '',
+      steps = [],
+      last = false,
+      started = false;
   final bool started;
   final bool last;
   final String flow;
@@ -149,6 +159,7 @@ class UserFlowState {
 class CurrentUserFlowState extends _$CurrentUserFlowState {
   @override
   UserFlowState build({required FlowConfig config, required String flowName}) {
+    ref.watch(userIdProvider);
     return UserFlowState(
       flow: flowName,
       steps: [config.flows[flowName]!.firstStep],
@@ -191,7 +202,10 @@ class CurrentUserFlowState extends _$CurrentUserFlowState {
 @riverpod
 class MemorySessionDataRepository extends _$MemorySessionDataRepository {
   @override
-  Map<String, dynamic> build() => {};
+  Map<String, dynamic> build() {
+    ref.watch(userIdProvider);
+    return {};
+  }
 
   void write(String field, dynamic value) {
     final newState = Map.of(state);
@@ -199,7 +213,10 @@ class MemorySessionDataRepository extends _$MemorySessionDataRepository {
     state = newState;
   }
 
-  Future<void> writeToUserSettings({required FlowConfig config, required String flowName}) async {
+  Future<void> writeToUserSettings({
+    required FlowConfig config,
+    required String flowName,
+  }) async {
     final dataStorage = config.flows[flowName]!.dataStorage;
     final preferences = ref.read(userPreferencesRepositoryProvider.notifier);
     switch (dataStorage) {

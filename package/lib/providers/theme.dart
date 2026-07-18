@@ -45,7 +45,8 @@ class ThemeConfig {
 
   // ignore: prefer_constructors_over_static_methods
   static ThemeConfig get defaultTheme =>
-      _default ?? ThemeConfig.initialize(darkTheme: false, seedColor: Colors.blue);
+      _default ??
+      ThemeConfig.initialize(darkTheme: false, seedColor: Colors.blue);
 
   static ThemeConfig? _default;
 
@@ -71,27 +72,13 @@ class AppThemeMode extends _$AppThemeMode {
   @override
   ThemeMode build() {
     ref.listen(userPreferencesRepositoryProvider, (previous, next) {
-      next.whenData((preferences) {
-        final savedThemeMode = preferences[themeModePreferenceKey];
-        if (savedThemeMode is String) {
-          for (final themeMode in ThemeMode.values) {
-            if (themeMode.name == savedThemeMode) {
-              state = themeMode;
-              return;
-            }
-          }
-        }
-
-        // Continue to support preferences written before ThemeMode was used.
-        final savedDarkTheme = preferences[darkThemePreferenceKey];
-        if (savedDarkTheme is bool) {
-          state = savedDarkTheme ? ThemeMode.dark : ThemeMode.light;
-        }
-      });
+      next.when(
+        data: (preferences) => state = _themeModeFrom(preferences),
+        loading: () => state = _defaultThemeMode,
+        error: (_, _) => state = _defaultThemeMode,
+      );
     });
-    return ThemeConfig.defaultTheme.darkTheme
-        ? ThemeMode.dark
-        : ThemeMode.light;
+    return _defaultThemeMode;
   }
 
   Future<void> setThemeMode(ThemeMode value) async {
@@ -107,12 +94,11 @@ class ThemeSeedColor extends _$ThemeSeedColor {
   @override
   Color build() {
     ref.listen(userPreferencesRepositoryProvider, (previous, next) {
-      next.whenData((preferences) {
-        final savedSeedColor = preferences[themeSeedColorPreferenceKey];
-        if (savedSeedColor is int) {
-          state = Color(savedSeedColor);
-        }
-      });
+      next.when(
+        data: (preferences) => state = _seedColorFrom(preferences),
+        loading: () => state = ThemeConfig.defaultTheme.seedColor,
+        error: (_, _) => state = ThemeConfig.defaultTheme.seedColor,
+      );
     });
     return ThemeConfig.defaultTheme.seedColor;
   }
@@ -128,6 +114,32 @@ class ThemeSeedColor extends _$ThemeSeedColor {
         .read(userPreferencesRepositoryProvider.notifier)
         .write(themeSeedColorPreferenceKey, seed.toARGB32());
   }
+}
+
+ThemeMode get _defaultThemeMode =>
+    ThemeConfig.defaultTheme.darkTheme ? ThemeMode.dark : ThemeMode.light;
+
+ThemeMode _themeModeFrom(Map<String, dynamic> preferences) {
+  final savedThemeMode = preferences[themeModePreferenceKey];
+  if (savedThemeMode is String) {
+    for (final themeMode in ThemeMode.values) {
+      if (themeMode.name == savedThemeMode) return themeMode;
+    }
+  }
+
+  // Continue to support preferences written before ThemeMode was used.
+  final savedDarkTheme = preferences[darkThemePreferenceKey];
+  if (savedDarkTheme is bool) {
+    return savedDarkTheme ? ThemeMode.dark : ThemeMode.light;
+  }
+  return _defaultThemeMode;
+}
+
+Color _seedColorFrom(Map<String, dynamic> preferences) {
+  final savedSeedColor = preferences[themeSeedColorPreferenceKey];
+  return savedSeedColor is int
+      ? Color(savedSeedColor)
+      : ThemeConfig.defaultTheme.seedColor;
 }
 
 @riverpod
