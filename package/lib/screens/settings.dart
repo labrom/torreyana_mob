@@ -40,11 +40,6 @@ class SettingsScreen extends StatelessWidget {
                       route: '/$profilePathSegment',
                       push: pushSubPages,
                     ),
-                  const ConnectedToggleSetting(
-                    settingKey: 'visible',
-                    title: 'Public profile',
-                    subtitle: 'Profile information can be seen by everybody.',
-                  ),
                 ],
               ),
               if (showThemeSettings && themeConfig.isCustomizable)
