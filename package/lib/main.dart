@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:flutter/widgets.dart';
+import 'package:torreyana_mob/providers/app_check.dart';
 import 'package:torreyana_mob/providers/auth.dart';
 import 'package:torreyana_mob/providers/flows.dart';
 import 'package:torreyana_mob/providers/navigation.dart';
@@ -10,6 +11,27 @@ import 'package:torreyana_mob/providers/settings.dart';
 import 'package:torreyana_mob/providers/theme.dart';
 import 'package:torreyana_mob/widgets/app.dart';
 
+export 'package:firebase_app_check/firebase_app_check.dart'
+    show
+        AndroidAppCheckProvider,
+        AndroidDebugProvider,
+        AndroidPlayIntegrityProvider,
+        AndroidReCaptchaProvider,
+        AppleAppAttestProvider,
+        AppleAppAttestWithDeviceCheckFallbackProvider,
+        AppleAppCheckProvider,
+        AppleDebugProvider,
+        AppleDeviceCheckProvider,
+        AppleReCaptchaProvider,
+        FirebaseAppCheck,
+        ReCaptchaEnterpriseProvider,
+        ReCaptchaV3Provider,
+        WebDebugProvider,
+        WebProvider,
+        WebReCaptchaProvider,
+        WindowsAppCheckProvider,
+        WindowsDebugProvider;
+export 'package:torreyana_mob/providers/app_check.dart' show AppCheckConfig;
 export 'package:torreyana_mob/providers/push_notifications.dart'
     show
         PushNotificationMessageHandler,
@@ -34,6 +56,7 @@ Future<void> runTorreyanaApp({
   FlowConfig? flowConfig,
   LocalizationsDelegate<dynamic>? localizationsDelegate,
   FirebaseOptions? firebaseOptions,
+  AppCheckConfig? appCheckConfig,
   String? usersFirestoreDatabaseName,
   String? usersCollectionName,
   ThemeConfig? themeConfig,
@@ -45,6 +68,7 @@ Future<void> runTorreyanaApp({
   WidgetsFlutterBinding.ensureInitialized();
 
   await Firebase.initializeApp(options: firebaseOptions);
+  await appCheckConfig?.activate();
   final backgroundMessageHandler =
       pushNotificationsConfig?.backgroundMessageHandler;
   if (backgroundMessageHandler != null) {
