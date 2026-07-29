@@ -10,10 +10,12 @@ class SettingsPageLink extends ConsumerWidget {
     required this.title,
     required this.route,
     super.key,
+    this.subtitle,
     this.push = false,
     this.useSectionTitleStyle = false,
   });
   final String title;
+  final String? subtitle;
   final String route;
   final bool push;
   final bool useSectionTitleStyle;
@@ -26,6 +28,7 @@ class SettingsPageLink extends ConsumerWidget {
 
     return SimpleWidgetSetting(
       title: title,
+      subtitle: subtitle,
       useSectionTitleStyle: useSectionTitleStyle,
       actionChild: IconButton(
         onPressed: navigate,

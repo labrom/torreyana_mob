@@ -31,17 +31,14 @@ class SettingsScreen extends StatelessWidget {
           child: Column(
             children: [
               if (children != null) ...children!,
-              SettingsSection(
-                title: 'Profile',
-                children: [
-                  if (showProfileLink)
-                    SettingsPageLink(
-                      title: 'Manage your profile',
-                      route: '/$profilePathSegment',
-                      push: pushSubPages,
-                    ),
-                ],
-              ),
+              if (showProfileLink)
+                SettingsPageLink(
+                  title: 'Profile',
+                  subtitle: 'Manage your profile',
+                  route: '/$profilePathSegment',
+                  push: pushSubPages,
+                  useSectionTitleStyle: true,
+                ),
               if (showThemeSettings && themeConfig.isCustomizable)
                 SettingsPageLink(
                   title: 'Theme',
@@ -54,15 +51,12 @@ class SettingsScreen extends StatelessWidget {
                   children: [ThemeModeSetting()],
                 ),
               if (showAppInfo)
-                SettingsSection(
+                SettingsPageLink(
                   title: 'About',
-                  children: [
-                    SettingsPageLink(
-                      title: 'App info',
-                      route: '/$settingsPathSegment/$appInfoPathSegment',
-                      push: pushSubPages,
-                    ),
-                  ],
+                  subtitle: 'App info',
+                  route: '/$settingsPathSegment/$appInfoPathSegment',
+                  push: pushSubPages,
+                  useSectionTitleStyle: true,
                 ),
             ],
           ),
