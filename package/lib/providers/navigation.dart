@@ -1,4 +1,3 @@
-import 'package:firebase_analytics/observer.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -196,7 +195,7 @@ GoRouter router(Ref ref, Navigation nav, FlowConfig? flowConfig) {
     debugLogDiagnostics: kDebugMode,
     initialLocation: defaultPath,
     observers: [
-      FirebaseAnalyticsObserver(analytics: ref.watch(analyticsProvider)),
+      AnalyticsScreenObserver(analytics: ref.watch(analyticsProvider)),
     ],
     routes: [
       GoRoute(
