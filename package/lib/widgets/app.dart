@@ -10,6 +10,7 @@ import 'package:torreyana_mob/providers/navigation.dart';
 import 'package:torreyana_mob/providers/push_notifications.dart';
 import 'package:torreyana_mob/providers/settings.dart';
 import 'package:torreyana_mob/providers/theme.dart';
+import 'package:torreyana_mob/screens/login.dart';
 import 'package:tourbillauth/config.dart';
 import 'package:tourbillon/libloc.dart' as tourbillon;
 
@@ -24,6 +25,7 @@ class App extends StatelessWidget {
     this.authProviders,
     this.pushNotificationsConfig,
     this.userPreferencesHandlerFactory,
+    this.loginScreenBuilder,
     super.key,
   });
 
@@ -36,6 +38,7 @@ class App extends StatelessWidget {
   final List<AuthProvider>? authProviders;
   final PushNotificationsConfig? pushNotificationsConfig;
   final UserPreferencesHandlerFactory? userPreferencesHandlerFactory;
+  final LoginScreenBuilder? loginScreenBuilder;
 
   @override
   Widget build(BuildContext context) {
@@ -63,6 +66,7 @@ class App extends StatelessWidget {
         flowConfig: flowConfig,
         title: title,
         localizationsDelegate: localizationsDelegate,
+        loginScreenBuilder: loginScreenBuilder,
       ),
     );
   }
@@ -74,12 +78,14 @@ class _AppRouter extends ConsumerStatefulWidget {
     required this.flowConfig,
     required this.title,
     required this.localizationsDelegate,
+    required this.loginScreenBuilder,
   });
 
   final Navigation nav;
   final FlowConfig? flowConfig;
   final String? title;
   final LocalizationsDelegate<dynamic>? localizationsDelegate;
+  final LoginScreenBuilder? loginScreenBuilder;
 
   @override
   ConsumerState<_AppRouter> createState() => _AppRouterState();
@@ -102,7 +108,13 @@ class _AppRouterState extends ConsumerState<_AppRouter> {
   Widget build(BuildContext context) {
     final themeConfig = ThemeConfig.defaultTheme;
     return MaterialApp.router(
-      routerConfig: ref.watch(routerProvider(widget.nav, widget.flowConfig)),
+      routerConfig: ref.watch(
+        routerProvider(
+          widget.nav,
+          widget.flowConfig,
+          widget.loginScreenBuilder,
+        ),
+      ),
       title: widget.title,
       theme: themeConfig.themeData ?? ref.watch(appLightThemeDataProvider),
       darkTheme: themeConfig.hasFixedTheme

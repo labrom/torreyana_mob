@@ -189,7 +189,12 @@ void Function(BuildContext, String, bool) navigationHandler(
 /// redirect. Don't set a login redirect on the root path ('/') since the login
 /// route is under that path root.
 @riverpod
-GoRouter router(Ref ref, Navigation nav, FlowConfig? flowConfig) {
+GoRouter router(
+  Ref ref,
+  Navigation nav,
+  FlowConfig? flowConfig,
+  LoginScreenBuilder? loginScreenBuilder,
+) {
   ref.watch(authStateChangesProvider);
   return GoRouter(
     debugLogDiagnostics: kDebugMode,
@@ -200,8 +205,10 @@ GoRouter router(Ref ref, Navigation nav, FlowConfig? flowConfig) {
     routes: [
       GoRoute(
         path: loginPath,
-        builder: (context, state) =>
-            LoginScreen(targetRoute: state.uri.queryParameters['target']),
+        builder: (context, state) => LoginScreen(
+          targetRoute: state.uri.queryParameters['target'],
+          builder: loginScreenBuilder,
+        ),
       ),
       defaultHomeRoute(
         ref,

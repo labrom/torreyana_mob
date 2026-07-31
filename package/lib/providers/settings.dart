@@ -52,12 +52,7 @@ UserPreferencesHandlerFactory userPreferencesHandlerFactory(Ref ref) =>
 /// and any handler-local caches change ownership when the user changes.
 @riverpod
 Future<UserPreferencesHandler> userPreferencesHandler(Ref ref) async {
-  final authState = ref.watch(authStateChangesProvider);
-  final user = await authState.when(
-    data: Future.value,
-    error: Future.error,
-    loading: () => ref.watch(authStateChangesProvider.future),
-  );
+  final user = await ref.watch(authStateChangesProvider.future);
   if (user == null) {
     throw StateError('User preferences require an authenticated user');
   }

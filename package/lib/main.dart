@@ -9,6 +9,7 @@ import 'package:torreyana_mob/providers/navigation.dart';
 import 'package:torreyana_mob/providers/push_notifications.dart';
 import 'package:torreyana_mob/providers/settings.dart';
 import 'package:torreyana_mob/providers/theme.dart';
+import 'package:torreyana_mob/screens/login.dart';
 import 'package:torreyana_mob/widgets/app.dart';
 
 export 'package:firebase_app_check/firebase_app_check.dart'
@@ -49,6 +50,7 @@ export 'package:torreyana_mob/providers/settings.dart'
         userPreferencesHandlerFactoryProvider,
         userPreferencesHandlerProvider,
         userPreferencesRepositoryProvider;
+export 'package:torreyana_mob/screens/login.dart' show LoginScreenBuilder;
 
 Future<void> runTorreyanaApp({
   required Navigation nav,
@@ -64,6 +66,7 @@ Future<void> runTorreyanaApp({
   List<AuthProvider>? authProviders,
   PushNotificationsConfig? pushNotificationsConfig,
   UserPreferencesHandlerFactory? userPreferencesHandlerFactory,
+  LoginScreenBuilder? loginScreenBuilder,
 }) async {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -92,6 +95,7 @@ Future<void> runTorreyanaApp({
       authProviders: configuredAuthProviders,
       pushNotificationsConfig: pushNotificationsConfig,
       userPreferencesHandlerFactory: userPreferencesHandlerFactory,
+      loginScreenBuilder: loginScreenBuilder,
     ),
   );
 }

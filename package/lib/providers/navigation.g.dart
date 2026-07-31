@@ -122,7 +122,7 @@ final class RouterProvider
   /// route is under that path root.
   RouterProvider._({
     required RouterFamily super.from,
-    required (Navigation, FlowConfig?) super.argument,
+    required (Navigation, FlowConfig?, LoginScreenBuilder?) super.argument,
   }) : super(
          retry: null,
          name: r'routerProvider',
@@ -148,8 +148,9 @@ final class RouterProvider
 
   @override
   GoRouter create(Ref ref) {
-    final argument = this.argument as (Navigation, FlowConfig?);
-    return router(ref, argument.$1, argument.$2);
+    final argument =
+        this.argument as (Navigation, FlowConfig?, LoginScreenBuilder?);
+    return router(ref, argument.$1, argument.$2, argument.$3);
   }
 
   /// {@macro riverpod.override_with_value}
@@ -171,7 +172,7 @@ final class RouterProvider
   }
 }
 
-String _$routerHash() => r'c4bb92c532f2b870f9ef38715f562b00ed58f160';
+String _$routerHash() => r'2a1b9642cc4da6b4d9258710e8d250501671e712';
 
 /// go_router provider with all the registered routes.
 ///
@@ -180,7 +181,11 @@ String _$routerHash() => r'c4bb92c532f2b870f9ef38715f562b00ed58f160';
 /// route is under that path root.
 
 final class RouterFamily extends $Family
-    with $FunctionalFamilyOverride<GoRouter, (Navigation, FlowConfig?)> {
+    with
+        $FunctionalFamilyOverride<
+          GoRouter,
+          (Navigation, FlowConfig?, LoginScreenBuilder?)
+        > {
   RouterFamily._()
     : super(
         retry: null,
@@ -196,8 +201,14 @@ final class RouterFamily extends $Family
   /// redirect. Don't set a login redirect on the root path ('/') since the login
   /// route is under that path root.
 
-  RouterProvider call(Navigation nav, FlowConfig? flowConfig) =>
-      RouterProvider._(argument: (nav, flowConfig), from: this);
+  RouterProvider call(
+    Navigation nav,
+    FlowConfig? flowConfig,
+    LoginScreenBuilder? loginScreenBuilder,
+  ) => RouterProvider._(
+    argument: (nav, flowConfig, loginScreenBuilder),
+    from: this,
+  );
 
   @override
   String toString() => r'routerProvider';
