@@ -27,6 +27,7 @@ dependencies:
   tourbillon:
     git:
       https://github.com/labrom/tourbillon.git
+  url_launcher:
 
 
 dev_dependencies:

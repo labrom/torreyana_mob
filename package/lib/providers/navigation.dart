@@ -6,7 +6,6 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:torreyana_mob/providers/analytics.dart';
 import 'package:torreyana_mob/providers/flows.dart';
 import 'package:torreyana_mob/providers/theme.dart';
-import 'package:torreyana_mob/screens/app_info.dart';
 import 'package:torreyana_mob/screens/flow.dart';
 import 'package:torreyana_mob/screens/login.dart';
 import 'package:torreyana_mob/screens/settings.dart';
@@ -20,7 +19,6 @@ const defaultPath = '/';
 const loginPath = '/_login';
 const flowPathSegment = '_flow';
 const settingsPathSegment = '_settings';
-const appInfoPathSegment = 'app-info';
 const profilePathSegment = '_profile';
 
 /// A screen definition.
@@ -148,6 +146,9 @@ class Navigation {
     this.showProfileLinkInSettings = false,
     this.showAppInfoInSettings = false,
     this.showThemeSettings = true,
+    this.termsOfServiceUrl,
+    this.privacyPolicyUrl,
+    this.copyrightMention,
   });
   final Screen homeScreen;
   final List<Screen> screens;
@@ -156,6 +157,9 @@ class Navigation {
   final bool showProfileLinkInSettings;
   final bool showAppInfoInSettings;
   final bool showThemeSettings;
+  final String? termsOfServiceUrl;
+  final String? privacyPolicyUrl;
+  final String? copyrightMention;
   final List<Widget>? settingsWidgets;
   final Future<bool> Function(BuildContext context, WidgetRef ref)?
   profileDeleteConfirmation;
@@ -312,6 +316,9 @@ List<RouteBase> settingsRoutes(
               nav.showAppInfoInSettings ||
               state.uri.queryParameters['showAppInfo'] == 'true',
           showThemeSettings: nav.showThemeSettings,
+          termsOfServiceUrl: nav.termsOfServiceUrl,
+          privacyPolicyUrl: nav.privacyPolicyUrl,
+          copyrightMention: nav.copyrightMention,
           children: nav.settingsWidgets,
         );
         return wrap?.call(screen) ?? screen;
@@ -322,10 +329,6 @@ List<RouteBase> settingsRoutes(
             path: 'theme',
             builder: (context, state) => const ThemeSettingsScreen(),
           ),
-        GoRoute(
-          path: appInfoPathSegment,
-          builder: (context, state) => const AppInfoScreen(),
-        ),
       ],
     ),
 
