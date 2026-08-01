@@ -49,16 +49,61 @@ class SettingsSection extends StatelessWidget {
   final List<Widget> children;
 
   @override
-  Widget build(BuildContext context) => Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-      Padding(
-        padding: const EdgeInsets.only(top: 24, bottom: 8),
-        child: Text(title, style: context.textTheme.titleLarge),
-      ),
-      ...children,
-    ],
+  Widget build(BuildContext context) => Padding(
+    padding: const EdgeInsets.only(bottom: 12),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Padding(
+          padding: const EdgeInsets.fromLTRB(20, 20, 20, 10),
+          child: Text(
+            title,
+            style: context.textTheme.titleMedium?.copyWith(
+              color: context.colorScheme.primary,
+            ),
+          ),
+        ),
+        Card(
+          key: const ValueKey('settings-section-card'),
+          margin: EdgeInsets.zero,
+          elevation: 0,
+          color: context.colorScheme.surfaceContainerLow,
+          clipBehavior: Clip.antiAlias,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(24),
+          ),
+          child: _SettingsSectionScope(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                for (var index = 0; index < children.length; index++) ...[
+                  if (index > 0)
+                    Divider(
+                      height: 1,
+                      indent: 20,
+                      endIndent: 20,
+                      color: context.colorScheme.outlineVariant,
+                    ),
+                  children[index],
+                ],
+              ],
+            ),
+          ),
+        ),
+      ],
+    ),
   );
+}
+
+class _SettingsSectionScope extends InheritedWidget {
+  const _SettingsSectionScope({required super.child});
+
+  static bool contains(BuildContext context) =>
+      context.dependOnInheritedWidgetOfExactType<_SettingsSectionScope>() !=
+      null;
+
+  @override
+  bool updateShouldNotify(_SettingsSectionScope oldWidget) => false;
 }
 
 class SimpleWidgetSetting extends StatelessWidget {
@@ -79,44 +124,60 @@ class SimpleWidgetSetting extends StatelessWidget {
   final bool useSectionTitleStyle;
 
   @override
-  Widget build(BuildContext context) => InkWell(
-    onTap: onTap,
-    child: Padding(
-      padding: const EdgeInsets.symmetric(vertical: 16),
-      child: Row(
-        children: [
-          Expanded(
-            child: subtitle != null
-                ? Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        title,
-                        style: useSectionTitleStyle
-                            ? context.textTheme.titleLarge
-                            : context.textTheme.titleMedium,
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 8),
-                        child: Text(
-                          subtitle!,
-                          style: context.textTheme.titleSmall,
+  Widget build(BuildContext context) {
+    final content = InkWell(
+      onTap: onTap,
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(20, 16, 12, 16),
+        child: Row(
+          children: [
+            Expanded(
+              child: subtitle != null
+                  ? Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          title,
+                          style: useSectionTitleStyle
+                              ? context.textTheme.titleLarge
+                              : context.textTheme.titleMedium,
                         ),
-                      ),
-                    ],
-                  )
-                : Text(
-                    title,
-                    style: useSectionTitleStyle
-                        ? context.textTheme.titleLarge
-                        : context.textTheme.titleMedium,
-                  ),
-          ),
-          actionChild,
-        ],
+                        Padding(
+                          padding: const EdgeInsets.only(top: 8),
+                          child: Text(
+                            subtitle!,
+                            style: context.textTheme.titleSmall,
+                          ),
+                        ),
+                      ],
+                    )
+                  : Text(
+                      title,
+                      style: useSectionTitleStyle
+                          ? context.textTheme.titleLarge
+                          : context.textTheme.titleMedium,
+                    ),
+            ),
+            actionChild,
+          ],
+        ),
       ),
-    ),
-  );
+    );
+
+    if (_SettingsSectionScope.contains(context)) {
+      return content;
+    }
+
+    return Card(
+      key: const ValueKey('standalone-setting-card'),
+      margin: const EdgeInsets.only(bottom: 12),
+      elevation: 0,
+      color: context.colorScheme.surfaceContainerLow,
+      clipBehavior: Clip.antiAlias,
+      shape: const StadiumBorder(),
+      child: content,
+    );
+  }
 }
 
 class ToggleSetting extends StatelessWidget {
