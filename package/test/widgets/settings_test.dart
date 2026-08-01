@@ -19,6 +19,16 @@ void main() {
       find.byKey(const ValueKey('standalone-setting-card')),
     );
     expect(card.shape, isA<StadiumBorder>());
+
+    final title = tester.widget<Text>(find.text('Profile'));
+    final theme = Theme.of(tester.element(find.text('Profile')));
+    expect(title.style, theme.textTheme.titleSmall);
+    expect(
+      tester
+          .getSize(find.byKey(const ValueKey('standalone-setting-card')))
+          .height,
+      lessThan(64),
+    );
   });
 
   testWidgets('section settings share a rounded divided card', (tester) async {

@@ -12,13 +12,11 @@ class SettingsPageLink extends ConsumerWidget {
     super.key,
     this.subtitle,
     this.push = false,
-    this.useSectionTitleStyle = false,
   });
   final String title;
   final String? subtitle;
   final String route;
   final bool push;
-  final bool useSectionTitleStyle;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -29,7 +27,6 @@ class SettingsPageLink extends ConsumerWidget {
     return SimpleWidgetSetting(
       title: title,
       subtitle: subtitle,
-      useSectionTitleStyle: useSectionTitleStyle,
       actionChild: IconButton(
         onPressed: navigate,
         icon: const Icon(Icons.chevron_right),
@@ -113,22 +110,27 @@ class SimpleWidgetSetting extends StatelessWidget {
     super.key,
     this.subtitle,
     this.onTap,
-    this.useSectionTitleStyle = false,
   });
   final String title;
   final String? subtitle;
   final Widget actionChild;
   final VoidCallback? onTap;
 
-  /// Displays the title at the same size as a [SettingsSection] title.
-  final bool useSectionTitleStyle;
-
   @override
   Widget build(BuildContext context) {
+    final inSection = _SettingsSectionScope.contains(context);
+    final titleStyle = inSection
+        ? context.textTheme.titleMedium
+        : context.textTheme.titleSmall;
     final content = InkWell(
       onTap: onTap,
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(20, 16, 12, 16),
+        padding: EdgeInsets.fromLTRB(
+          20,
+          inSection ? 16 : 8,
+          12,
+          inSection ? 16 : 8,
+        ),
         child: Row(
           children: [
             Expanded(
@@ -136,27 +138,19 @@ class SimpleWidgetSetting extends StatelessWidget {
                   ? Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          title,
-                          style: useSectionTitleStyle
-                              ? context.textTheme.titleLarge
-                              : context.textTheme.titleMedium,
-                        ),
+                        Text(title, style: titleStyle),
                         Padding(
-                          padding: const EdgeInsets.only(top: 8),
+                          padding: EdgeInsets.only(top: inSection ? 8 : 4),
                           child: Text(
                             subtitle!,
-                            style: context.textTheme.titleSmall,
+                            style: inSection
+                                ? context.textTheme.titleSmall
+                                : context.textTheme.bodySmall,
                           ),
                         ),
                       ],
                     )
-                  : Text(
-                      title,
-                      style: useSectionTitleStyle
-                          ? context.textTheme.titleLarge
-                          : context.textTheme.titleMedium,
-                    ),
+                  : Text(title, style: titleStyle),
             ),
             actionChild,
           ],
@@ -164,7 +158,7 @@ class SimpleWidgetSetting extends StatelessWidget {
       ),
     );
 
-    if (_SettingsSectionScope.contains(context)) {
+    if (inSection) {
       return content;
     }
 
@@ -187,12 +181,10 @@ class ToggleSetting extends StatelessWidget {
     super.key,
     this.onChanged,
     this.subtitle,
-    this.useSectionTitleStyle = false,
   });
   final String title;
   final String? subtitle;
   final bool value;
-  final bool useSectionTitleStyle;
   // ignore: avoid_positional_boolean_parameters
   final void Function(bool)? onChanged;
 
@@ -200,7 +192,6 @@ class ToggleSetting extends StatelessWidget {
   Widget build(BuildContext context) => SimpleWidgetSetting(
     title: title,
     subtitle: subtitle,
-    useSectionTitleStyle: useSectionTitleStyle,
     actionChild: Switch(value: value, onChanged: onChanged),
   );
 }
@@ -211,18 +202,15 @@ class ConnectedToggleSetting extends ConsumerWidget {
     required this.title,
     super.key,
     this.subtitle,
-    this.useSectionTitleStyle = false,
   });
   final String settingKey;
   final String title;
   final String? subtitle;
-  final bool useSectionTitleStyle;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) => ToggleSetting(
     title: title,
     subtitle: subtitle,
-    useSectionTitleStyle: useSectionTitleStyle,
     value:
         ref
             .watch(userPreferencesRepositoryProvider)
@@ -245,18 +233,15 @@ class CachedToggleSetting extends ConsumerWidget {
     required this.title,
     super.key,
     this.subtitle,
-    this.useSectionTitleStyle = false,
   });
   final String settingKey;
   final String title;
   final String? subtitle;
-  final bool useSectionTitleStyle;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) => ToggleSetting(
     title: title,
     subtitle: subtitle,
-    useSectionTitleStyle: useSectionTitleStyle,
     value: ref.watch(memorySessionDataRepositoryProvider)[settingKey] == true,
     onChanged: (value) {
       ref

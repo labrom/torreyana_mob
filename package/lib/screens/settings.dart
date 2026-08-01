@@ -47,7 +47,6 @@ class SettingsScreen extends StatelessWidget {
                     subtitle: 'Manage your profile',
                     route: '/$profilePathSegment',
                     push: pushSubPages,
-                    useSectionTitleStyle: true,
                   ),
                 if (showThemeSettings && themeConfig.isCustomizable)
                   SettingsPageLink(
