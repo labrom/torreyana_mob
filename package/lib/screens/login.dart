@@ -14,10 +14,36 @@ import 'package:torreyana_mob/providers/navigation.dart';
 typedef LoginScreenBuilder =
     Widget Function(BuildContext context, SignInScreen screen);
 
+typedef LoginScreenWrapper =
+    Widget Function(BuildContext context, Widget screen);
+
+class LoginScreenOptions {
+  const LoginScreenOptions({
+    this.headerMaxExtent,
+    this.headerBuilder,
+    this.subtitleBuilder,
+    this.wrapper,
+  });
+
+  final double? headerMaxExtent;
+  final HeaderBuilder? headerBuilder;
+  final AuthViewContentBuilder? subtitleBuilder;
+  final LoginScreenWrapper? wrapper;
+}
+
 class LoginScreen extends ConsumerWidget {
-  const LoginScreen({required this.targetRoute, this.builder, super.key});
+  const LoginScreen({
+    required this.targetRoute,
+    this.options,
+    @Deprecated(
+      'Use options instead. The builder must recreate the full screen.',
+    )
+    this.builder,
+    super.key,
+  });
 
   final String? targetRoute;
+  final LoginScreenOptions? options;
   final LoginScreenBuilder? builder;
 
   @override
@@ -34,7 +60,11 @@ class LoginScreen extends ConsumerWidget {
           .where((provider) => provider.providerId != 'google.com')
           .toList(),
       styles: const {EmailFormStyle(signInButtonVariant: ButtonVariant.filled)},
-      subtitleBuilder: (context, action) => const SizedBox.shrink(),
+      headerMaxExtent: options?.headerMaxExtent,
+      headerBuilder: options?.headerBuilder,
+      subtitleBuilder:
+          options?.subtitleBuilder ??
+          (context, action) => const SizedBox.shrink(),
       footerBuilder: googleProvider == null
           ? null
           : (context, action) =>
@@ -45,7 +75,8 @@ class LoginScreen extends ConsumerWidget {
         ),
       ],
     );
-    return builder?.call(context, screen) ?? screen;
+    final builtScreen = builder?.call(context, screen) ?? screen;
+    return options?.wrapper?.call(context, builtScreen) ?? builtScreen;
   }
 }
 

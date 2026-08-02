@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter/services.dart';
 import 'package:torreyana_mob/localization.dart' as torreyana;
 import 'package:torreyana_mob/providers/auth.dart';
 import 'package:torreyana_mob/providers/flows.dart';
@@ -25,7 +26,8 @@ class App extends StatelessWidget {
     this.authProviders,
     this.pushNotificationsConfig,
     this.userPreferencesHandlerFactory,
-    this.loginScreenBuilder,
+    this.loginScreenOptions,
+    @Deprecated('Use loginScreenOptions instead.') this.loginScreenBuilder,
     super.key,
   });
 
@@ -38,6 +40,7 @@ class App extends StatelessWidget {
   final List<AuthProvider>? authProviders;
   final PushNotificationsConfig? pushNotificationsConfig;
   final UserPreferencesHandlerFactory? userPreferencesHandlerFactory;
+  final LoginScreenOptions? loginScreenOptions;
   final LoginScreenBuilder? loginScreenBuilder;
 
   @override
@@ -66,6 +69,7 @@ class App extends StatelessWidget {
         flowConfig: flowConfig,
         title: title,
         localizationsDelegate: localizationsDelegate,
+        loginScreenOptions: loginScreenOptions,
         loginScreenBuilder: loginScreenBuilder,
       ),
     );
@@ -78,6 +82,7 @@ class _AppRouter extends ConsumerStatefulWidget {
     required this.flowConfig,
     required this.title,
     required this.localizationsDelegate,
+    required this.loginScreenOptions,
     required this.loginScreenBuilder,
   });
 
@@ -85,6 +90,7 @@ class _AppRouter extends ConsumerStatefulWidget {
   final FlowConfig? flowConfig;
   final String? title;
   final LocalizationsDelegate<dynamic>? localizationsDelegate;
+  final LoginScreenOptions? loginScreenOptions;
   final LoginScreenBuilder? loginScreenBuilder;
 
   @override
@@ -112,6 +118,7 @@ class _AppRouterState extends ConsumerState<_AppRouter> {
         routerProvider(
           widget.nav,
           widget.flowConfig,
+          widget.loginScreenOptions,
           widget.loginScreenBuilder,
         ),
       ),
@@ -123,6 +130,16 @@ class _AppRouterState extends ConsumerState<_AppRouter> {
       themeMode: themeConfig.hasFixedTheme
           ? ThemeMode.light
           : ref.watch(appThemeModeProvider),
+      builder: (context, child) {
+        final brightness = Theme.of(context).brightness;
+        final overlayStyle = brightness == Brightness.dark
+            ? SystemUiOverlayStyle.light
+            : SystemUiOverlayStyle.dark;
+        return AnnotatedRegion<SystemUiOverlayStyle>(
+          value: overlayStyle.copyWith(statusBarColor: Colors.transparent),
+          child: child ?? const SizedBox.shrink(),
+        );
+      },
       localizationsDelegates: [
         if (widget.localizationsDelegate != null) widget.localizationsDelegate!,
         torreyana.LibLocalizations.delegate,

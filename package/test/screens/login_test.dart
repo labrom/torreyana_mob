@@ -43,4 +43,36 @@ void main() {
       );
     });
   }
+
+  testWidgets('applies login screen options without rebuilding the screen', (
+    tester,
+  ) async {
+    late SignInScreen configuredScreen;
+
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [authProvidersProvider.overrideWithValue(const [])],
+        child: MaterialApp(
+          home: LoginScreen(
+            targetRoute: null,
+            options: LoginScreenOptions(
+              headerMaxExtent: 184,
+              subtitleBuilder: (context, action) => const Text('Subtitle'),
+              wrapper: (context, screen) {
+                configuredScreen = screen as SignInScreen;
+                return const Text('Wrapped', textDirection: TextDirection.ltr);
+              },
+            ),
+          ),
+        ),
+      ),
+    );
+
+    expect(find.text('Wrapped'), findsOneWidget);
+    expect(configuredScreen.headerMaxExtent, 184);
+    expect(configuredScreen.subtitleBuilder, isNotNull);
+    expect(configuredScreen.footerBuilder, isNull);
+    expect(configuredScreen.styles, isNotEmpty);
+    expect(configuredScreen.actions, hasLength(1));
+  });
 }

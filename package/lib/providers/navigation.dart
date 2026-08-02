@@ -197,6 +197,7 @@ GoRouter router(
   Ref ref,
   Navigation nav,
   FlowConfig? flowConfig,
+  LoginScreenOptions? loginScreenOptions,
   LoginScreenBuilder? loginScreenBuilder,
 ) {
   ref.watch(authStateChangesProvider);
@@ -211,6 +212,7 @@ GoRouter router(
         path: loginPath,
         builder: (context, state) => LoginScreen(
           targetRoute: state.uri.queryParameters['target'],
+          options: loginScreenOptions,
           builder: loginScreenBuilder,
         ),
       ),

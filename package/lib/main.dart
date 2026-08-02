@@ -50,7 +50,8 @@ export 'package:torreyana_mob/providers/settings.dart'
         userPreferencesHandlerFactoryProvider,
         userPreferencesHandlerProvider,
         userPreferencesRepositoryProvider;
-export 'package:torreyana_mob/screens/login.dart' show LoginScreenBuilder;
+export 'package:torreyana_mob/screens/login.dart'
+    show LoginScreenBuilder, LoginScreenOptions, LoginScreenWrapper;
 
 Future<void> runTorreyanaApp({
   required Navigation nav,
@@ -66,6 +67,8 @@ Future<void> runTorreyanaApp({
   List<AuthProvider>? authProviders,
   PushNotificationsConfig? pushNotificationsConfig,
   UserPreferencesHandlerFactory? userPreferencesHandlerFactory,
+  LoginScreenOptions? loginScreenOptions,
+  @Deprecated('Use loginScreenOptions instead.')
   LoginScreenBuilder? loginScreenBuilder,
 }) async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -95,6 +98,7 @@ Future<void> runTorreyanaApp({
       authProviders: configuredAuthProviders,
       pushNotificationsConfig: pushNotificationsConfig,
       userPreferencesHandlerFactory: userPreferencesHandlerFactory,
+      loginScreenOptions: loginScreenOptions,
       loginScreenBuilder: loginScreenBuilder,
     ),
   );

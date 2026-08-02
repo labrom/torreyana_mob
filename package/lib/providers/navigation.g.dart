@@ -122,7 +122,8 @@ final class RouterProvider
   /// route is under that path root.
   RouterProvider._({
     required RouterFamily super.from,
-    required (Navigation, FlowConfig?, LoginScreenBuilder?) super.argument,
+    required (Navigation, FlowConfig?, LoginScreenOptions?, LoginScreenBuilder?)
+    super.argument,
   }) : super(
          retry: null,
          name: r'routerProvider',
@@ -149,8 +150,14 @@ final class RouterProvider
   @override
   GoRouter create(Ref ref) {
     final argument =
-        this.argument as (Navigation, FlowConfig?, LoginScreenBuilder?);
-    return router(ref, argument.$1, argument.$2, argument.$3);
+        this.argument
+            as (
+              Navigation,
+              FlowConfig?,
+              LoginScreenOptions?,
+              LoginScreenBuilder?,
+            );
+    return router(ref, argument.$1, argument.$2, argument.$3, argument.$4);
   }
 
   /// {@macro riverpod.override_with_value}
@@ -172,7 +179,7 @@ final class RouterProvider
   }
 }
 
-String _$routerHash() => r'2a1b9642cc4da6b4d9258710e8d250501671e712';
+String _$routerHash() => r'2930eff704d04533ff9b46d42869921f2c0cce59';
 
 /// go_router provider with all the registered routes.
 ///
@@ -184,7 +191,7 @@ final class RouterFamily extends $Family
     with
         $FunctionalFamilyOverride<
           GoRouter,
-          (Navigation, FlowConfig?, LoginScreenBuilder?)
+          (Navigation, FlowConfig?, LoginScreenOptions?, LoginScreenBuilder?)
         > {
   RouterFamily._()
     : super(
@@ -204,9 +211,10 @@ final class RouterFamily extends $Family
   RouterProvider call(
     Navigation nav,
     FlowConfig? flowConfig,
+    LoginScreenOptions? loginScreenOptions,
     LoginScreenBuilder? loginScreenBuilder,
   ) => RouterProvider._(
-    argument: (nav, flowConfig, loginScreenBuilder),
+    argument: (nav, flowConfig, loginScreenOptions, loginScreenBuilder),
     from: this,
   );
 
