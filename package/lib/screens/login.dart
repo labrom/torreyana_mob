@@ -1,5 +1,6 @@
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:torreyana_mob/providers/auth.dart';
@@ -11,11 +12,9 @@ import 'package:torreyana_mob/providers/navigation.dart';
 /// Callers that replace [screen] should preserve its providers, actions,
 /// styles, and footer builder so authentication, theming, and post-login
 /// navigation keep working.
-typedef LoginScreenBuilder =
-    Widget Function(BuildContext context, SignInScreen screen);
+typedef LoginScreenBuilder = Widget Function(BuildContext context, SignInScreen screen);
 
-typedef LoginScreenWrapper =
-    Widget Function(BuildContext context, Widget screen);
+typedef LoginScreenWrapper = Widget Function(BuildContext context, Widget screen);
 
 class LoginScreenOptions {
   const LoginScreenOptions({
@@ -44,6 +43,9 @@ class LoginScreen extends ConsumerWidget {
 
   final String? targetRoute;
   final LoginScreenOptions? options;
+  @Deprecated(
+    'Use options instead. The builder must recreate the full screen.',
+  )
   final LoginScreenBuilder? builder;
 
   @override
@@ -52,23 +54,16 @@ class LoginScreen extends ConsumerWidget {
     final googleProviders = providers.where(
       (provider) => provider.providerId == 'google.com',
     );
-    final googleProvider = googleProviders.isEmpty
-        ? null
-        : googleProviders.first;
+    final googleProvider = googleProviders.isEmpty ? null : googleProviders.first;
     final screen = SignInScreen(
-      providers: providers
-          .where((provider) => provider.providerId != 'google.com')
-          .toList(),
+      providers: providers.where((provider) => provider.providerId != 'google.com').toList(),
       styles: const {EmailFormStyle(signInButtonVariant: ButtonVariant.filled)},
       headerMaxExtent: options?.headerMaxExtent,
       headerBuilder: options?.headerBuilder,
-      subtitleBuilder:
-          options?.subtitleBuilder ??
-          (context, action) => const SizedBox.shrink(),
+      subtitleBuilder: options?.subtitleBuilder ?? (context, action) => const SizedBox.shrink(),
       footerBuilder: googleProvider == null
           ? null
-          : (context, action) =>
-                _GoogleSignInFooter(provider: googleProvider, action: action),
+          : (context, action) => _GoogleSignInFooter(provider: googleProvider, action: action),
       actions: [
         AuthStateChangeAction<SignedIn>(
           (context, _) => context.go(targetRoute ?? defaultPath),
@@ -76,7 +71,16 @@ class LoginScreen extends ConsumerWidget {
       ],
     );
     final builtScreen = builder?.call(context, screen) ?? screen;
-    return options?.wrapper?.call(context, builtScreen) ?? builtScreen;
+    final wrappedScreen = options?.wrapper?.call(context, builtScreen) ?? builtScreen;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+        statusBarIconBrightness: isDark ? Brightness.light : Brightness.dark,
+        statusBarBrightness: isDark ? Brightness.dark : Brightness.light,
+      ),
+      child: wrappedScreen,
+    );
   }
 }
 
@@ -103,9 +107,7 @@ class _GoogleSignInFooter extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               OutlinedButton.icon(
-                onPressed: isLoading
-                    ? null
-                    : () => controller.signIn(Theme.of(context).platform),
+                onPressed: isLoading ? null : () => controller.signIn(Theme.of(context).platform),
                 icon: isLoading
                     ? const SizedBox.square(
                         dimension: 18,

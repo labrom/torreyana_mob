@@ -1,6 +1,7 @@
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:torreyana_mob/providers/auth.dart';
 import 'package:torreyana_mob/screens/login.dart';
@@ -32,6 +33,20 @@ void main() {
       );
 
       expect(find.text('branding-${brightness.name}'), findsOneWidget);
+      final overlay = tester.widget<AnnotatedRegion<SystemUiOverlayStyle>>(
+        find.ancestor(
+          of: find.text('branding-${brightness.name}'),
+          matching: find.byType(AnnotatedRegion<SystemUiOverlayStyle>),
+        ),
+      );
+      expect(
+        overlay.value.statusBarIconBrightness,
+        brightness == Brightness.dark ? Brightness.light : Brightness.dark,
+      );
+      expect(
+        overlay.value.statusBarBrightness,
+        brightness == Brightness.dark ? Brightness.dark : Brightness.light,
+      );
       expect(configuredScreen.providers, isEmpty);
       expect(configuredScreen.actions, hasLength(1));
       expect(configuredScreen.subtitleBuilder, isNotNull);
