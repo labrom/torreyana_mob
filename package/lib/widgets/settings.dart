@@ -55,7 +55,7 @@ class SettingsSection extends StatelessWidget {
           padding: const EdgeInsets.fromLTRB(20, 20, 20, 10),
           child: Text(
             title,
-            style: context.textTheme.titleMedium?.copyWith(
+            style: context.textTheme.titleLarge?.copyWith(
               color: context.colorScheme.primary,
             ),
           ),
@@ -119,9 +119,7 @@ class SimpleWidgetSetting extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final inSection = _SettingsSectionScope.contains(context);
-    final titleStyle = inSection
-        ? context.textTheme.titleMedium
-        : context.textTheme.titleSmall;
+    final titleStyle = context.textTheme.titleMedium;
     final content = InkWell(
       onTap: onTap,
       child: Padding(
@@ -168,7 +166,7 @@ class SimpleWidgetSetting extends StatelessWidget {
       elevation: 0,
       color: context.colorScheme.surfaceContainerLow,
       clipBehavior: Clip.antiAlias,
-      shape: const StadiumBorder(),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
       child: content,
     );
   }

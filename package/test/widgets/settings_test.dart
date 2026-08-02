@@ -3,7 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:torreyana_mob/widgets/settings.dart';
 
 void main() {
-  testWidgets('standalone settings render in individual pills', (tester) async {
+  testWidgets('standalone settings use compact rounded cards', (tester) async {
     await tester.pumpWidget(
       const MaterialApp(
         home: Scaffold(
@@ -18,11 +18,12 @@ void main() {
     final card = tester.widget<Card>(
       find.byKey(const ValueKey('standalone-setting-card')),
     );
-    expect(card.shape, isA<StadiumBorder>());
+    final shape = card.shape! as RoundedRectangleBorder;
+    expect(shape.borderRadius, BorderRadius.circular(24));
 
     final title = tester.widget<Text>(find.text('Profile'));
     final theme = Theme.of(tester.element(find.text('Profile')));
-    expect(title.style, theme.textTheme.titleSmall);
+    expect(title.style, theme.textTheme.titleMedium);
     expect(
       tester
           .getSize(find.byKey(const ValueKey('standalone-setting-card')))
@@ -55,6 +56,10 @@ void main() {
     expect(find.byKey(const ValueKey('settings-section-card')), findsOneWidget);
     expect(find.byKey(const ValueKey('standalone-setting-card')), findsNothing);
     expect(find.byType(Divider), findsOneWidget);
+
+    final sectionTitle = tester.widget<Text>(find.text('Notifications'));
+    final theme = Theme.of(tester.element(find.text('Notifications')));
+    expect(sectionTitle.style?.fontSize, theme.textTheme.titleLarge?.fontSize);
 
     final card = tester.widget<Card>(
       find.byKey(const ValueKey('settings-section-card')),
