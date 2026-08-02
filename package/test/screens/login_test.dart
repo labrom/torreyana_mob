@@ -34,6 +34,9 @@ void main() {
       expect(find.text('branding-${brightness.name}'), findsOneWidget);
       expect(configuredScreen.providers, isEmpty);
       expect(configuredScreen.actions, hasLength(1));
+      expect(configuredScreen.subtitleBuilder, isNotNull);
+      final emailStyle = configuredScreen.styles!.single as EmailFormStyle;
+      expect(emailStyle.signInButtonVariant, ButtonVariant.filled);
       expect(
         configuredScreen.actions.single,
         isA<AuthStateChangeAction<SignedIn>>(),
