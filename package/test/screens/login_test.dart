@@ -1,7 +1,8 @@
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:torreyana_mob/providers/auth.dart';
 import 'package:torreyana_mob/screens/login.dart';
@@ -46,6 +47,17 @@ void main() {
       expect(
         overlay.value.statusBarBrightness,
         brightness == Brightness.dark ? Brightness.dark : Brightness.light,
+      );
+      expect(overlay.sized, isFalse);
+      final sampledOverlay = RendererBinding
+          .instance
+          .renderViews
+          .single
+          .debugLayer!
+          .find<SystemUiOverlayStyle>(const Offset(400, 0));
+      expect(
+        sampledOverlay?.statusBarIconBrightness,
+        brightness == Brightness.dark ? Brightness.light : Brightness.dark,
       );
       expect(configuredScreen.providers, isEmpty);
       expect(configuredScreen.actions, hasLength(1));
