@@ -116,8 +116,7 @@ class ThemeSeedColor extends _$ThemeSeedColor {
   }
 }
 
-ThemeMode get _defaultThemeMode =>
-    ThemeConfig.defaultTheme.darkTheme ? ThemeMode.dark : ThemeMode.light;
+ThemeMode get _defaultThemeMode => ThemeMode.system;
 
 ThemeMode _themeModeFrom(Map<String, dynamic> preferences) {
   final savedThemeMode = preferences[themeModePreferenceKey];
