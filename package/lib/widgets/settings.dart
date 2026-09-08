@@ -136,7 +136,7 @@ class SimpleWidgetSetting extends StatelessWidget {
                   ? Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(title, style: titleStyle),
+                        _SettingTitle(title, style: titleStyle),
                         Padding(
                           padding: EdgeInsets.only(top: inSection ? 8 : 4),
                           child: Text(
@@ -148,7 +148,7 @@ class SimpleWidgetSetting extends StatelessWidget {
                         ),
                       ],
                     )
-                  : Text(title, style: titleStyle),
+                  : _SettingTitle(title, style: titleStyle),
             ),
             actionChild,
           ],
@@ -170,6 +170,20 @@ class SimpleWidgetSetting extends StatelessWidget {
       child: content,
     );
   }
+}
+
+class _SettingTitle extends StatelessWidget {
+  const _SettingTitle(this.title, {this.style});
+
+  final String title;
+  final TextStyle? style;
+
+  @override
+  Widget build(BuildContext context) => FittedBox(
+    fit: BoxFit.scaleDown,
+    alignment: Alignment.centerLeft,
+    child: Text(title, maxLines: 1, softWrap: false, style: style),
+  );
 }
 
 class ToggleSetting extends StatelessWidget {

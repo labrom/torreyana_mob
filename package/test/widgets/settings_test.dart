@@ -3,6 +3,35 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:torreyana_mob/widgets/settings.dart';
 
 void main() {
+  testWidgets('setting titles scale down instead of wrapping', (tester) async {
+    await tester.pumpWidget(
+      const MaterialApp(
+        home: Scaffold(
+          body: SizedBox(
+            width: 180,
+            child: SimpleWidgetSetting(
+              title: 'A long setting title',
+              actionChild: SizedBox(width: 100),
+            ),
+          ),
+        ),
+      ),
+    );
+
+    final title = tester.widget<Text>(find.text('A long setting title'));
+    final fittedBox = tester.widget<FittedBox>(
+      find.ancestor(
+        of: find.text('A long setting title'),
+        matching: find.byType(FittedBox),
+      ),
+    );
+
+    expect(title.maxLines, 1);
+    expect(title.softWrap, isFalse);
+    expect(fittedBox.fit, BoxFit.scaleDown);
+    expect(tester.takeException(), isNull);
+  });
+
   testWidgets('standalone settings use compact rounded cards', (tester) async {
     await tester.pumpWidget(
       const MaterialApp(
