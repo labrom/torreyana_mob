@@ -33,6 +33,17 @@ notification-opened messages, and keep device-token registration synchronized
 with the currently authenticated user through an app-defined
 `PushTokenRegistry`.
 
+Automatic token synchronization retries failures with exponential backoff, from
+5 seconds up to 1 minute. It also retries when Firebase has not provided a token
+yet. Replacement tokens are registered before old-token cleanup; failed cleanup
+is retried without blocking the replacement. Retries stop on sign-out or disposal.
+
+Registries must atomically transfer ownership when an existing token is registered
+for a different user. Torreyana does not unregister that token after the transfer.
+If unregistering requires the outgoing user's credentials, call and await
+`unregisterCurrentToken()` before signing out; cleanup triggered by the auth-state
+change may be too late for an authenticated backend.
+
 ## Analytics
 
 Firebase Analytics is available through Riverpod, and navigation events are
