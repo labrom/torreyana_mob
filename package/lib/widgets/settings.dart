@@ -12,11 +12,15 @@ class SettingsPageLink extends ConsumerWidget {
     super.key,
     this.subtitle,
     this.push = false,
+    this.leading,
+    this.titleStyle,
   });
   final String title;
   final String? subtitle;
   final String route;
   final bool push;
+  final Widget? leading;
+  final TextStyle? titleStyle;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -27,6 +31,8 @@ class SettingsPageLink extends ConsumerWidget {
     return SimpleWidgetSetting(
       title: title,
       subtitle: subtitle,
+      leading: leading,
+      titleStyle: titleStyle,
       actionChild: IconButton(
         onPressed: navigate,
         icon: const Icon(Icons.chevron_right),
@@ -110,16 +116,20 @@ class SimpleWidgetSetting extends StatelessWidget {
     super.key,
     this.subtitle,
     this.onTap,
+    this.leading,
+    this.titleStyle,
   });
   final String title;
   final String? subtitle;
   final Widget actionChild;
   final VoidCallback? onTap;
+  final Widget? leading;
+  final TextStyle? titleStyle;
 
   @override
   Widget build(BuildContext context) {
     final inSection = _SettingsSectionScope.contains(context);
-    final titleStyle = context.textTheme.titleMedium;
+    final titleStyle = this.titleStyle ?? context.textTheme.titleMedium;
     final content = InkWell(
       onTap: onTap,
       child: Padding(
@@ -131,6 +141,7 @@ class SimpleWidgetSetting extends StatelessWidget {
         ),
         child: Row(
           children: [
+            if (leading != null) ...[leading!, const SizedBox(width: 16)],
             Expanded(
               child: subtitle != null
                   ? Column(

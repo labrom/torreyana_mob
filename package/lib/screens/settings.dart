@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:torreyana_mob/providers/navigation.dart';
 import 'package:torreyana_mob/providers/theme.dart';
 import 'package:torreyana_mob/widgets/settings.dart';
 import 'package:torreyana_mob/widgets/theme.dart';
+import 'package:tourbillauth/auth.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class SettingsScreen extends StatelessWidget {
@@ -40,14 +42,8 @@ class SettingsScreen extends StatelessWidget {
             padding: EdgeInsets.fromLTRB(16, 16, 16, showFooter ? 0 : 16),
             sliver: SliverList.list(
               children: [
+                if (showProfileLink) _ProfileSettingsLink(push: pushSubPages),
                 if (children != null) ...children!,
-                if (showProfileLink)
-                  SettingsPageLink(
-                    title: 'Profile',
-                    subtitle: 'Manage your profile',
-                    route: '/$profilePathSegment',
-                    push: pushSubPages,
-                  ),
                 if (showThemeSettings && themeConfig.isCustomizable)
                   SettingsPageLink(
                     title: 'Theme',
@@ -94,6 +90,33 @@ class SettingsScreen extends StatelessWidget {
             ),
         ],
       ),
+    );
+  }
+}
+
+class _ProfileSettingsLink extends ConsumerWidget {
+  const _ProfileSettingsLink({required this.push});
+
+  final bool push;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final user = ref.watch(userProvider);
+    final name = user?.displayName?.trim() ?? '';
+    final photoUrl = user?.photoURL?.trim() ?? '';
+
+    return SettingsPageLink(
+      title: name.isEmpty ? 'Profile' : name,
+      titleStyle: Theme.of(context).textTheme.headlineSmall,
+      subtitle: 'Manage your profile',
+      leading: CircleAvatar(
+        radius: 28,
+        foregroundImage: photoUrl.isEmpty ? null : NetworkImage(photoUrl),
+        onForegroundImageError: photoUrl.isEmpty ? null : (_, _) {},
+        child: const Icon(Icons.person),
+      ),
+      route: '/$profilePathSegment',
+      push: push,
     );
   }
 }
