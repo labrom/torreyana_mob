@@ -3,7 +3,7 @@ description: Torreyana Flutter app building blocks.
 version: 0.0.1+1
 
 environment:
-  sdk: '>=3.9.0 <4.0.0'
+  sdk: ^3.13.0
 
 dependencies:
   cloud_firestore:
@@ -19,6 +19,7 @@ dependencies:
   flutter_riverpod: ^3.3.2
   go_router:
   google_fonts:
+  material_ui: ^1.5.0
   package_info_plus:
   riverpod_annotation: ^4.0.3
   tourbillauth:

@@ -1,8 +1,8 @@
 import 'dart:async';
 
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:torreyana_mob/localization.dart' as torreyana;
 import 'package:torreyana_mob/providers/auth.dart';
 import 'package:torreyana_mob/providers/flows.dart';
@@ -113,6 +113,9 @@ class _AppRouterState extends ConsumerState<_AppRouter> {
   Widget build(BuildContext context) {
     final themeConfig = ThemeConfig.defaultTheme;
     return MaterialApp.router(
+      // Firebase UI and other legacy packages still need the old inherited types.
+      // ignore: deprecated_member_use
+      builder: (context, child) => MaterialUiCompatibilityBridge(child: child!),
       routerConfig: ref.watch(
         routerProvider(
           widget.nav,
@@ -130,6 +133,7 @@ class _AppRouterState extends ConsumerState<_AppRouter> {
           ? ThemeMode.light
           : ref.watch(appThemeModeProvider),
       localizationsDelegates: [
+        ...GlobalMaterialLocalizations.delegates,
         if (widget.localizationsDelegate != null) widget.localizationsDelegate!,
         torreyana.LibLocalizations.delegate,
         tourbillon.LibLocalizations.delegate,

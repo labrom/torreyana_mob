@@ -30,3 +30,6 @@ custom_lint.log
 
 sample_app/lib/firebase_options.dart
 sample_app/flutter_*.log
+
+# Local dependency development overrides
+pubspec_overrides.yaml

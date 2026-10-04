@@ -1,9 +1,9 @@
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:torreyana_mob/providers/auth.dart';
 import 'package:torreyana_mob/screens/login.dart';
 
